@@ -1,0 +1,50 @@
+#theme{
+    display: none;
+}
+
+.NavThemeChangeButton{
+    display: block;
+    width: 60px;
+    height: 32px;
+    border: 2px solid var(--primary-color);
+    border-radius: 30px;
+    position: absolute;
+    transform: translate(100px, 7px);
+    cursor: pointer;
+    right: 30px;
+    top: 30px;
+}
+
+.NavThemeChangeBall,
+.NavThemeChangeSun,
+.NavThemeChangeMoon{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.NavThemeChangeBall{
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    left: 1.5px;
+    right: 1.5px;
+    z-index: 3;
+    transition: transform .5s ease-in-out;
+}
+
+.NavThemeChangeSun{
+    left: 5px;
+    color: white;
+}
+
+.NavThemeChangeMoon{
+    right: 5px;
+    color: var(--primary-color);
+}
+
+#theme:checked + .NavThemeChangeBall {
+    transform: translate(27px, -50%);
+}

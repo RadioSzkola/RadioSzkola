@@ -1,0 +1,117 @@
+.LoginCentralizingContainer{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.614);
+}
+
+.LoginContainer {
+    background-color: var(--fifth-color);
+    padding: 2rem;
+    border-radius: 0.2rem;
+    width: 20rem;
+    position: absolute;
+}
+
+.LoginCloseButton{
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    color: var(--primary-color)
+}
+
+.LoginContainerHeader {
+    margin-bottom: 2rem;
+    color: var(--default-text-color)
+}
+
+.LoginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.LoginFormContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.LoginFormLabel {
+    position: absolute;
+    top: -0.5rem;
+    left: 0.5rem;
+    background-color: var(--fifth-color);
+    padding: 0 0.5rem;
+    font-size: 0.8rem;
+    color: var(--default-text-color);
+}
+.LoginFormInput {
+    padding: 1rem;
+    font-family: inherit;
+    color: inherit;
+    outline: none;
+    border: 1px solid var(--secondary-color);
+    border-radius: 0.2rem;
+    background-color: var(--fifth-color);
+    color: var(--default-text-color);
+}
+
+.form__successicon, .form__erroricon {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    width: 1rem;
+    display: none;
+}
+.form__successicon {
+    fill: #00c853;
+}
+.form__erroricon {
+    fill: #ff1744;
+}
+.LoginFormMessage {
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+    color: #ff1744;
+    display: none;
+}
+.LoginFormSuccess input {
+    border: 1px solid #00c853;
+}
+.LoginFormSuccess svg.form__successicon {
+    display: block;
+}
+.LoginFormError input {
+    border: 1px solid #ff1744;
+}
+.LoginFormError svg.form__erroricon {
+    display: block;
+}
+.LoginFormError p.LoginFormMessage {
+    display: block;
+}
+.ToggleLoginButton {
+    outline: none;
+    border: none;
+    padding: 1rem;
+    border-radius: 0.2rem;
+    font-family: inherit;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: var(--fifth-color);
+}
+
+.register__button{
+    color: var(--default-text-color);
+}
+
+.LoginHidden{
+    display: none !important; 
+}
