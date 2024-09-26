@@ -1,0 +1,13 @@
+{
+    "name": "radio-szkola-monorepo",
+    "private": true,
+    "scripts": {
+        "build": "turbo run build",
+        "dev": "turbo run dev"
+    },
+    "packageManager": "pnpm@9.10.0",
+    "devDependencies": {
+        "@biomejs/biome": "1.9.2",
+        "turbo": "2.1.2"
+    }
+}
