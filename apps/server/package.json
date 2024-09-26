@@ -1,12 +1,14 @@
 {
     "name": "@rs/server",
+    "private": true,
     "scripts": {
         "dev": "tsx watch src/index.ts",
         "build": "pkgroll"
     },
     "dependencies": {
         "@hono/node-server": "^1.13.1",
-        "hono": "^4.6.3"
+        "hono": "^4.6.3",
+        "@rs/shared": "workspace:*"
     },
     "devDependencies": {
         "@types/node": "^20.11.17",

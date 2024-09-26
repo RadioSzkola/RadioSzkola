@@ -20,9 +20,24 @@ importers:
       '@hono/node-server':
         specifier: ^1.13.1
         version: 1.13.1(hono@4.6.3)
+      '@rs/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       hono:
         specifier: ^4.6.3
         version: 4.6.3
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.17
+        version: 20.16.9
+      pkgroll:
+        specifier: 2.5.0
+        version: 2.5.0
+      tsx:
+        specifier: ^4.7.1
+        version: 4.19.1
+
+  packages/shared:
     devDependencies:
       '@types/node':
         specifier: ^20.11.17
