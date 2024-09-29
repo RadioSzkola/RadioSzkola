@@ -7,7 +7,7 @@ export type UserRole = z.infer<typeof userRoleSchema>;
 
 export const createUserSchema = createInsertSchema(userTable, {
     email: s => s.email.email(),
-    role: s => s.role.pipe(userRoleSchema),
+    role: userRoleSchema,
 })
     .omit({ id: true, passwordHash: true })
     .extend({

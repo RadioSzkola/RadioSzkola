@@ -6,15 +6,20 @@ import { userTable } from "../../../../packages/shared/src/db";
 import { SqliteError } from "better-sqlite3";
 import { generateId } from "lucia";
 import lucia from "../auth/lucia";
+import { parse } from "@rs/shared/validation";
+import { createAPIError } from "@rs/shared/error";
 
 export const signupRouterV1 = new Hono();
 
 signupRouterV1.post("/signup/web", async c => {
-    const body = await c.req.parseBody();
-    const { success, data, error } = createUserSchema.safeParse(body);
+    const body = await c.req.json();
+    const [data, error] = parse(body, createUserSchema);
 
-    if (!success) {
-        return c.json({ code: "VALIDATION", data: error.flatten() }, 400);
+    if (error) {
+        return c.json(
+            createAPIError("VALIDATION", "Validation failed", error),
+            400,
+        );
     }
 
     const passwordHash = await hash(data.password, {
