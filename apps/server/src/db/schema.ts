@@ -1,1 +1,1 @@
-export * from "@rs/models/db";
+export * from "@rs/shared/db";

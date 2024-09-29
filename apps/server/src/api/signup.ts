@@ -1,8 +1,8 @@
 import { hash } from "@node-rs/argon2";
-import { createUserSchema } from "@rs/models";
+import { createUserSchema } from "@rs/shared/models";
 import { Hono } from "hono";
 import db from "../db";
-import { userTable } from "@rs/models/db";
+import { userTable } from "../../../../packages/shared/src/db";
 import { SqliteError } from "better-sqlite3";
 import { generateId } from "lucia";
 import lucia from "../auth/lucia";
@@ -45,7 +45,7 @@ signupRouterV1.post("/signup/web", async c => {
         return c.json({ data: user });
     } catch (e) {
         if (e instanceof SqliteError && e.code === "SQLITE_CONSTRAINT_UNIQUE") {
-            return c.json({ code: "EMAIL_IN_USE", data: e.message }, 409);
+            return c.json({ code: "DATABASE", data: e.message }, 409);
         }
         return c.json({ code: "UNKNOWN", data: null }, 500);
     }

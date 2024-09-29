@@ -1,6 +1,5 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { helloWorld } from "@rs/shared";
 import { PORT, setupConst } from "./const";
 import { logger } from "hono/logger";
 import { bodyLimit } from "hono/body-limit";
@@ -24,7 +23,7 @@ app.use(csrf());
 app.use(secureHeaders());
 
 app.get("/", c => {
-    return c.text(helloWorld());
+    return c.text("helloWorld()");
 });
 
 serve({
