@@ -18,3 +18,9 @@ dist/
 build/
 
 .turbo
+
+.output
+.data
+.nuxt
+.nitro
+.cache
