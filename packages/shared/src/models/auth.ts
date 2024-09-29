@@ -14,9 +14,17 @@ export const createUserSchema = createInsertSchema(userTable, {
         password: z.string().min(8).max(1024),
     });
 
-export const userSchema = createSelectSchema(userTable);
+// dbUserSchema represents a user just returned from the database,
+// while userSchema represents a safe and secure version of the user
+// that can be passed everywhere
+export const dbUserSchema = createSelectSchema(userTable, {
+    email: s => s.email.email(),
+    role: userRoleSchema,
+});
+export const userSchema = dbUserSchema.omit({ passwordHash: true });
 
 export type CreateUser = z.infer<typeof createUserSchema>;
+export type DbUser = z.infer<typeof dbUserSchema>;
 export type User = z.infer<typeof userSchema>;
 
 export const createSessionSchema = createInsertSchema(sessionTable).omit({

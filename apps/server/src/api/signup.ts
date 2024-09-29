@@ -1,5 +1,5 @@
 import { hash } from "@node-rs/argon2";
-import { createUserSchema } from "@rs/shared/models";
+import { createUserSchema, DbUser, User } from "@rs/shared/models";
 import { Hono } from "hono";
 import db from "../db";
 import { userTable } from "../../../../packages/shared/src/db";
@@ -13,7 +13,7 @@ export const signupRouterV1 = new Hono();
 
 signupRouterV1.post("/signup/web", async c => {
     const body = await c.req.json();
-    const [data, error] = parse(body, createUserSchema);
+    const { data, error } = parse(body, createUserSchema);
 
     if (error) {
         return c.json(
@@ -32,26 +32,36 @@ signupRouterV1.post("/signup/web", async c => {
     const id = generateId(32);
 
     try {
-        const user = await db
-            .insert(userTable)
-            .values({
-                email: data.email,
-                name: data.name,
-                role: data.role,
-                id,
-                passwordHash,
-            })
-            .returning();
+        const { passwordHash: _, ...user } = (
+            await db
+                .insert(userTable)
+                .values({
+                    email: data.email,
+                    name: data.name,
+                    role: data.role,
+                    id,
+                    passwordHash,
+                })
+                .returning()
+        )[0];
 
         const session = await lucia.createSession(id, {});
         const cookie = lucia.createSessionCookie(session.id).serialize();
+
         c.header("Set-Cookie", cookie, { append: true });
 
         return c.json({ data: user });
     } catch (e) {
         if (e instanceof SqliteError && e.code === "SQLITE_CONSTRAINT_UNIQUE") {
-            return c.json({ code: "DATABASE", data: e.message }, 409);
+            return c.json(
+                createAPIError(
+                    "DATABASE",
+                    "Konto z takim adresem email już istieje",
+                    e.message,
+                ),
+                409,
+            );
         }
-        return c.json({ code: "UNKNOWN", data: null }, 500);
+        return c.json(createAPIError("UNKNOWN", "Błąd serwera :("), 500);
     }
 });

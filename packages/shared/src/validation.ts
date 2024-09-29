@@ -4,7 +4,7 @@ import { customZodErrorMap } from "./error";
 export function parse<T>(
     data: any,
     schema: ZodSchema<T>,
-): [null, Record<string, string[]>] | [T, null] {
+): { data: null; error: Record<string, string[]> } | { data: T; error: null } {
     const {
         success,
         data: out,
@@ -12,8 +12,11 @@ export function parse<T>(
     } = schema.safeParse(data, { errorMap: customZodErrorMap });
 
     if (!success) {
-        return [null, error.flatten().fieldErrors as Record<string, string[]>];
+        return {
+            data: null,
+            error: error.flatten().fieldErrors as Record<string, string[]>,
+        };
     }
 
-    return [out, null];
+    return { data: out, error: null };
 }
