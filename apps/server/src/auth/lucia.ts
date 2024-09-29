@@ -1,6 +1,6 @@
 import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
 import db from "../db";
-import { sessionTable, userTable } from "../db/schema";
+import { sessionTable, userTable } from "@rs/models/db";
 import { Lucia } from "lucia";
 import { ENV } from "../const";
 

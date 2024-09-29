@@ -2,10 +2,14 @@ import { relations } from "drizzle-orm";
 import { integer } from "drizzle-orm/sqlite-core";
 import { text } from "drizzle-orm/sqlite-core";
 import { sqliteTable } from "drizzle-orm/sqlite-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { UserRole } from "../models";
 
 export const userTable = sqliteTable("user", {
     id: text("id").primaryKey(),
+    role: text("role").notNull().$type<UserRole>(),
+    name: text("name").notNull(),
+    email: text("email").notNull().unique(),
+    passwordHash: text("passwordHash").notNull(),
 });
 
 export const sessionTable = sqliteTable("session", {
