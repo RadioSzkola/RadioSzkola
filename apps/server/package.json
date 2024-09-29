@@ -3,15 +3,27 @@
     "private": true,
     "scripts": {
         "dev": "tsx watch src/index.ts",
-        "build": "pkgroll"
+        "build": "pkgroll",
+        "migrate:generate": "drizzle-kit generate",
+        "migrate:run": "tsx src/migrate.ts"
     },
     "dependencies": {
         "@hono/node-server": "^1.13.1",
+        "@lucia-auth/adapter-drizzle": "^1.1.0",
+        "@rs/shared": "workspace:*",
+        "better-sqlite3": "^11.3.0",
+        "dotenv": "^16.4.5",
+        "drizzle-orm": "^0.33.0",
+        "drizzle-zod": "^0.5.1",
         "hono": "^4.6.3",
-        "@rs/shared": "workspace:*"
+        "lucia": "^3.2.0",
+        "oslo": "^1.2.1",
+        "zod": "^3.23.8"
     },
     "devDependencies": {
+        "@types/better-sqlite3": "^7.6.11",
         "@types/node": "^20.11.17",
+        "drizzle-kit": "^0.24.2",
         "pkgroll": "2.5.0",
         "tsx": "^4.7.1"
     },

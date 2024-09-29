@@ -1,6 +1,9 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { helloWorld } from "@rs/shared";
+import { PORT, setupConst } from "./const";
+
+setupConst();
 
 const app = new Hono();
 
@@ -8,10 +11,7 @@ app.get("/", c => {
     return c.text(helloWorld());
 });
 
-const port = 8080;
-console.log(`Server is running on port ${port}`);
-
 serve({
     fetch: app.fetch,
-    port,
+    port: PORT,
 });
