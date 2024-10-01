@@ -1,25 +1,23 @@
 import { hash } from "@node-rs/argon2";
-import { createUserSchema, DbUser, User } from "@rs/shared/models";
+import { createUserSchema } from "@rs/shared/models";
 import { Hono } from "hono";
-import db from "../db";
-import { userTable } from "../../../../packages/shared/src/db";
+import { db } from "../db";
+import { userTable } from "@rs/shared/schemas";
 import { SqliteError } from "better-sqlite3";
 import { generateId } from "lucia";
-import lucia from "../auth/lucia";
-import { parse } from "@rs/shared/validation";
-import { createAPIError } from "@rs/shared/error";
+import lucia from "../auth";
+import { parseBySchema } from "@rs/shared/validation";
+import { Context } from "./context";
+import { ApiError } from "@rs/shared/error";
 
-export const signupRouterV1 = new Hono();
+export const signupRouterV1 = new Hono<Context>();
 
 signupRouterV1.post("/signup/web", async c => {
     const body = await c.req.json();
-    const { data, error } = parse(body, createUserSchema);
+    const { data, error } = parseBySchema(body, createUserSchema);
 
     if (error) {
-        return c.json(
-            createAPIError("VALIDATION", "Validation failed", error),
-            400,
-        );
+        return c.json<ApiError>({ code: "AUTH" }, 422);
     }
 
     const passwordHash = await hash(data.password, {
@@ -53,15 +51,8 @@ signupRouterV1.post("/signup/web", async c => {
         return c.json({ data: user });
     } catch (e) {
         if (e instanceof SqliteError && e.code === "SQLITE_CONSTRAINT_UNIQUE") {
-            return c.json(
-                createAPIError(
-                    "DATABASE",
-                    "Konto z takim adresem email już istieje",
-                    e.message,
-                ),
-                409,
-            );
+            return c.json<ApiError>({ code: "AUTH" }, 409);
         }
-        return c.json(createAPIError("UNKNOWN", "Błąd serwera :("), 500);
+        return c.json<ApiError>({ code: "DATABASE" }, 409);
     }
 });

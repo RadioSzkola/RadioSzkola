@@ -1,8 +1,8 @@
 import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
-import db from "../db";
-import { sessionTable, userTable } from "../../../../packages/shared/src/db";
+import { db } from "./db";
+import { sessionTable, userTable } from "@rs/shared/schemas";
 import { Lucia } from "lucia";
-import { ENV } from "../const";
+import { ENV } from "./const";
 
 const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
 const lucia = new Lucia(adapter, {

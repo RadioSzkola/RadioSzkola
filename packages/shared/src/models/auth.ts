@@ -1,5 +1,5 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { sessionTable, userTable } from "../db/auth";
+import { sessionTable, userTable } from "../schemas/auth";
 import { z } from "zod";
 
 export const userRoleSchema = z.enum(["member", "editor", "admin"]);
@@ -11,7 +11,7 @@ export const createUserSchema = createInsertSchema(userTable, {
 })
     .omit({ id: true, passwordHash: true })
     .extend({
-        password: z.string().min(8).max(1024),
+        password: z.string().min(8).max(128),
     });
 
 // dbUserSchema represents a user just returned from the database,
@@ -26,6 +26,13 @@ export const userSchema = dbUserSchema.omit({ passwordHash: true });
 export type CreateUser = z.infer<typeof createUserSchema>;
 export type DbUser = z.infer<typeof dbUserSchema>;
 export type User = z.infer<typeof userSchema>;
+
+export const userLoginSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8).max(128),
+});
+
+export type UserLogin = z.infer<typeof userLoginSchema>;
 
 export const createSessionSchema = createInsertSchema(sessionTable).omit({
     id: true,

@@ -1,36 +1,30 @@
 import { z, ZodErrorMap } from "zod";
 
-export const APIErrorCodeSchema = z.enum(["UNKNOWN", "DATABASE", "VALIDATION"]);
-export type APIErrorCode = z.infer<typeof APIErrorCodeSchema>;
+export type ApiErrorCode = "VALIDATION" | "UNKNOWN" | "DATABASE" | "AUTH";
 
-export type APIError = (
+export type ApiError<T = any> =
     | {
-          code: typeof APIErrorCodeSchema.Values.UNKNOWN;
-          data: any;
+          code: "VALIDATION";
+          data: {
+              [P in T extends any ? keyof T : never]?: string[] | undefined;
+          };
+          message?: string;
       }
     | {
-          code: typeof APIErrorCodeSchema.Values.DATABASE;
-          data: any;
+          code: "UNKNOWN";
+          data?: any;
+          message?: string;
       }
     | {
-          code: typeof APIErrorCodeSchema.Values.VALIDATION;
-          data: Record<string, string[]>;
+          code: "DATABASE";
+          data?: any;
+          message?: string;
       }
-) & {
-    message: string;
-};
-
-export function createAPIError(
-    code: APIErrorCode,
-    message: string,
-    data: any = null,
-): APIError {
-    return {
-        code,
-        message,
-        data,
-    };
-}
+    | {
+          code: "AUTH";
+          data?: any;
+          message?: string;
+      };
 
 export const customZodErrorMap: ZodErrorMap = (error, ctx) => {
     return { message: ctx.defaultError };

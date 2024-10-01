@@ -1,10 +1,20 @@
 import { ZodSchema } from "zod";
 import { customZodErrorMap } from "./error";
 
-export function parse<T>(
+export function parseBySchema<T>(
     data: any,
     schema: ZodSchema<T>,
-): { data: null; error: Record<string, string[]> } | { data: T; error: null } {
+):
+    | {
+          data: null;
+          error: {
+              [P in T extends any ? keyof T : never]?: string[] | undefined;
+          };
+      }
+    | {
+          data: T;
+          error: null;
+      } {
     const {
         success,
         data: out,
@@ -14,7 +24,7 @@ export function parse<T>(
     if (!success) {
         return {
             data: null,
-            error: error.flatten().fieldErrors as Record<string, string[]>,
+            error: error.flatten().fieldErrors,
         };
     }
 

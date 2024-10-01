@@ -21,9 +21,9 @@
             "types": "./src/models/index.ts",
             "default": "./dist/models/index.js"
         },
-        "./db": {
-            "types": "./src/db/index.ts",
-            "default": "./dist/db/index.js"
+        "./schemas": {
+            "types": "./src/schemas/index.ts",
+            "default": "./dist/schemas/index.js"
         },
         "./error": {
             "types": "./src/error.ts",
