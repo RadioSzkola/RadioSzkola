@@ -1,9 +1,9 @@
 import { Session, User } from "@rs/shared/models";
 import type { Env } from "hono";
 
-export interface Context extends Env {
+export interface ApiContext extends Env {
     Variables: {
-        user: User | null;
-        session: Session | null;
+        user: User;
+        session: Session;
     };
 }
