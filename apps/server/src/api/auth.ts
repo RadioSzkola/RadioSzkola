@@ -71,7 +71,7 @@ authRouterV1.post(
         });
 
         if (!dbUser) {
-            return c.json<ApiError>({ code: "AUTH" }, 422);
+            return c.json<ApiError>({ code: "AUTH" }, 401);
         }
 
         const { passwordHash, ...user } = dbUser;
@@ -84,7 +84,7 @@ authRouterV1.post(
         });
 
         if (!isPasswordValid) {
-            return c.json<ApiError>({ code: "AUTH" }, 422);
+            return c.json<ApiError>({ code: "AUTH" }, 401);
         }
 
         const session = await lucia.createSession(user.id, {});

@@ -3,7 +3,6 @@ import { ApiContext } from "../context";
 import lucia from "../auth";
 import { ApiError } from "@rs/shared/error";
 import { db } from "../db";
-import { getCookie } from "hono/cookie";
 
 export const userAuthGuard = createMiddleware<ApiContext>(async (c, next) => {
     const cookies = c.req.header("Cookie") ?? "";
