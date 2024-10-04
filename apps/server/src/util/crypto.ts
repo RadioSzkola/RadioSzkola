@@ -1,14 +1,13 @@
 import crypto from "node:crypto";
 import { Algorithm, hash, Options, verify } from "@node-rs/argon2";
 
-export function getPepper(): string {
+export function getPepper(): Buffer {
     // Empty for testing purposes
-    return "";
+    return Buffer.from("");
 }
 
-export function getSalt(): string {
-    const buf = crypto.randomBytes(32);
-    return buf.toString("base64");
+export function getSalt(): Buffer {
+    return crypto.randomBytes(32);
 }
 
 export const argon2Options: Options = {
@@ -26,31 +25,24 @@ export const argon2Options: Options = {
 export async function hashPassword(password: string): Promise<string> {
     const pepper = getPepper();
     const salt = getSalt();
-    const passwordHash = await hash(pepper + salt + password, argon2Options);
 
-    if (!argon2Options.algorithm) {
-        throw Error("crypto::hashPassword -> Wrong algorithm code");
-    }
+    const passwordHash = await hash(password, {
+        ...argon2Options,
+        salt: salt,
+        secret: pepper,
+    });
 
-    return argon2Options.algorithm.toString() + "$" + salt + "$" + passwordHash;
+    return passwordHash;
 }
 
 export async function verifyPassword(
     passwordHash: string,
     password: string,
 ): Promise<boolean> {
-    const [algoCode, salt, hashValue] = passwordHash.split("$");
     const pepper = getPepper();
 
-    if (
-        algoCode !== Algorithm.Argon2d.toString() ||
-        algoCode !== Algorithm.Argon2i.toString() ||
-        algoCode !== Algorithm.Argon2id.toString()
-    ) {
-        throw Error("crypto::verifyPassword -> Wrong algorithm code");
-    }
-    return await verify(hashValue, pepper + salt + password, {
+    return await verify(passwordHash, password, {
         ...argon2Options,
-        algorithm: parseInt(algoCode),
+        secret: pepper,
     });
 }
