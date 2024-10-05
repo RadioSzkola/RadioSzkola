@@ -40,7 +40,7 @@ accountRouterV1.get("/", apiAuth, async c => {
     const user = c.get("user");
 
     if (!user) {
-        return c.json<ApiError>({ code: "AUTH" });
+        return c.json<ApiError>({ code: "AUTH" }, 401);
     }
 
     return c.json<ApiResponse>({ data: user });
@@ -55,7 +55,7 @@ accountRouterV1.patch(
         const updateUserData = c.req.valid("json");
 
         if (!user) {
-            return c.json<ApiError>({ code: "AUTH" });
+            return c.json<ApiError>({ code: "AUTH" }, 401);
         }
 
         const updatedUsers = await db
@@ -65,7 +65,7 @@ accountRouterV1.patch(
             .returning();
 
         if (updatedUsers.length === 0) {
-            return c.json<ApiError>({ code: "DATABASE" });
+            return c.json<ApiError>({ code: "DATABASE" }, 400);
         }
 
         return c.json<ApiResponse>({ data: updatedUsers[0] });
@@ -82,11 +82,11 @@ accountRouterV1.patch(
         const params = c.req.param();
 
         if (!user) {
-            return c.json<ApiError>({ code: "AUTH" });
+            return c.json<ApiError>({ code: "AUTH" }, 401);
         }
 
         if (user.role !== "admin") {
-            return c.json<ApiError>({ code: "AUTH" });
+            return c.json<ApiError>({ code: "AUTH" }, 401);
         }
 
         const updatedUsers = await db
@@ -96,7 +96,7 @@ accountRouterV1.patch(
             .returning();
 
         if (updatedUsers.length === 0) {
-            return c.json<ApiError>({ code: "DATABASE" });
+            return c.json<ApiError>({ code: "DATABASE" }, 400);
         }
 
         return c.json<ApiResponse>({ data: updatedUsers[0] });

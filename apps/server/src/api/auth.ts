@@ -78,9 +78,9 @@ webAuthRouterV1.post(
                 e instanceof SqliteError &&
                 e.code === "SQLITE_CONSTRAINT_UNIQUE"
             ) {
-                return c.json<ApiError>({ code: "AUTH" }, 409);
+                return c.json<ApiError>({ code: "AUTH" }, 401);
             }
-            return c.json<ApiError>({ code: "DATABASE" }, 409);
+            return c.json<ApiError>({ code: "DATABASE" }, 400);
         }
     },
 );

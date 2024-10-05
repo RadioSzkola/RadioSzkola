@@ -38,11 +38,11 @@ usersRouterV1.get("/", apiAuth, async c => {
     const query = c.req.query();
 
     if (!user) {
-        return c.json<ApiError>({ code: "AUTH" });
+        return c.json<ApiError>({ code: "AUTH" }, 401);
     }
 
     if (user.role !== "admin") {
-        return c.json<ApiError>({ code: "AUTH" });
+        return c.json<ApiError>({ code: "AUTH" }, 401);
     }
 
     let limit = parseInt(query.limit ?? 100);
@@ -61,11 +61,11 @@ usersRouterV1.get("/:id", apiAuth, async c => {
     const params = c.req.param();
 
     if (!user) {
-        return c.json<ApiError>({ code: "AUTH" });
+        return c.json<ApiError>({ code: "AUTH" }, 401);
     }
 
     if (user.role !== "admin") {
-        return c.json<ApiError>({ code: "AUTH" });
+        return c.json<ApiError>({ code: "AUTH" }, 401);
     }
 
     const selectedUser = await db.query.userTable.findFirst({
@@ -73,7 +73,7 @@ usersRouterV1.get("/:id", apiAuth, async c => {
     });
 
     if (!selectedUser) {
-        return c.json<ApiError>({ code: "DATABASE" });
+        return c.json<ApiError>({ code: "DATABASE" }, 400);
     }
 
     return c.json<ApiResponse>({ data: selectedUser });
