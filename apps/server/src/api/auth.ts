@@ -8,11 +8,13 @@ import lucia from "../auth";
 import { ApiContext } from "../context";
 import { ApiError } from "@rs/shared/error";
 import { jsonSchemaValidator } from "../middlewares/validation";
-import { userAuthGuard } from "../middlewares/auth";
+import { apiAuth } from "../middlewares/auth";
 import { hashPassword, verifyPassword } from "../crypto";
 import { bodyLimit } from "hono/body-limit";
 import { WEB_APP_PORT } from "../const";
 import { cors } from "hono/cors";
+import { rateLimiter } from "hono-rate-limiter";
+import { getConnInfo } from "@hono/node-server/conninfo";
 
 export const webAuthRouterV1 = new Hono<ApiContext>();
 
@@ -31,6 +33,15 @@ webAuthRouterV1.use(
 webAuthRouterV1.use(
     bodyLimit({
         maxSize: 1024, // 1kb
+    }),
+);
+
+webAuthRouterV1.use(
+    rateLimiter({
+        windowMs: 1 * 60 * 1000, // 1min
+        limit: 10, // max 10 auth requests per 1min per IP
+        standardHeaders: "draft-6",
+        keyGenerator: c => getConnInfo(c).remote.address ?? "",
     }),
 );
 
@@ -109,8 +120,12 @@ webAuthRouterV1.post(
     },
 );
 
-webAuthRouterV1.post("/logout", userAuthGuard, async c => {
+webAuthRouterV1.post("/logout", apiAuth, async c => {
     const session = c.get("session");
+
+    if (!session) {
+        return c.json<ApiError>({ code: "AUTH" }, 401);
+    }
 
     await lucia.invalidateSession(session.id);
     const cookie = lucia.createBlankSessionCookie().serialize();

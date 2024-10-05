@@ -4,24 +4,32 @@ import lucia from "../auth";
 import { ApiError } from "@rs/shared/error";
 import { db } from "../db";
 
-export const userAuthGuard = createMiddleware<ApiContext>(async (c, next) => {
-    const cookies = c.req.header("Cookie") ?? "";
+export const apiAuth = createMiddleware<ApiContext>(async (c, next) => {
+    c.set("session", null);
+    c.set("user", null);
 
+    const cookies = c.req.header("Cookie") ?? "";
     const sessionId = lucia.readSessionCookie(cookies);
 
     if (!sessionId) {
-        return c.json<ApiError>({ code: "AUTH" }, 401);
+        return next();
     }
 
     const { session, user: sessionUser } =
         await lucia.validateSession(sessionId);
+
     if (session && session.fresh) {
         const cookie = lucia.createSessionCookie(session.id).serialize();
         c.header("Set-Cookie", cookie, { append: true });
-    } else {
+    }
+
+    if (!session) {
         const cookie = lucia.createBlankSessionCookie().serialize();
         c.header("Set-Cookie", cookie, { append: true });
-        return c.json<ApiError>({ code: "AUTH" }, 401);
+        return next();
+    }
+    if (!sessionUser) {
+        return next();
     }
 
     const user = await db.query.userTable.findFirst({

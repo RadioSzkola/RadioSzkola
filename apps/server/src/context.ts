@@ -3,7 +3,7 @@ import type { Env } from "hono";
 
 export interface ApiContext extends Env {
     Variables: {
-        user: User;
-        session: Session;
+        user: User | null;
+        session: Session | null;
     };
 }
