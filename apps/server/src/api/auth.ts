@@ -1,4 +1,8 @@
-import { createUserSchema, userLoginSchema } from "@rs/shared/models";
+import {
+    ApiResponse,
+    createUserSchema,
+    userLoginSchema,
+} from "@rs/shared/models";
 import { Hono } from "hono";
 import { db } from "../db";
 import { userTable } from "@rs/shared/schemas";
@@ -11,7 +15,7 @@ import { jsonSchemaValidator } from "../middlewares/validation";
 import { apiAuth } from "../middlewares/auth";
 import { hashPassword, verifyPassword } from "../crypto";
 import { bodyLimit } from "hono/body-limit";
-import { WEB_APP_PORT } from "../const";
+import { getAllowedOrigins } from "../const";
 import { cors } from "hono/cors";
 import { rateLimiter } from "hono-rate-limiter";
 import { getConnInfo } from "@hono/node-server/conninfo";
@@ -20,13 +24,8 @@ export const webAuthRouterV1 = new Hono<ApiContext>();
 
 webAuthRouterV1.use(
     cors({
-        origin: [
-            `http://localhost:${WEB_APP_PORT}`,
-            `http://192.168.55.119:${WEB_APP_PORT}`,
-            `http://192.168.68.131:${WEB_APP_PORT}`,
-        ],
+        origin: getAllowedOrigins(),
         allowMethods: ["POST"],
-        allowHeaders: ["Content-Type", "Cookie"],
     }),
 );
 
@@ -73,7 +72,7 @@ webAuthRouterV1.post(
 
             c.header("Set-Cookie", cookie, { append: true });
 
-            return c.json({ data: user });
+            return c.json<ApiResponse>({ data: user });
         } catch (e) {
             if (
                 e instanceof SqliteError &&
@@ -116,7 +115,7 @@ webAuthRouterV1.post(
 
         c.header("Set-Cookie", cookie, { append: true });
 
-        return c.json({ data: user });
+        return c.json<ApiResponse>({ data: user });
     },
 );
 
@@ -132,5 +131,5 @@ webAuthRouterV1.post("/logout", apiAuth, async c => {
 
     c.header("Set-Cookie", cookie);
 
-    return c.json({ message: "Logout successful" }, 200);
+    return c.json<ApiResponse>({ message: "Logout successful" }, 200);
 });

@@ -1,4 +1,4 @@
-import { z, ZodErrorMap } from "zod";
+import { ZodErrorMap } from "zod";
 
 export type ApiErrorCode = "VALIDATION" | "UNKNOWN" | "DATABASE" | "AUTH";
 
