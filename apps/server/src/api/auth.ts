@@ -10,11 +10,32 @@ import { ApiError } from "@rs/shared/error";
 import { jsonSchemaValidator } from "../middlewares/validation";
 import { userAuthGuard } from "../middlewares/auth";
 import { hashPassword, verifyPassword } from "../crypto";
+import { bodyLimit } from "hono/body-limit";
+import { WEB_APP_PORT } from "../const";
+import { cors } from "hono/cors";
 
-export const authRouterV1 = new Hono<ApiContext>();
+export const webAuthRouterV1 = new Hono<ApiContext>();
 
-authRouterV1.post(
-    "/web/signup",
+webAuthRouterV1.use(
+    cors({
+        origin: [
+            `http://localhost:${WEB_APP_PORT}`,
+            `http://192.168.55.119:${WEB_APP_PORT}`,
+            `http://192.168.68.131:${WEB_APP_PORT}`,
+        ],
+        allowMethods: ["POST"],
+        allowHeaders: ["Content-Type", "Cookie"],
+    }),
+);
+
+webAuthRouterV1.use(
+    bodyLimit({
+        maxSize: 1024, // 1kb
+    }),
+);
+
+webAuthRouterV1.post(
+    "/signup",
     jsonSchemaValidator(createUserSchema),
     async c => {
         const signupData = c.req.valid("json");
@@ -54,8 +75,8 @@ authRouterV1.post(
     },
 );
 
-authRouterV1.post(
-    "/web/login",
+webAuthRouterV1.post(
+    "/login",
     jsonSchemaValidator(userLoginSchema),
     async c => {
         const loginData = c.req.valid("json");
@@ -88,7 +109,7 @@ authRouterV1.post(
     },
 );
 
-authRouterV1.post("/web/logout", userAuthGuard, async c => {
+webAuthRouterV1.post("/logout", userAuthGuard, async c => {
     const session = c.get("session");
 
     await lucia.invalidateSession(session.id);
@@ -97,9 +118,4 @@ authRouterV1.post("/web/logout", userAuthGuard, async c => {
     c.header("Set-Cookie", cookie);
 
     return c.json({ message: "Logout successful" }, 200);
-});
-
-authRouterV1.get("/user", userAuthGuard, async c => {
-    const user = c.get("user");
-    c.json({ data: user });
 });

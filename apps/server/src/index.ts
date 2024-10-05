@@ -6,5 +6,5 @@ setupConst();
 
 serve({
     fetch: api.fetch,
-    port: PORT,
+    port: parseInt(PORT),
 });

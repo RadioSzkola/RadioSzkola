@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 
-export const PORT = (process.env.PORT || 8080) as number | undefined;
+export const PORT = process.env.PORT || "8080";
+export const WEB_APP_PORT = process.env.WEB_APP_PORT || "3000";
 export const ENV = (process.env.NODE_ENV || "development") as
     | "production"
     | "development";
