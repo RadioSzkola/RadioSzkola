@@ -104,28 +104,6 @@ importers:
         specifier: ^3.4.13
         version: 3.4.13
 
-  packages/models:
-    dependencies:
-      drizzle-orm:
-        specifier: ^0.33.0
-        version: 0.33.0(@types/better-sqlite3@7.6.11)(better-sqlite3@11.3.0)
-      drizzle-zod:
-        specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.33.0(@types/better-sqlite3@7.6.11)(better-sqlite3@11.3.0))(zod@3.23.8)
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
-    devDependencies:
-      '@types/node':
-        specifier: ^20.11.17
-        version: 20.16.9
-      pkgroll:
-        specifier: 2.5.0
-        version: 2.5.0
-      tsx:
-        specifier: ^4.7.1
-        version: 4.19.1
-
   packages/shared:
     dependencies:
       drizzle-orm:

@@ -1,4 +1,3 @@
-import { hash, verify } from "@node-rs/argon2";
 import { createUserSchema, userLoginSchema } from "@rs/shared/models";
 import { Hono } from "hono";
 import { db } from "../db";
@@ -8,8 +7,9 @@ import { generateId } from "lucia";
 import lucia from "../auth";
 import { ApiContext } from "../context";
 import { ApiError } from "@rs/shared/error";
-import { jsonSchemaValidator } from "../middleware/validation";
-import { userAuthGuard } from "../middleware/auth";
+import { jsonSchemaValidator } from "../middlewares/validation";
+import { userAuthGuard } from "../middlewares/auth";
+import { hashPassword, verifyPassword } from "../crypto";
 
 export const authRouterV1 = new Hono<ApiContext>();
 
@@ -19,13 +19,7 @@ authRouterV1.post(
     async c => {
         const signupData = c.req.valid("json");
 
-        const passwordHash = await hash(signupData.password, {
-            memoryCost: 20000,
-            timeCost: 2,
-            outputLen: 32,
-            parallelism: 1,
-        });
-
+        const passwordHash = await hashPassword(signupData.password);
         const id = generateId(32);
 
         try {
@@ -76,12 +70,10 @@ authRouterV1.post(
 
         const { passwordHash, ...user } = dbUser;
 
-        const isPasswordValid = await verify(passwordHash, loginData.password, {
-            memoryCost: 20000,
-            timeCost: 2,
-            outputLen: 32,
-            parallelism: 1,
-        });
+        const isPasswordValid = await verifyPassword(
+            passwordHash,
+            loginData.password,
+        );
 
         if (!isPasswordValid) {
             return c.json<ApiError>({ code: "AUTH" }, 401);

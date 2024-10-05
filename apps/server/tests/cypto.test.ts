@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hashPassword, verifyPassword } from "../src/util/crypto";
+import { hashPassword, verifyPassword } from "../src/crypto";
 import crypto from "node:crypto";
 
 describe("Hashing and verifying passwords", () => {

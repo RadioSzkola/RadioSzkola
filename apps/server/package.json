@@ -6,8 +6,7 @@
         "build": "pkgroll",
         "migrate:generate": "drizzle-kit generate",
         "migrate:run": "tsx src/migrate.ts",
-        "test": "vitest",
-        "coverage": "vitest run --coverage"
+        "test:unit": "vitest"
     },
     "dependencies": {
         "@hono/node-server": "^1.13.1",
