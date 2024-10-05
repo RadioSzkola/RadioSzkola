@@ -2,10 +2,12 @@
     "name": "@rs/server",
     "private": true,
     "scripts": {
-        "dev": "tsx watch src/index.ts",
+        "dev": "conc \"tsx watch src/index.ts\" \"pnpm db:studio\"",
         "build": "pkgroll",
-        "migrate:generate": "drizzle-kit generate",
-        "migrate:run": "tsx src/migrate.ts",
+        "db:migrate:generate": "drizzle-kit generate",
+        "db:migrate:run": "tsx src/migrate.ts",
+        "db:migrate": "pnpm db:migrate:generate && pnpm db:migrate:run",
+        "db:studio": "pnpm drizzle-kit studio",
         "test:unit": "vitest"
     },
     "dependencies": {
@@ -25,6 +27,7 @@
     "devDependencies": {
         "@types/better-sqlite3": "^7.6.11",
         "@types/node": "^20.11.17",
+        "concurrently": "^9.0.1",
         "drizzle-kit": "^0.24.2",
         "pkgroll": "2.5.0",
         "tsx": "^4.7.1",
