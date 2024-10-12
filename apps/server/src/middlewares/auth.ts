@@ -4,7 +4,7 @@ import lucia from "../auth";
 import { ApiError } from "@rs/shared/error";
 import { db } from "../db";
 
-export const apiAuth = createMiddleware<ApiContext>(async (c, next) => {
+export const auth = createMiddleware<ApiContext>(async (c, next) => {
     c.set("session", null);
     c.set("user", null);
 

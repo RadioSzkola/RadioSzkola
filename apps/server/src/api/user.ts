@@ -2,13 +2,13 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { getAllowedOrigins } from "../const";
 import { bodyLimit } from "hono/body-limit";
-import { apiAuth } from "../middlewares/auth";
+import { auth } from "../middlewares/auth";
 import { ApiError } from "@rs/shared/error";
 import { ApiResponse, updateUserSchema, User } from "@rs/shared/models";
 import {
-    bodySchemaValidator,
+    bodyValidator,
     paginationOptionsValidator,
-    paramsSchemaValidator,
+    paramsValidator,
 } from "../middlewares/validation";
 import { db } from "../db";
 import { userTable } from "../schema";
@@ -30,7 +30,7 @@ userRouterV1.use(
     }),
 );
 
-userRouterV1.get("/", apiAuth, paginationOptionsValidator, async c => {
+userRouterV1.get("/", auth, paginationOptionsValidator, async c => {
     const user = c.get("user");
     const { limit, offset } = c.req.valid("query");
 
@@ -64,8 +64,8 @@ userRouterV1.get("/", apiAuth, paginationOptionsValidator, async c => {
 
 userRouterV1.get(
     "/:id",
-    apiAuth,
-    paramsSchemaValidator(z.object({ id: z.string() })),
+    auth,
+    paramsValidator(z.object({ id: z.string() })),
     async c => {
         const user = c.get("user");
         const params = c.req.valid("param");
@@ -99,9 +99,9 @@ userRouterV1.get(
 
 userRouterV1.patch(
     "/:id",
-    apiAuth,
-    bodySchemaValidator(updateUserSchema),
-    paramsSchemaValidator(z.object({ id: z.string() })),
+    auth,
+    bodyValidator(updateUserSchema),
+    paramsValidator(z.object({ id: z.string() })),
     async c => {
         const user = c.get("user");
         const updateUserData = c.req.valid("json");
@@ -146,8 +146,8 @@ userRouterV1.patch(
 
 userRouterV1.delete(
     "/:id",
-    apiAuth,
-    paramsSchemaValidator(z.object({ id: z.string() })),
+    auth,
+    paramsValidator(z.object({ id: z.string() })),
     async c => {
         const user = c.get("user");
         const params = c.req.valid("param");
