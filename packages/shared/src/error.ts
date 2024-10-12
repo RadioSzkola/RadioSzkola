@@ -21,7 +21,12 @@ export type ApiError<T = any> =
           message?: string;
       }
     | {
-          code: "AUTH";
+          code: "AUTHENTICATION";
+          data?: any;
+          message?: string;
+      }
+    | {
+          code: "AUTHORIZATION";
           data?: any;
           message?: string;
       };

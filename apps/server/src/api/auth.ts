@@ -11,7 +11,7 @@ import { generateId } from "lucia";
 import lucia from "../auth";
 import { ApiContext } from "../context";
 import { ApiError } from "@rs/shared/error";
-import { jsonSchemaValidator } from "../middlewares/validation";
+import { bodySchemaValidator } from "../middlewares/validation";
 import { apiAuth } from "../middlewares/auth";
 import { hashPassword, verifyPassword } from "../crypto";
 import { bodyLimit } from "hono/body-limit";
@@ -35,18 +35,9 @@ webAuthRouterV1.use(
     }),
 );
 
-webAuthRouterV1.use(
-    rateLimiter({
-        windowMs: 1 * 60 * 1000, // 1min
-        limit: 10, // max 10 auth requests per 1min per IP
-        standardHeaders: "draft-6",
-        keyGenerator: c => getConnInfo(c).remote.address ?? "",
-    }),
-);
-
 webAuthRouterV1.post(
     "/signup",
-    jsonSchemaValidator(createUserSchema),
+    bodySchemaValidator(createUserSchema),
     async c => {
         const signupData = c.req.valid("json");
 
@@ -57,6 +48,7 @@ webAuthRouterV1.post(
             const { passwordHash: _, ...user } = (
                 await db
                     .insert(userTable)
+                    // @ts-ignore
                     .values({
                         email: signupData.email,
                         name: signupData.name,
@@ -78,7 +70,7 @@ webAuthRouterV1.post(
                 e instanceof SqliteError &&
                 e.code === "SQLITE_CONSTRAINT_UNIQUE"
             ) {
-                return c.json<ApiError>({ code: "AUTH" }, 401);
+                return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
             }
             return c.json<ApiError>({ code: "DATABASE" }, 400);
         }
@@ -87,7 +79,7 @@ webAuthRouterV1.post(
 
 webAuthRouterV1.post(
     "/login",
-    jsonSchemaValidator(userLoginSchema),
+    bodySchemaValidator(userLoginSchema),
     async c => {
         const loginData = c.req.valid("json");
 
@@ -96,7 +88,7 @@ webAuthRouterV1.post(
         });
 
         if (!dbUser) {
-            return c.json<ApiError>({ code: "AUTH" }, 401);
+            return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
         }
 
         const { passwordHash, ...user } = dbUser;
@@ -107,7 +99,7 @@ webAuthRouterV1.post(
         );
 
         if (!isPasswordValid) {
-            return c.json<ApiError>({ code: "AUTH" }, 401);
+            return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
         }
 
         const session = await lucia.createSession(user.id, {});
@@ -123,7 +115,7 @@ webAuthRouterV1.post("/logout", apiAuth, async c => {
     const session = c.get("session");
 
     if (!session) {
-        return c.json<ApiError>({ code: "AUTH" }, 401);
+        return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
     }
 
     await lucia.invalidateSession(session.id);
@@ -131,5 +123,5 @@ webAuthRouterV1.post("/logout", apiAuth, async c => {
 
     c.header("Set-Cookie", cookie);
 
-    return c.json<ApiResponse>({ message: "Logout successful" }, 200);
+    return c.json<ApiResponse>({ message: "Wylogowanie powiodło się" }, 200);
 });
