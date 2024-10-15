@@ -3,9 +3,9 @@ import { cors } from "hono/cors";
 import { getAllowedOrigins } from "../const";
 import { bodyLimit } from "hono/body-limit";
 import {
-    bodyValidator,
-    paginationOptionsValidator,
-    paramsValidator,
+    bodyValidatorMiddleware,
+    paginationValidatorMiddleware,
+    paramsValidatorMiddleware,
 } from "../middlewares/validation";
 import { db } from "../db";
 import {
@@ -15,11 +15,11 @@ import {
 } from "@rs/shared/models";
 import { z } from "zod";
 import { ApiError } from "@rs/shared/error";
-import { auth } from "../middlewares/auth";
 import { schoolTable } from "../schema";
 import { eq } from "drizzle-orm";
+import { ApiContext } from "../context";
 
-export const schoolRouterV1 = new Hono();
+export const schoolRouterV1 = new Hono<ApiContext>();
 
 schoolRouterV1.use(
     cors({
@@ -28,13 +28,7 @@ schoolRouterV1.use(
     }),
 );
 
-schoolRouterV1.use(
-    bodyLimit({
-        maxSize: 8 * 1024 * 1024, // 8mb
-    }),
-);
-
-schoolRouterV1.get("/", paginationOptionsValidator, async c => {
+schoolRouterV1.get("/", paginationValidatorMiddleware, async c => {
     const { limit, offset } = c.req.valid("query");
 
     const schools = await db.query.schoolTable.findMany({
@@ -45,35 +39,39 @@ schoolRouterV1.get("/", paginationOptionsValidator, async c => {
     return c.json<ApiResponse>({ data: schools });
 });
 
-schoolRouterV1.post("/", auth, bodyValidator(createSchoolSchema), async c => {
-    const user = c.get("user");
-    const createSchoolData = c.req.valid("json");
+schoolRouterV1.post(
+    "/",
+    bodyValidatorMiddleware(createSchoolSchema),
+    async c => {
+        const user = c.get("user");
+        const createSchoolData = c.req.valid("json");
 
-    if (!user) {
-        return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
-    }
+        if (!user) {
+            return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
+        }
 
-    const isAuthorized = user.role === "systemadmin";
+        const isAuthorized = user.role === "systemadmin";
 
-    if (!isAuthorized) {
-        return c.json<ApiError>({ code: "AUTHORIZATION" }, 401);
-    }
+        if (!isAuthorized) {
+            return c.json<ApiError>({ code: "AUTHORIZATION" }, 401);
+        }
 
-    const school = await db
-        .insert(schoolTable)
-        .values(createSchoolData)
-        .returning();
+        const school = await db
+            .insert(schoolTable)
+            .values(createSchoolData)
+            .returning();
 
-    if (school.length === 0) {
-        return c.json<ApiError>({ code: "DATABASE" }, 500);
-    }
+        if (school.length === 0) {
+            return c.json<ApiError>({ code: "DATABASE" }, 500);
+        }
 
-    return c.json<ApiResponse>({ data: school[0] });
-});
+        return c.json<ApiResponse>({ data: school[0] });
+    },
+);
 
 schoolRouterV1.get(
     "/:id",
-    paramsValidator(z.object({ id: z.number() })),
+    paramsValidatorMiddleware(z.object({ id: z.number() })),
     async c => {
         const params = c.req.valid("param");
 
@@ -91,9 +89,8 @@ schoolRouterV1.get(
 
 schoolRouterV1.patch(
     "/:id",
-    auth,
-    paramsValidator(z.object({ id: z.number() })),
-    bodyValidator(updateSchoolSchema),
+    paramsValidatorMiddleware(z.object({ id: z.number() })),
+    bodyValidatorMiddleware(updateSchoolSchema),
     async c => {
         const user = c.get("user");
         const params = c.req.valid("param");
@@ -138,8 +135,7 @@ schoolRouterV1.patch(
 
 schoolRouterV1.delete(
     "/:id",
-    auth,
-    paramsValidator(z.object({ id: z.number() })),
+    paramsValidatorMiddleware(z.object({ id: z.number() })),
     async c => {
         const user = c.get("user");
         const params = c.req.valid("param");

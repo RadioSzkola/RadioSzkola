@@ -4,7 +4,7 @@ import { parseBySchema } from "@rs/shared/validation";
 import { validator } from "hono/validator";
 import type { ZodSchema } from "zod";
 
-export const bodyValidator = <T>(schema: ZodSchema<T>) =>
+export const bodyValidatorMiddleware = <T>(schema: ZodSchema<T>) =>
     validator<unknown, string, string, "json", T>("json", (value, c) => {
         const { data, error } = parseBySchema(value, schema);
 
@@ -19,7 +19,7 @@ export const bodyValidator = <T>(schema: ZodSchema<T>) =>
         return data as T;
     });
 
-export const queryValidator = <T>(schema: ZodSchema<T>) =>
+export const queryValidatorMiddleware = <T>(schema: ZodSchema<T>) =>
     validator<unknown, string, string, "query", T>("query", (value, c) => {
         const { data, error } = parseBySchema(value, schema);
 
@@ -34,7 +34,7 @@ export const queryValidator = <T>(schema: ZodSchema<T>) =>
         return data as T;
     });
 
-export const paginationOptionsValidator = validator<
+export const paginationValidatorMiddleware = validator<
     unknown,
     string,
     string,
@@ -60,7 +60,7 @@ export const paginationOptionsValidator = validator<
     return data;
 });
 
-export const paramsValidator = <T>(schema: ZodSchema<T>) =>
+export const paramsValidatorMiddleware = <T>(schema: ZodSchema<T>) =>
     validator<unknown, string, string, "param", T>("param", (value, c) => {
         const { data, error } = parseBySchema(value, schema);
 

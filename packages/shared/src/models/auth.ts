@@ -9,7 +9,7 @@ export const userRoleSchema = z.enum([
     "systemadmin", // A global admin (all of schools)
 ]);
 
-export const passwordSchema = z.string().min(8).max(128);
+export const userPasswordSchema = z.string().min(8).max(128);
 
 export const createUserSchema = createInsertSchema(userTable, {
     email: s => s.email.email(),
@@ -17,7 +17,7 @@ export const createUserSchema = createInsertSchema(userTable, {
 })
     .omit({ id: true, passwordHash: true, updatedAt: true, createdAt: true })
     .extend({
-        password: passwordSchema,
+        password: userPasswordSchema,
     });
 
 export const updateUserSchema = createInsertSchema(userTable, {
@@ -42,7 +42,7 @@ export const userSchema = createSelectSchema(userTable, {
 
 export const userLoginSchema = z.object({
     email: z.string().email(),
-    password: passwordSchema,
+    password: userPasswordSchema,
 });
 
 export const createSessionSchema = createInsertSchema(sessionTable).omit({

@@ -2,13 +2,13 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { getAllowedOrigins } from "../const";
 import { bodyLimit } from "hono/body-limit";
-import { auth } from "../middlewares/auth";
+import { authMiddleware } from "../middlewares/auth";
 import { ApiError } from "@rs/shared/error";
 import { ApiResponse, updateUserSchema, User } from "@rs/shared/models";
 import {
-    bodyValidator,
-    paginationOptionsValidator,
-    paramsValidator,
+    bodyValidatorMiddleware,
+    paginationValidatorMiddleware,
+    paramsValidatorMiddleware,
 } from "../middlewares/validation";
 import { db } from "../db";
 import { userTable } from "../schema";
@@ -30,42 +30,48 @@ userRouterV1.use(
     }),
 );
 
-userRouterV1.get("/", auth, paginationOptionsValidator, async c => {
-    const user = c.get("user");
-    const { limit, offset } = c.req.valid("query");
+userRouterV1.get(
+    "/",
+    authMiddleware,
+    paginationValidatorMiddleware,
+    async c => {
+        const user = c.get("user");
+        const { limit, offset } = c.req.valid("query");
 
-    if (!user) {
-        return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
-    }
+        if (!user) {
+            return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
+        }
 
-    const isAuthorized = user.role === "admin" || user.role === "systemadmin";
-    if (!isAuthorized) {
-        return c.json<ApiError>({ code: "AUTHORIZATION" }, 401);
-    }
+        const isAuthorized =
+            user.role === "admin" || user.role === "systemadmin";
+        if (!isAuthorized) {
+            return c.json<ApiError>({ code: "AUTHORIZATION" }, 401);
+        }
 
-    let users: User[];
+        let users: User[];
 
-    if (user.role === "admin") {
-        users = await db.query.userTable.findMany({
-            limit,
-            offset,
-            where: (fields, operators) =>
-                operators.eq(fields.schoolId, user.schoolId),
-        });
-    } else {
-        users = await db.query.userTable.findMany({
-            limit,
-            offset,
-        });
-    }
+        if (user.role === "admin") {
+            users = await db.query.userTable.findMany({
+                limit,
+                offset,
+                where: (fields, operators) =>
+                    operators.eq(fields.schoolId, user.schoolId),
+            });
+        } else {
+            users = await db.query.userTable.findMany({
+                limit,
+                offset,
+            });
+        }
 
-    return c.json<ApiResponse>({ data: users });
-});
+        return c.json<ApiResponse>({ data: users });
+    },
+);
 
 userRouterV1.get(
     "/:id",
-    auth,
-    paramsValidator(z.object({ id: z.string() })),
+    authMiddleware,
+    paramsValidatorMiddleware(z.object({ id: z.string() })),
     async c => {
         const user = c.get("user");
         const params = c.req.valid("param");
@@ -99,9 +105,9 @@ userRouterV1.get(
 
 userRouterV1.patch(
     "/:id",
-    auth,
-    bodyValidator(updateUserSchema),
-    paramsValidator(z.object({ id: z.string() })),
+    authMiddleware,
+    bodyValidatorMiddleware(updateUserSchema),
+    paramsValidatorMiddleware(z.object({ id: z.string() })),
     async c => {
         const user = c.get("user");
         const updateUserData = c.req.valid("json");
@@ -146,8 +152,8 @@ userRouterV1.patch(
 
 userRouterV1.delete(
     "/:id",
-    auth,
-    paramsValidator(z.object({ id: z.string() })),
+    authMiddleware,
+    paramsValidatorMiddleware(z.object({ id: z.string() })),
     async c => {
         const user = c.get("user");
         const params = c.req.valid("param");

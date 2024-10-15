@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { Algorithm, hash, Options, verify } from "@node-rs/argon2";
+import { generateId } from "lucia";
 
 export function getPepper(): Buffer {
     // Empty for testing purposes
@@ -45,4 +46,8 @@ export async function verifyPassword(
         ...argon2Options,
         secret: pepper,
     });
+}
+
+export function createUserId(): string {
+    return generateId(32);
 }
