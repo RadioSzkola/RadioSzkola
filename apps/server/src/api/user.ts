@@ -1,8 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { getAllowedOrigins } from "../const";
-import { bodyLimit } from "hono/body-limit";
-import { authMiddleware } from "../middlewares/auth";
 import { ApiError } from "@rs/shared/error";
 import { ApiResponse, updateUserSchema, User } from "@rs/shared/models";
 import {
@@ -14,8 +12,10 @@ import { db } from "../db";
 import { userTable } from "../schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { ApiContext } from "../context";
+import { useAuthRules } from "../auth";
 
-export const userRouterV1 = new Hono();
+export const userRouterV1 = new Hono<ApiContext>();
 
 userRouterV1.use(
     cors({
@@ -24,80 +24,55 @@ userRouterV1.use(
     }),
 );
 
-userRouterV1.use(
-    bodyLimit({
-        maxSize: 4 * 1024, // 4kb
-    }),
-);
+userRouterV1.get("/", paginationValidatorMiddleware, async c => {
+    const { limit, offset } = c.req.valid("query");
 
-userRouterV1.get(
-    "/",
-    authMiddleware,
-    paginationValidatorMiddleware,
-    async c => {
-        const user = c.get("user");
-        const { limit, offset } = c.req.valid("query");
+    const { user, error, statusCode } = useAuthRules(c, {
+        admin: true,
+        systemadmin: true,
+    });
 
-        if (!user) {
-            return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
-        }
+    if (error) return c.json(error, statusCode);
 
-        const isAuthorized =
-            user.role === "admin" || user.role === "systemadmin";
-        if (!isAuthorized) {
-            return c.json<ApiError>({ code: "AUTHORIZATION" }, 401);
-        }
+    let users: User[];
 
-        let users: User[];
+    if (user.role === "admin") {
+        users = await db.query.userTable.findMany({
+            limit,
+            offset,
+            where: (fields, operators) =>
+                operators.eq(fields.schoolId, user.schoolId),
+        });
+    } else {
+        users = await db.query.userTable.findMany({
+            limit,
+            offset,
+        });
+    }
 
-        if (user.role === "admin") {
-            users = await db.query.userTable.findMany({
-                limit,
-                offset,
-                where: (fields, operators) =>
-                    operators.eq(fields.schoolId, user.schoolId),
-            });
-        } else {
-            users = await db.query.userTable.findMany({
-                limit,
-                offset,
-            });
-        }
-
-        return c.json<ApiResponse>({ data: users });
-    },
-);
+    return c.json<ApiResponse>({ data: users });
+});
 
 userRouterV1.get(
     "/:id",
-    authMiddleware,
     paramsValidatorMiddleware(z.object({ id: z.string() })),
     async c => {
-        const user = c.get("user");
         const params = c.req.valid("param");
-
-        if (!user) {
-            return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
-        }
 
         const selectedUser = await db.query.userTable.findFirst({
             where: (fields, operators) => operators.eq(fields.id, params.id),
         });
 
-        if (!selectedUser) {
-            return c.json<ApiError>({ code: "DATABASE" }, 400);
-        }
+        if (!selectedUser) return c.json<ApiError>({ code: "DATABASE" }, 404);
 
-        const isAuthorized =
-            (user.role === "member" && user.id === params.id) ||
-            (user.role === "creator" && user.id === params.id) ||
-            (user.role === "admin" &&
-                selectedUser.schoolId === user.schoolId) ||
-            user.role === "systemadmin";
+        const { error, statusCode } = useAuthRules(c, {
+            member: user => user.id === selectedUser.id,
+            creator: user => user.id === selectedUser.id,
+            admin: user => user.schoolId === selectedUser.schoolId,
+            systemadmin: true,
+        });
 
-        if (!isAuthorized) {
-            return c.json<ApiError>({ code: "AUTHORIZATION" }, 401);
-        }
+        if (error) return c.json(error, statusCode);
 
         return c.json<ApiResponse>({ data: selectedUser });
     },
@@ -105,36 +80,26 @@ userRouterV1.get(
 
 userRouterV1.patch(
     "/:id",
-    authMiddleware,
     bodyValidatorMiddleware(updateUserSchema),
     paramsValidatorMiddleware(z.object({ id: z.string() })),
     async c => {
-        const user = c.get("user");
         const updateUserData = c.req.valid("json");
         const params = c.req.valid("param");
-
-        if (!user) {
-            return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
-        }
 
         const selectedUser = await db.query.userTable.findFirst({
             where: (fields, operators) => operators.eq(fields.id, params.id),
         });
 
-        if (!selectedUser) {
-            return c.json<ApiError>({ code: "DATABASE" }, 400);
-        }
+        if (!selectedUser) return c.json<ApiError>({ code: "DATABASE" }, 400);
 
-        const isAuthorized =
-            (user.role === "member" && user.id === params.id) ||
-            (user.role === "creator" && user.id === params.id) ||
-            (user.role === "admin" &&
-                selectedUser.schoolId === user.schoolId) ||
-            user.role === "systemadmin";
+        const { error, statusCode } = useAuthRules(c, {
+            member: user => user.id === selectedUser.id,
+            creator: user => user.id === selectedUser.id,
+            admin: user => user.schoolId === selectedUser.schoolId,
+            systemadmin: true,
+        });
 
-        if (!isAuthorized) {
-            return c.json<ApiError>({ code: "AUTHORIZATION" }, 401);
-        }
+        if (error) return c.json(error, statusCode);
 
         const updatedUsers = await db
             .update(userTable)
@@ -142,9 +107,8 @@ userRouterV1.patch(
             .where(eq(userTable.id, params.id))
             .returning();
 
-        if (updatedUsers.length === 0) {
+        if (updatedUsers.length === 0)
             return c.json<ApiError>({ code: "DATABASE" }, 400);
-        }
 
         return c.json<ApiResponse>({ data: updatedUsers[0] });
     },
@@ -152,42 +116,32 @@ userRouterV1.patch(
 
 userRouterV1.delete(
     "/:id",
-    authMiddleware,
     paramsValidatorMiddleware(z.object({ id: z.string() })),
     async c => {
-        const user = c.get("user");
         const params = c.req.valid("param");
-
-        if (!user) {
-            return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
-        }
 
         const selectedUser = await db.query.userTable.findFirst({
             where: (fields, operators) => operators.eq(fields.id, params.id),
         });
 
-        if (!selectedUser) {
-            return c.json<ApiError>({ code: "DATABASE" }, 400);
-        }
+        if (!selectedUser) return c.json<ApiError>({ code: "DATABASE" }, 400);
 
-        const isAuthorized =
-            (user.role === "member" && user.id === params.id) ||
-            (user.role === "creator" && user.id === params.id) ||
-            (user.role === "admin" &&
-                selectedUser.schoolId === user.schoolId) ||
-            user.role === "systemadmin";
-        if (!isAuthorized) {
-            return c.json<ApiError>({ code: "AUTHORIZATION" }, 401);
-        }
+        const { error, statusCode } = useAuthRules(c, {
+            member: user => user.id === selectedUser.id,
+            creator: user => user.id === selectedUser.id,
+            admin: user => user.schoolId === selectedUser.schoolId,
+            systemadmin: true,
+        });
+
+        if (error) return c.json(error, statusCode);
 
         const deletedUsers = await db
             .delete(userTable)
             .where(eq(userTable.id, params.id))
             .returning();
 
-        if (deletedUsers.length === 0) {
+        if (deletedUsers.length === 0)
             return c.json<ApiError>({ code: "DATABASE" }, 500);
-        }
 
         return c.json<ApiResponse>({ data: deletedUsers[0] });
     },

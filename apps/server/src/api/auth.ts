@@ -77,9 +77,7 @@ webAuthRouterV1.post(
             where: (table, { eq }) => eq(table.email, loginData.email),
         });
 
-        if (!dbUser) {
-            return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
-        }
+        if (!dbUser) return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
 
         const { passwordHash, ...user } = dbUser;
 
@@ -88,9 +86,8 @@ webAuthRouterV1.post(
             loginData.password,
         );
 
-        if (!isPasswordValid) {
+        if (!isPasswordValid)
             return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
-        }
 
         const session = await lucia.createSession(user.id, {});
         const cookie = lucia.createSessionCookie(session.id).serialize();
@@ -104,9 +101,7 @@ webAuthRouterV1.post(
 webAuthRouterV1.post("/logout", async c => {
     const session = c.get("session");
 
-    if (!session) {
-        return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
-    }
+    if (!session) return c.json<ApiError>({ code: "AUTHENTICATION" }, 401);
 
     await lucia.invalidateSession(session.id);
     const cookie = lucia.createBlankSessionCookie().serialize();
