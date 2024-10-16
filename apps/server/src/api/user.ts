@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { getAllowedOrigins } from "../const";
-import { ApiError } from "@rs/shared/error";
-import { ApiResponse, updateUserSchema, User } from "@rs/shared/models";
+import { AppError } from "@rs/shared/error";
+import { ServerResponse, updateUserSchema, User } from "@rs/shared/models";
 import {
     bodyValidatorMiddleware,
     paginationValidatorMiddleware,
@@ -50,7 +50,7 @@ userRouterV1.get("/", paginationValidatorMiddleware, async c => {
         });
     }
 
-    return c.json<ApiResponse>({ data: users });
+    return c.json<ServerResponse>({ data: users });
 });
 
 userRouterV1.get(
@@ -63,7 +63,7 @@ userRouterV1.get(
             where: (fields, operators) => operators.eq(fields.id, params.id),
         });
 
-        if (!selectedUser) return c.json<ApiError>({ code: "DATABASE" }, 404);
+        if (!selectedUser) return c.json<AppError>({ code: "DATABASE" }, 404);
 
         const { error, statusCode } = useAuthRules(c, {
             member: user => user.id === selectedUser.id,
@@ -74,7 +74,7 @@ userRouterV1.get(
 
         if (error) return c.json(error, statusCode);
 
-        return c.json<ApiResponse>({ data: selectedUser });
+        return c.json<ServerResponse>({ data: selectedUser });
     },
 );
 
@@ -90,7 +90,7 @@ userRouterV1.patch(
             where: (fields, operators) => operators.eq(fields.id, params.id),
         });
 
-        if (!selectedUser) return c.json<ApiError>({ code: "DATABASE" }, 400);
+        if (!selectedUser) return c.json<AppError>({ code: "DATABASE" }, 400);
 
         const { error, statusCode } = useAuthRules(c, {
             member: user => user.id === selectedUser.id,
@@ -108,9 +108,9 @@ userRouterV1.patch(
             .returning();
 
         if (updatedUsers.length === 0)
-            return c.json<ApiError>({ code: "DATABASE" }, 400);
+            return c.json<AppError>({ code: "DATABASE" }, 400);
 
-        return c.json<ApiResponse>({ data: updatedUsers[0] });
+        return c.json<ServerResponse>({ data: updatedUsers[0] });
     },
 );
 
@@ -124,7 +124,7 @@ userRouterV1.delete(
             where: (fields, operators) => operators.eq(fields.id, params.id),
         });
 
-        if (!selectedUser) return c.json<ApiError>({ code: "DATABASE" }, 400);
+        if (!selectedUser) return c.json<AppError>({ code: "DATABASE" }, 400);
 
         const { error, statusCode } = useAuthRules(c, {
             member: user => user.id === selectedUser.id,
@@ -141,8 +141,8 @@ userRouterV1.delete(
             .returning();
 
         if (deletedUsers.length === 0)
-            return c.json<ApiError>({ code: "DATABASE" }, 500);
+            return c.json<AppError>({ code: "DATABASE" }, 500);
 
-        return c.json<ApiResponse>({ data: deletedUsers[0] });
+        return c.json<ServerResponse>({ data: deletedUsers[0] });
     },
 );

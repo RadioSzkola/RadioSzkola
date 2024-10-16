@@ -1,20 +1,15 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { getAllowedOrigins } from "../const";
-import { bodyLimit } from "hono/body-limit";
 import {
     bodyValidatorMiddleware,
     paginationValidatorMiddleware,
     paramsValidatorMiddleware,
 } from "../middlewares/validation";
 import { db } from "../db";
-import {
-    ApiResponse,
-    createSchoolSchema,
-    updateSchoolSchema,
-} from "@rs/shared/models";
+import { createSchoolSchema, updateSchoolSchema } from "@rs/shared/models";
 import { z } from "zod";
-import { ApiError } from "@rs/shared/error";
+import { AppError } from "@rs/shared/error";
 import { schoolTable } from "../schema";
 import { eq } from "drizzle-orm";
 import { ApiContext } from "../context";
@@ -37,7 +32,7 @@ schoolRouterV1.get("/", paginationValidatorMiddleware, async c => {
         offset,
     });
 
-    return c.json<ApiResponse>({ data: schools });
+    return c.json(schools[0]);
 });
 
 schoolRouterV1.post(
@@ -51,15 +46,15 @@ schoolRouterV1.post(
         if (error) return c.json(error, statusCode);
 
         const createSchoolData = c.req.valid("json");
-        const school = await db
+        const schools = await db
             .insert(schoolTable)
             .values(createSchoolData)
             .returning();
 
-        if (school.length === 0)
-            return c.json<ApiError>({ code: "DATABASE" }, 500);
+        if (schools.length === 0)
+            return c.json<AppError>({ code: "DATABASE" }, 500);
 
-        return c.json<ApiResponse>({ data: school[0] });
+        return c.json(schools[0]);
     },
 );
 
@@ -73,9 +68,9 @@ schoolRouterV1.get(
             where: (fields, operators) => operators.eq(fields.id, params.id),
         });
 
-        if (!school) c.json<ApiError>({ code: "DATABASE" }, 404);
+        if (!school) c.json<AppError>({ code: "DATABASE" }, 404);
 
-        return c.json<ApiResponse>({ data: school });
+        return c.json(school);
     },
 );
 
@@ -91,7 +86,7 @@ schoolRouterV1.patch(
             where: (fields, operators) => operators.eq(fields.id, params.id),
         });
 
-        if (!school) return c.json<ApiError>({ code: "DATABASE" }, 404);
+        if (!school) return c.json<AppError>({ code: "DATABASE" }, 404);
 
         const { error, statusCode } = useAuthRules(c, {
             admin: user => user.schoolId === school.id,
@@ -107,9 +102,9 @@ schoolRouterV1.patch(
             .returning();
 
         if (updatedSchools.length === 0)
-            return c.json<ApiError>({ code: "DATABASE" }, 500);
+            return c.json<AppError>({ code: "DATABASE" }, 500);
 
-        return c.json<ApiResponse>({ data: updatedSchools[0] });
+        return c.json(updatedSchools[0]);
     },
 );
 
@@ -131,8 +126,8 @@ schoolRouterV1.delete(
             .returning();
 
         if (deletedSchools.length === 0)
-            return c.json<ApiError>({ code: "DATABASE" }, 500);
+            return c.json<AppError>({ code: "DATABASE" }, 500);
 
-        return c.json<ApiResponse>({ data: deletedSchools[0] });
+        return c.json(deletedSchools[0]);
     },
 );

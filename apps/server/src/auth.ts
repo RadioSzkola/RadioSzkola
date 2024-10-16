@@ -6,7 +6,7 @@ import { ENV } from "./const";
 import { ApiContext } from "./context";
 import { Session, User, UserRole, userRoleSchema } from "@rs/shared/models";
 import { Context } from "hono";
-import { ApiError } from "@rs/shared/error";
+import { AppError } from "@rs/shared/error";
 
 const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
 export const lucia = new Lucia(adapter, {
@@ -33,7 +33,7 @@ export function useAuthRules(
     rules: { [P in UserRole]?: AuthRuleMatcher } = {},
 ):
     | { user: User; session: Session; error: null; statusCode: null }
-    | { user: null; session: null; error: ApiError; statusCode: ResponseInit } {
+    | { user: null; session: null; error: AppError; statusCode: ResponseInit } {
     const user = c.get("user");
     const session = c.get("session");
 

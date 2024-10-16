@@ -1,8 +1,8 @@
 import { ZodErrorMap } from "zod";
 
-export type ApiErrorCode = "VALIDATION" | "UNKNOWN" | "DATABASE" | "AUTH";
+export type AppErrorCode = "VALIDATION" | "UNKNOWN" | "DATABASE" | "AUTH";
 
-export type ApiError<T = any> =
+export type AppError<T = any> =
     | {
           code: "VALIDATION";
           data: {
