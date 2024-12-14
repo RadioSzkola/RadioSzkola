@@ -1,0 +1,125 @@
+footer {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    gap: 1rem;
+    width: 100%;
+    background-color: var(--color-primary);
+    color: white;
+}
+
+footer > .spacer {
+    width: 105%;
+    height: 2px;
+    background-color: var(--color-primary-light);
+}
+
+footer > .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+footer > .top > header > h1 {
+    font-size: 1.25rem;
+}
+
+footer > .top > .socials {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+}
+
+footer > .top > .socials svg {
+    aspect-ratio: 1/1;
+}
+
+footer > .top > .socials a {
+    display: flex;
+}
+
+footer > .mid {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(2, auto);
+    gap: 1rem;
+    width: 100%;
+}
+
+footer > .mid > .info > h1 {
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+footer > .mid > .info > h1::after {
+    content: "";
+    display: block;
+    width: 2rem;
+    height: 2px;
+    background-color: var(--color-text-inverted);
+    transition: transform 0.125s ease-in-out;
+}
+
+footer > .mid > .info:hover > h1::after {
+    transform: translateX(1.5rem) scaleX(2.5);
+}
+
+footer > .mid > .info li {
+    margin-bottom: 0.25rem;
+    color: var(--color-text-inverted-accent);
+    font-size: 1rem;
+}
+
+footer > .mid > .info a:hover {
+    text-decoration: underline;
+    color: var(--color-text-inverted);
+}
+
+footer > .bottom {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+footer > .bottom > .copyright {
+    text-align: left;
+}
+footer > .bottom > .policy-terms {
+    text-align: right;
+}
+
+@media (min-width: 600px) {
+    footer > .top > header > h1 {
+        font-size: 1.75rem;
+    }
+
+    footer > .top > .socials {
+        display: flex;
+        gap: 1rem;
+        font-size: 2rem;
+    }
+
+    footer {
+        padding: 2.5rem;
+    }
+}
+
+footer > .top,
+footer > .mid,
+footer > .bottom,
+footer > .spacer {
+    max-width: 1200px;
+}
+
+@media (min-width: 1000px) {
+    footer > .mid {
+        grid-template-columns: repeat(4, auto);
+        grid-template-rows: repeat(1, 100%);
+    }
+}
