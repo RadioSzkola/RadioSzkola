@@ -1,4 +1,4 @@
-import { ApiError } from "@rs/shared/error";
+import { AppError } from "@rs/shared/error";
 import { PaginationOptions, paginationOptionsSchema } from "@rs/shared/models";
 import { parseBySchema } from "@rs/shared/validation";
 import { validator } from "hono/validator";
@@ -9,7 +9,7 @@ export const bodyValidatorMiddleware = <T>(schema: ZodSchema<T>) =>
         const { data, error } = parseBySchema(value, schema);
 
         if (error) {
-            return c.json<ApiError>({
+            return c.json<AppError>({
                 code: "VALIDATION",
                 message: "body",
                 data: error,
@@ -24,7 +24,7 @@ export const queryValidatorMiddleware = <T>(schema: ZodSchema<T>) =>
         const { data, error } = parseBySchema(value, schema);
 
         if (error) {
-            return c.json<ApiError>({
+            return c.json<AppError>({
                 code: "VALIDATION",
                 message: "query",
                 data: error,
@@ -50,7 +50,7 @@ export const paginationValidatorMiddleware = validator<
     );
 
     if (error) {
-        return c.json<ApiError>({
+        return c.json<AppError>({
             code: "VALIDATION",
             message: "pagination query",
             data: error,
@@ -65,7 +65,7 @@ export const paramsValidatorMiddleware = <T>(schema: ZodSchema<T>) =>
         const { data, error } = parseBySchema(value, schema);
 
         if (error) {
-            return c.json<ApiError>({
+            return c.json<AppError>({
                 code: "VALIDATION",
                 message: "param",
                 data: error,

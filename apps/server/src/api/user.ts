@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { getAllowedOrigins } from "../const";
 import { AppError } from "@rs/shared/error";
-import { ServerResponse, updateUserSchema, User } from "@rs/shared/models";
+import { updateUserSchema, User } from "@rs/shared/models";
 import {
     bodyValidatorMiddleware,
     paginationValidatorMiddleware,
@@ -50,7 +50,7 @@ userRouterV1.get("/", paginationValidatorMiddleware, async c => {
         });
     }
 
-    return c.json<ServerResponse>({ data: users });
+    return c.json({ data: users });
 });
 
 userRouterV1.get(
@@ -74,7 +74,7 @@ userRouterV1.get(
 
         if (error) return c.json(error, statusCode);
 
-        return c.json<ServerResponse>({ data: selectedUser });
+        return c.json(selectedUser);
     },
 );
 
@@ -110,7 +110,7 @@ userRouterV1.patch(
         if (updatedUsers.length === 0)
             return c.json<AppError>({ code: "DATABASE" }, 400);
 
-        return c.json<ServerResponse>({ data: updatedUsers[0] });
+        return c.json(updatedUsers[0]);
     },
 );
 
@@ -143,6 +143,6 @@ userRouterV1.delete(
         if (deletedUsers.length === 0)
             return c.json<AppError>({ code: "DATABASE" }, 500);
 
-        return c.json<ServerResponse>({ data: deletedUsers[0] });
+        return c.json(deletedUsers[0]);
     },
 );

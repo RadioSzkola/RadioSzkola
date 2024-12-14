@@ -1,7 +1,7 @@
 import { createMiddleware } from "hono/factory";
 import { ApiContext } from "../context";
 import { lucia } from "../auth";
-import { ApiError } from "@rs/shared/error";
+import { AppError } from "@rs/shared/error";
 import { db } from "../db";
 
 export const authMiddleware = createMiddleware<ApiContext>(async (c, next) => {
@@ -37,7 +37,7 @@ export const authMiddleware = createMiddleware<ApiContext>(async (c, next) => {
     });
 
     if (!user) {
-        return c.json<ApiError>({ code: "DATABASE" }, 500);
+        return c.json<AppError>({ code: "DATABASE" }, 500);
     }
 
     c.set("session", {
