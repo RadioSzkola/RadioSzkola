@@ -5,7 +5,7 @@ footer {
     flex-direction: column;
     align-items: center;
     padding: 1.5rem;
-    gap: 1rem;
+    gap: 1.5rem;
     width: 100%;
     background-color: var(--color-primary);
     color: white;
@@ -89,9 +89,20 @@ footer > .bottom {
 
 footer > .bottom > .copyright {
     text-align: left;
+    font-size: 0.75rem;
+    color: var(--color-text-inverted-accent);
 }
 footer > .bottom > .policy-terms {
     text-align: right;
+    font-size: 0.75rem;
+    color: var(--color-text-inverted-accent);
+}
+
+footer > .top,
+footer > .mid,
+footer > .bottom,
+footer > .spacer {
+    max-width: 1200px;
 }
 
 @media (min-width: 600px) {
@@ -106,15 +117,9 @@ footer > .bottom > .policy-terms {
     }
 
     footer {
-        padding: 2.5rem;
+        padding: 2rem;
+        gap: 2rem;
     }
-}
-
-footer > .top,
-footer > .mid,
-footer > .bottom,
-footer > .spacer {
-    max-width: 1200px;
 }
 
 @media (min-width: 1000px) {
