@@ -1,0 +1,125 @@
+.Footer {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    width: 100%;
+    background-color: var(--color-primary);
+    color: white;
+
+    @media (min-width: 600px) {
+        padding: 2rem;
+        gap: 2rem;
+    }
+}
+
+.FooterSpacer {
+    width: 105%;
+    max-width: 1200px;
+    height: 2px;
+    background-color: var(--color-primary-light);
+}
+
+.FooterTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.FooterTopHeader {
+    font-size: 1.25rem;
+
+    @media (min-width: 600px) {
+        font-size: 1.75rem;
+    }
+}
+
+.FooterTopSocials {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+
+    @media (min-witdh: 600px) {
+        gap: 1rem;
+        font-size: 2rem;
+    }
+}
+
+.FooterBody {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(2, auto);
+    gap: 1rem;
+    width: 100%;
+    max-width: 1200px;
+
+    @media (min-width: 1000px) {
+        grid-template-columns: repeat(4, auto);
+        grid-template-rows: repeat(1, 100%);
+    }
+}
+
+.FooterBodyInfo {
+    &:hover {
+        & > h1::after {
+            transform: translateX(1.5rem) scaleX(2.5);
+        }
+    }
+}
+
+.FooterBodyInfoLink {
+    margin-bottom: 0.25rem;
+    color: var(--color-text-inverted-accent);
+    font-size: 1rem;
+}
+
+.FooterBodyInfoHeader {
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+    font-size: 1.25rem;
+
+    &::after {
+        content: "";
+        display: block;
+        width: 2rem;
+        height: 2px;
+        background-color: var(--color-text-inverted);
+        transition: transform 0.125s ease-in-out;
+    }
+
+    @media (min-witdh: 600px) {
+        font-size: 4rem;
+    }
+}
+
+.FooterBodyInfoLink {
+    &:hover {
+        text-decoration: underline;
+        color: var(--color-text-inverted);
+    }
+}
+
+.FooterBottom {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.FooterBottomCopyright {
+    text-align: left;
+    font-size: 0.75rem;
+    color: var(--color-text-inverted-accent);
+}
+
+.FooterBottomPolicyTerms {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--color-text-inverted-accent);
+}
