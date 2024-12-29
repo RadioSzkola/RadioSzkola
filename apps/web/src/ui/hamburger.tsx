@@ -22,6 +22,7 @@ export default function Hamburger({
                 ${styles.hamburger}
                 ${colorInverted ? styles.hamburgerDash__colorInverted : ""}
                 ${orientation === "right" ? styles.hamburger__right : styles.hamburger__left}
+                ${className}
             `}
         >
             <span
