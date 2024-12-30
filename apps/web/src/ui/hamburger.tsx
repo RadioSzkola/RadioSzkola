@@ -6,6 +6,7 @@ export type HamburgerProps = {
     onClick?: () => void;
     className?: string;
     orientation: "left" | "right";
+    hiddenOnDesktop?: boolean;
 };
 
 export default function Hamburger({
@@ -14,6 +15,7 @@ export default function Hamburger({
     className,
     onClick,
     orientation,
+    hiddenOnDesktop,
 }: HamburgerProps) {
     return (
         <button
@@ -22,7 +24,8 @@ export default function Hamburger({
                 ${styles.hamburger}
                 ${colorInverted ? styles.hamburgerDash__colorInverted : ""}
                 ${orientation === "right" ? styles.hamburger__right : styles.hamburger__left}
-                ${className}
+                ${hiddenOnDesktop ? styles.hamburger__hiddenOnMobile : ""}
+                ${className ? className : ""}
             `}
         >
             <span

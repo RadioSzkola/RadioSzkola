@@ -1,0 +1,31 @@
+.nav {
+}
+
+.mobileMenu {
+    width: 90%;
+    height: 90%;
+    padding: var(--spacing-md);
+
+    background-color: var(--color-bg);
+    border-radius: var(--spacing-sm);
+}
+
+.mobileMenuBar {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+}
+
+.mobileMenuBarX {
+    font-size: var(--text-lg);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modalList {
+}
+
+.modalListItem {
+}

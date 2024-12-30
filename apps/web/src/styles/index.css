@@ -78,12 +78,12 @@ html {
     --desktop-text-xl: 2.5rem;
     --desktop-text-2xl: 5rem;
 
-    --text-sm: var(var(--mobile-text-sm));
-    --text-md: var(var(--mobile-text-md));
-    --text-lg: var(var(--mobile-text-lg));
-    --text-bg: var(var(--mobile-text-bg));
-    --text-xl: var(var(--mobile-text-xl));
-    --text-2xl: var(var(--mobile-text-2xl));
+    --text-sm: var(--mobile-text-sm);
+    --text-md: var(--mobile-text-md);
+    --text-lg: var(--mobile-text-lg);
+    --text-bg: var(--mobile-text-bg);
+    --text-xl: var(--mobile-text-xl);
+    --text-2xl: var(--mobile-text-2xl);
 
     --mobile-spacing-xxs: 0.125rem;
     --mobile-spacing-xs: 0.25rem;
@@ -99,27 +99,27 @@ html {
     --desktop-spacing-lg: 1.75rem;
     --desktop-spacing-xl: 2.5rem;
 
-    --spacing-xxs: var(var(--mobile-spacing-xxs));
-    --spacing-xs: var(var(--mobile-spacing-xs));
-    --spacing-sm: var(var(--mobile-spacing-sm));
-    --spacing-md: var(var(--mobile-spacing-md));
-    --spacing-lg: var(var(--mobile-spacing-lg));
-    --spacing-xl: var(var(--mobile-spacing-xl));
+    --spacing-xxs: var(--mobile-spacing-xxs);
+    --spacing-xs: var(--mobile-spacing-xs);
+    --spacing-sm: var(--mobile-spacing-sm);
+    --spacing-md: var(--mobile-spacing-md);
+    --spacing-lg: var(--mobile-spacing-lg);
+    --spacing-xl: var(--mobile-spacing-xl);
 
     @media (min-width: 600px) {
-        --text-sm: var(var(--desktop-text-sm));
-        --text-md: var(var(--desktop-text-md));
-        --text-lg: var(var(--desktop-text-lg));
-        --text-bg: var(var(--desktop-text-bg));
-        --text-xl: var(var(--desktop-text-xl));
-        --text-2xl: var(var(--desktop-text-2xl));
+        --text-sm: var(--desktop-text-sm);
+        --text-md: var(--desktop-text-md);
+        --text-lg: var(--desktop-text-lg);
+        --text-bg: var(--desktop-text-bg);
+        --text-xl: var(--desktop-text-xl);
+        --text-2xl: var(--desktop-text-2xl);
 
-        --spacing-xxs: var(var(--desktop-spacing-xxs));
-        --spacing-xs: var(var(--desktop-spacing-xs));
-        --spacing-sm: var(var(--desktop-spacing-sm));
-        --spacing-md: var(var(--desktop-spacing-md));
-        --spacing-lg: var(var(--desktop-spacing-lg));
-        --spacing-xl: var(var(--desktop-spacing-xl));
+        --spacing-xxs: var(--desktop-spacing-xxs);
+        --spacing-xs: var(--desktop-spacing-xs);
+        --spacing-sm: var(--desktop-spacing-sm);
+        --spacing-md: var(--desktop-spacing-md);
+        --spacing-lg: var(--desktop-spacing-lg);
+        --spacing-xl: var(--desktop-spacing-xl);
     }
 }
 
@@ -145,4 +145,10 @@ html {
 
 body {
     background-color: var(--color-bg);
+}
+
+#root {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
 }
