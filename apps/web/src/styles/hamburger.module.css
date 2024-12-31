@@ -17,7 +17,7 @@
 }
 
 .hamburger__hiddenOnMobile {
-    @media (min-width: 600px) {
+    @media (min-width: 760px) {
         display: none;
     }
 }

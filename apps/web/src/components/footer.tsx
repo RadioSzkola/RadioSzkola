@@ -64,7 +64,7 @@ export default function Footer() {
             <section className={styles.FooterBody}>
                 <div className={styles.FooterBodyInfo}>
                     <h1 className={styles.FooterBodyInfoHeader}>Adres</h1>
-                    <ul>
+                    <ul className={styles.FooterBodyInfoList}>
                         <li>
                             II Liceum Ogólnokształcące im. Adama Mickiewicza
                         </li>
@@ -74,7 +74,7 @@ export default function Footer() {
                 </div>
                 <div className={styles.FooterBodyInfo}>
                     <h1 className={styles.FooterBodyInfoHeader}>O stronie</h1>
-                    <ul>
+                    <ul className={styles.FooterBodyInfoList}>
                         <li className={styles.FooterBodyInfoLink}>
                             <a href="#nav_menu">Strona główna</a>
                         </li>
@@ -88,7 +88,7 @@ export default function Footer() {
                 </div>
                 <div className={styles.FooterBodyInfo}>
                     <h1 className={styles.FooterBodyInfoHeader}>Kontakt</h1>
-                    <ul>
+                    <ul className={styles.FooterBodyInfoList}>
                         <li className={styles.FooterBodyInfoLink}>
                             <a href="mailto:lo2radiowezel@proton.me">Poczta</a>
                         </li>
@@ -102,7 +102,7 @@ export default function Footer() {
                 </div>
                 <div className={styles.FooterBodyInfo}>
                     <h1 className={styles.FooterBodyInfoHeader}>Informacje</h1>
-                    <ul>
+                    <ul className={styles.FooterBodyInfoList}>
                         <li>©Radiowęzeł LO2</li>
                         <li className={styles.FooterBodyInfoLink}>
                             <a href="https://open.spotify.com/playlist/6kG5IPJjb2xyu0mouhET7B?si=bf71003228344627">
