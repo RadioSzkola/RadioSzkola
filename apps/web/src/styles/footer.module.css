@@ -3,18 +3,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: var(--spacing-md);
-    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    gap: var(--spacing-lg);
     width: 100%;
     background-color: var(--color-primary);
     color: white;
 }
 
 .FooterSpacer {
-    width: 105%;
+    width: 100%;
     max-width: 1200px;
-    height: 2px;
-    background-color: var(--color-primary-light);
+    height: 1px;
+    background-color: var(--color-indigo-pale);
 }
 
 .FooterTop {
@@ -64,11 +64,11 @@
 
 .FooterBodyInfoList {
     font-size: var(--text-md);
+    color: var(--color-indigo-pale);
 }
 
 .FooterBodyInfoLink {
     margin-bottom: var(--spacing-xxs);
-    color: var(--color-text-inverted-accent);
 
     &:hover {
         text-decoration: underline;
@@ -79,13 +79,14 @@
     margin-bottom: var(--spacing-sm);
     font-weight: bold;
     font-size: var(--text-lg);
+    color: var(--color-neutral-white);
 
     &::after {
         content: "";
         display: block;
         width: 2rem;
         height: 2px;
-        background-color: var(--color-text-inverted);
+        background-color: var(--color-neutral-white);
         transition: transform 0.125s ease-in-out;
     }
 }

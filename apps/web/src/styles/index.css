@@ -28,8 +28,8 @@ a {
 
 html {
     --color-indigo: #140b5c;
-    --color-indigo-light: #2e2380;
-    --color-indigo-lighter: #4d4a8f;
+    --color-indigo-light: #2f209c;
+    --color-indigo-lighter: #746fdd;
     --color-indigo-pale: #dcd8ff;
     --color-indigo-dark: #0c063a;
     --color-indigo-darker: #0c063a;
@@ -121,6 +121,10 @@ html {
         --spacing-lg: var(--desktop-spacing-lg);
         --spacing-xl: var(--desktop-spacing-xl);
     }
+
+    --rounded-sm: 0.25rem;
+    --rounded-md: 0.5rem;
+    --rounded-lg: 1rem;
 }
 
 .dark {

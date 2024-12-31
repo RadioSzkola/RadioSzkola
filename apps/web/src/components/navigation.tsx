@@ -3,6 +3,7 @@ import Hamburger from "../ui/hamburger";
 
 import styles from "../styles/navigation.module.css";
 import Modal from "../ui/modal";
+import ThemeSwitch from "./theme-switch";
 
 export default function Navigation() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function Navigation() {
             <Modal open={isMenuOpen}>
                 <div className={styles.mobileMenu}>
                     <div className={styles.mobileMenuBar}>
-                        <div>Theme switch</div>
+                        <ThemeSwitch />
                         <button
                             className={styles.mobileMenuBarX}
                             onClick={handleHamburgerClick}

@@ -6,6 +6,7 @@ import "./styles/index.css";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
+import Outlet from "./outlet";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -23,7 +24,9 @@ if (!rootElement.innerHTML) {
     const root = ReactDOM.createRoot(rootElement);
     root.render(
         <StrictMode>
-            <RouterProvider router={router} />
+            <Outlet>
+                <RouterProvider router={router} />
+            </Outlet>
         </StrictMode>,
     );
 }
