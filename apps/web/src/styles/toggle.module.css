@@ -1,0 +1,22 @@
+.toggle {
+    width: var(--spacing-xl);
+    height: var(--spacing-xl);
+}
+
+.toggle__off {
+}
+
+.toggle__on {
+}
+
+.toggleSwitch {
+}
+
+.toggleSwitch__on {
+}
+
+.toggleSwitch__off {
+}
+
+.slot {
+}

@@ -99,12 +99,33 @@ html {
     --desktop-spacing-lg: 1.75rem;
     --desktop-spacing-xl: 2.5rem;
 
+    --mobile-size-xxs: 0.5rem;
+    --mobile-size-xs: 1rem;
+    --mobile-size-sm: 2rem;
+    --mobile-size-md: 4rem;
+    --mobile-size-lg: 8rem;
+    --mobile-size-xl: 16rem;
+
+    --desktop-size-xxs: 0.75rem;
+    --desktop-size-xs: 1.5rem;
+    --desktop-size-sm: 3rem;
+    --desktop-size-md: 6rem;
+    --dekstop-size-lg: 12rem;
+    --desktop-size-xl: 24rem;
+
     --spacing-xxs: var(--mobile-spacing-xxs);
     --spacing-xs: var(--mobile-spacing-xs);
     --spacing-sm: var(--mobile-spacing-sm);
     --spacing-md: var(--mobile-spacing-md);
     --spacing-lg: var(--mobile-spacing-lg);
     --spacing-xl: var(--mobile-spacing-xl);
+
+    --size-xxs: var(--mobile-size-xxs);
+    --size-xs: var(--mobile-size-xs);
+    --size-sm: var(--mobile-size-sm);
+    --size-md: var(--mobile-size-md);
+    --size-lg: var(--mobile-size-lg);
+    --size-xl: var(--mobile-size-xl);
 
     @media (min-width: 760px) {
         --text-sm: var(--desktop-text-sm);
@@ -120,6 +141,13 @@ html {
         --spacing-md: var(--desktop-spacing-md);
         --spacing-lg: var(--desktop-spacing-lg);
         --spacing-xl: var(--desktop-spacing-xl);
+
+        --size-xxs: var(--desktop-size-xxs);
+        --size-xs: var(--desktop-size-xs);
+        --size-sm: var(--desktop-size-sm);
+        --size-md: var(--desktop-size-md);
+        --size-lg: var(--desktop-size-lg);
+        --size-xl: var(--desktop-size-xl);
     }
 
     --rounded-sm: 0.25rem;

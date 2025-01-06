@@ -1,27 +1,18 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import styles from "../styles/theme-switch.module.css";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { themeContext, themeDispatchContext } from "../stores/theme";
+import Toggle from "../ui/toggle";
 
 export default function ThemeSwitch() {
     const theme = useContext(themeContext);
     const themeDispatch = useContext(themeDispatchContext);
+    const [toggleOn, setToggleOn] = useState(false);
 
     const handleThemeToggle = () => {
         themeDispatch("toggle");
+        setToggleOn(t => !t);
     };
 
-    return (
-        <button
-            onClick={handleThemeToggle}
-            className={styles.themeSwitch}
-            role="switch"
-            aria-checked="false"
-            tabIndex={0}
-        >
-            <Icon className={styles.themeSwitchIcon} icon="" />
-            <Icon className={styles.themeSwitchIcon} icon="" />
-            <span className={styles.themeSwitchTrigger}></span>
-        </button>
-    );
+    return <Toggle on={toggleOn} onToggle={handleThemeToggle} />;
 }

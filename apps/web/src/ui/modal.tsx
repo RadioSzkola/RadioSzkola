@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 
 import styles from "../styles/modal.module.css";
 
-type Props = {
+type ModalProps = {
     children: React.ReactElement;
     overlayClass?: string;
     overlayClassOpen?: string;
@@ -18,7 +18,7 @@ export default function Modal({
     overlayClassOpen,
     wrapperClass,
     wrapperClassOpen,
-}: Props) {
+}: ModalProps) {
     return createPortal(
         <>
             <div
