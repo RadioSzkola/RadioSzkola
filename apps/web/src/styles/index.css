@@ -74,6 +74,8 @@ html {
     --color-bg-inverted: var(--color-neutral-black);
     --color-bg-inverted-alt: var(--color-neutral-dark);
 
+    --color-shadow: #0c063a10;
+
     --mobile-text-sm: 0.75rem;
     --mobile-text-md: 1rem;
     --mobile-text-lg: 1.25rem;
@@ -112,16 +114,16 @@ html {
     --mobile-size-xxs: 0.5rem;
     --mobile-size-xs: 1rem;
     --mobile-size-sm: 1.5rem;
-    --mobile-size-md: 2.5rem;
+    --mobile-size-md: 2rem;
     --mobile-size-lg: 4rem;
     --mobile-size-xl: 6.5rem;
 
-    --desktop-size-xxs: 0.75rem;
-    --desktop-size-xs: 1.5rem;
-    --desktop-size-sm: 2.25rem;
-    --desktop-size-md: 3.75rem;
-    --dekstop-size-lg: 6rem;
-    --desktop-size-xl: 9.75rem;
+    --desktop-size-xxs: 0.5rem;
+    --desktop-size-xs: 1rem;
+    --desktop-size-sm: 1.5rem;
+    --desktop-size-md: 2rem;
+    --dekstop-size-lg: 4rem;
+    --desktop-size-xl: 6.5rem;
 
     --spacing-xxs: var(--mobile-spacing-xxs);
     --spacing-xs: var(--mobile-spacing-xs);
@@ -163,6 +165,7 @@ html {
     --rounded-sm: 0.25rem;
     --rounded-md: 0.5rem;
     --rounded-lg: 1rem;
+    --rounded-full: 999999px;
 }
 
 .dark {
@@ -191,6 +194,8 @@ html {
     --color-bg-alt: var(--color-neutral-dark);
     --color-bg-inverted: var(--color-neutral-white);
     --color-bg-inverted-alt: var(--color-neutral-light);
+
+    --color-shadow: #dcd8ff20;
 }
 
 body {

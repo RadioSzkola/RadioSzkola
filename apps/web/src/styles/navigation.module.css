@@ -8,7 +8,7 @@
 
     background-color: var(--color-bg);
     border-radius: var(--rounded-lg);
-    box-shadow: 0 0 32px 0 #00000010;
+    box-shadow: 0 0 32px 0 var(--color-shadow);
 }
 
 .mobileMenuBar {

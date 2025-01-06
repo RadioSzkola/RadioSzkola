@@ -1,11 +1,13 @@
 .toggle {
-    width: var(--size-xl);
+    --padding: var(--spacing-xs);
+
+    position: relative;
     height: var(--size-md);
-
-    border: 2px solid var(--color-primary-dark);
-    border-radius: var(--rounded-md);
-
-    background-color: var(--color-indigo-pale);
+    aspect-ratio: 2/1;
+    padding: var(--padding);
+    border: 2px solid var(--color-bg-inverted);
+    border-radius: var(--rounded-full);
+    cursor: pointer;
 }
 
 .toggle__off {
@@ -15,12 +17,23 @@
 }
 
 .toggleSwitch {
-}
+    position: absolute;
+    top: var(--spacing-xs);
+    left: var(--spacing-xs);
+    height: calc(100% - 2 * var(--padding));
+    width: calc(50% - 1 * var(--padding));
+    border: 2px solid var(--color-bg-inverted);
+    border-radius: var(--rounded-full);
 
-.toggleSwitch__on {
+    transition: transform 0.125s ease-in-out;
 }
 
 .toggleSwitch__off {
+    transform: translateX(0);
+}
+
+.toggleSwitch__on {
+    transform: translateX(100%);
 }
 
 .slot {

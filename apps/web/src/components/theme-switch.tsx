@@ -7,7 +7,7 @@ import Toggle from "../ui/toggle";
 export default function ThemeSwitch() {
     const theme = useContext(themeContext);
     const themeDispatch = useContext(themeDispatchContext);
-    const [toggleOn, setToggleOn] = useState(false);
+    const [toggleOn, setToggleOn] = useState(theme == "light" ? false : true);
 
     const handleThemeToggle = () => {
         themeDispatch("toggle");
