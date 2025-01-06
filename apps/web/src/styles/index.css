@@ -33,6 +33,7 @@ html {
     --color-indigo-pale: #dcd8ff;
     --color-indigo-dark: #0c063a;
     --color-indigo-darker: #0c063a;
+    --color-indigo-black: #0c063a;
 
     --color-red: #ff0000;
     --color-red-light: #ff4d4d;
@@ -40,6 +41,7 @@ html {
     --color-red-pale: #ffcccc;
     --color-red-dark: #920f0f;
     --color-red-darker: #920f0f;
+    --color-red-black: #920f0f;
 
     --color-neutral-light: #e7e7e7;
     --color-neutral-white: #ffffff;
@@ -48,11 +50,19 @@ html {
 
     --color-primary: var(--color-indigo);
     --color-primary-light: var(--color-indigo-light);
+    --color-primary-lighter: var(--color-indigo-lighter);
+    --color-primary-pale: var(--color-indigo-pale);
     --color-primary-dark: var(--color-indigo-dark);
+    --color-primary-darker: var(--color-indigo-darker);
+    --color-primary-black: var(--color-indigo-black);
 
     --color-secondary: var(--color-red);
     --color-secondary-light: var(--color-red-light);
+    --color-secondary-lighter: var(--color-red-lighter);
+    --color-secondary-pale: var(--color-red-pale);
     --color-secondary-dark: var(--color-red-dark);
+    --color-secondary-darker: var(--color-red-darker);
+    --color-secondary-black: var(--color-red-black);
 
     --color-text: var(--color-neutral-black);
     --color-text-alt: var(--color-neutral-dark);
@@ -101,17 +111,17 @@ html {
 
     --mobile-size-xxs: 0.5rem;
     --mobile-size-xs: 1rem;
-    --mobile-size-sm: 2rem;
-    --mobile-size-md: 4rem;
-    --mobile-size-lg: 8rem;
-    --mobile-size-xl: 16rem;
+    --mobile-size-sm: 1.5rem;
+    --mobile-size-md: 2.5rem;
+    --mobile-size-lg: 4rem;
+    --mobile-size-xl: 6.5rem;
 
     --desktop-size-xxs: 0.75rem;
     --desktop-size-xs: 1.5rem;
-    --desktop-size-sm: 3rem;
-    --desktop-size-md: 6rem;
-    --dekstop-size-lg: 12rem;
-    --desktop-size-xl: 24rem;
+    --desktop-size-sm: 2.25rem;
+    --desktop-size-md: 3.75rem;
+    --dekstop-size-lg: 6rem;
+    --desktop-size-xl: 9.75rem;
 
     --spacing-xxs: var(--mobile-spacing-xxs);
     --spacing-xs: var(--mobile-spacing-xs);
@@ -157,12 +167,20 @@ html {
 
 .dark {
     --color-primary: var(--color-indigo-light);
-    --color-primary-light: var(--color-indigo-lighter);
-    --color-primary-dark: var(--color-indigo);
+    --color-primary-light: var(--color-indigo);
+    --color-primary-lighter: var(--color-indigo-dark);
+    --color-primary-pale: var(--color-indigo-darker);
+    --color-primary-dark: var(--color-indigo-lighter);
+    --color-primary-darker: var(--color-indigo-pale);
+    --color-primary-black: var(--color-indigo-pale);
 
     --color-secondary: var(--color-red-light);
-    --color-secondary-light: var(--color-red-lighter);
-    --color-secondary-dark: var(--color-red);
+    --color-secondary-light: var(--color-red);
+    --color-secondary-lighter: var(--color-red-dark);
+    --color-secondary-pale: var(--color-red-darker);
+    --color-secondary-dark: var(--color-red-lighter);
+    --color-secondary-darker: var(--color-red-pale);
+    --color-secondary-black: var(--color-red-pale);
 
     --color-text: var(--color-neutral-white);
     --color-text-alt: var(--color-neutral-light);

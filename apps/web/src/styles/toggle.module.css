@@ -1,6 +1,11 @@
 .toggle {
-    width: var(--spacing-xl);
-    height: var(--spacing-xl);
+    width: var(--size-xl);
+    height: var(--size-md);
+
+    border: 2px solid var(--color-primary-dark);
+    border-radius: var(--rounded-md);
+
+    background-color: var(--color-indigo-pale);
 }
 
 .toggle__off {
