@@ -14,5 +14,22 @@ export default function ThemeSwitch() {
         setToggleOn(t => !t);
     };
 
-    return <Toggle on={toggleOn} onToggle={handleThemeToggle} />;
+    return (
+        <Toggle
+            on={toggleOn}
+            onToggle={handleThemeToggle}
+            offSlot={
+                <Icon
+                    className={styles.themeSwitchIcon}
+                    icon={"solar:sun-bold"}
+                />
+            }
+            onSlot={
+                <Icon
+                    className={styles.themeSwitchIcon}
+                    icon={"solar:moon-bold"}
+                />
+            }
+        />
+    );
 }

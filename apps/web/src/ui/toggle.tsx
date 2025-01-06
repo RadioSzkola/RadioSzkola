@@ -32,8 +32,8 @@ export default function Toggle({
                 ${on ? rootClassOn : rootClassOff}
             `}
         >
-            <span className={`${styles.slot}`}>{offSlot && offSlot}</span>
-            <span className={`${styles.slot}`}>{onSlot && onSlot}</span>
+            <span className={`${styles.slotLeft}`}>{offSlot && offSlot}</span>
+            <span className={`${styles.slotRight}`}>{onSlot && onSlot}</span>
             <span
                 className={`
                     ${styles.toggleSwitch}

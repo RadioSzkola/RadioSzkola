@@ -1,18 +1,4 @@
-.themeSwitch {
-    height: 2rem;
-    width: 6rem;
-    border-radius: var(--rounded-md);
-    border: var(--color-bg-inverted) solid 1px;
-}
-
-.themeSwitch__dark {
-}
-
-.themeSwitch__light {
-}
-
 .themeSwitchIcon {
-}
-
-.themeSwitchTrigger {
+    font-size: var(--text-md);
+    color: var(--color-text);
 }

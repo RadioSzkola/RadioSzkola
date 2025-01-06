@@ -5,7 +5,7 @@
     height: var(--size-md);
     aspect-ratio: 2/1;
     padding: var(--padding);
-    border: 2px solid var(--color-bg-inverted);
+    box-shadow: 0 0 0 2px var(--color-bg-inverted) inset;
     border-radius: var(--rounded-full);
     cursor: pointer;
 }
@@ -18,11 +18,11 @@
 
 .toggleSwitch {
     position: absolute;
-    top: var(--spacing-xs);
-    left: var(--spacing-xs);
-    height: calc(100% - 2 * var(--padding));
-    width: calc(50% - 1 * var(--padding));
-    border: 2px solid var(--color-bg-inverted);
+    top: 0;
+    left: 0;
+    height: calc(100%);
+    width: calc(50%);
+    background-color: var(--color-bg-inverted);
     border-radius: var(--rounded-full);
 
     transition: transform 0.125s ease-in-out;
@@ -36,5 +36,23 @@
     transform: translateX(100%);
 }
 
-.slot {
+.slotLeft {
+    position: absolute;
+    top: var(--padding);
+    left: var(--padding);
+    height: calc(100% - 2 * var(--padding));
+    width: calc(50% - 1 * var(--padding));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.slotRight {
+    position: absolute;
+    top: var(--padding);
+    right: var(--padding);
+    height: calc(100% - 2 * var(--padding));
+    width: calc(50% - 1 * var(--padding));
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
