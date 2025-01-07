@@ -3,8 +3,10 @@
     height: var(--size-md);
     padding: 0 var(--spacing-xs);
     aspect-ratio: 2/1;
-    box-shadow: 0 0 0 2px var(--color-bg-inverted);
-    border-radius: var(--rounded-full);
+    box-shadow:
+        0 0 0 2px var(--color-bg-inverted),
+        2px 2px 0 2px var(--color-bg-inverted);
+    border-radius: var(--rounded-md);
     cursor: pointer;
 
     display: flex;
@@ -25,7 +27,7 @@
     height: calc(100% - 2 * var(--spacing-xs));
     width: calc(50% - var(--spacing-xs));
     background-color: var(--color-bg-inverted);
-    border-radius: var(--rounded-full);
+    border-radius: var(--rounded-md);
 
     transition: transform 0.125s ease-in-out;
 }

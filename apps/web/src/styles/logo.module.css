@@ -2,6 +2,6 @@
 }
 
 .logoImg {
-    width: var(--size-lg);
-    height: var(--size-lg);
+    width: var(--size-xl);
+    height: var(--size-xl);
 }

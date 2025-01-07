@@ -1,17 +1,21 @@
 .Footer {
-    margin-top: auto;
+    width: calc(100% - 2 * var(--spacing-lg));
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: var(--spacing-lg);
     gap: var(--spacing-lg);
-    width: 100%;
-    background-color: var(--color-primary);
     color: white;
+    margin: auto var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+    box-shadow:
+        0 0 0 4px var(--color-bg-inverted),
+        4px 4px 0 4px var(--color-bg-inverted);
+    border-radius: var(--rounded-md);
+    background-color: var(--color-indigo-light);
 }
 
 .FooterSpacer {
-    width: 90vw;
+    width: 100%;
     border-top: 2px solid var(--color-indigo-pale);
 }
 

@@ -16,15 +16,15 @@ export default function Outlet({ children }: OutletProps) {
         if (theme === "dark") {
             document.querySelector("html")?.classList.add("dark");
 
-            //document
-            //   .querySelectorAll("*")
-            //  .forEach(el => el.classList.add("dark"));
+            document
+                .querySelectorAll("*")
+                .forEach(el => el.classList.add("dark"));
         } else {
             document.querySelector("html")?.classList.remove("dark");
 
-            //document
-            //  .querySelectorAll("*")
-            //.forEach(el => el.classList.remove("dark"));
+            document
+                .querySelectorAll("*")
+                .forEach(el => el.classList.remove("dark"));
         }
     }, [theme]);
 

@@ -13,6 +13,7 @@
 
     background-color: var(--color-bg);
     border-radius: var(--rounded-lg);
+    border: 2px solid var(--color-bg-inverted);
     box-shadow: 0 0 32px 0 var(--color-shadow);
 }
 

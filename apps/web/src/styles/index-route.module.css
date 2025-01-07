@@ -1,3 +1,5 @@
+.indexRoute {}
+
 .mainWraper {
     display: flex;
     flex-direction: column;
@@ -6,6 +8,12 @@
     padding: var(--spacing-lg);
     gap: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
+    max-width: 1200px;
+
+    @media (min-width: 760px) {
+        flex-direction: row-reverse;
+
+    }
 }
 
 .mainImg {
@@ -19,46 +27,64 @@
     text-align: center;
     justify-content: center;
     gap: var(--spacing-lg);
+
+    @media (min-width: 760px) {
+        text-align: left;
+    }
 }
 
 .mainContentHeader {
     font-size: var(--text-2xl);
     font-weight: bold;
+    color: var(--color-secondary);
 }
 
 .mainContentParagraph {
     font-size: var(--text-md);
-    width: 80%;
+    max-width: 600px;
     align-self: center;
     line-height: 1.5em;
 }
 
-.mainContentCTA {
+.mainContentCTAWraper {
     display: flex;
     gap: var(--spacing-lg);
     align-self: center;
+
+    @media (min-width: 760px) {
+        align-self: flex-start;
+    }
+}
+
+.mainContentCTA {
+    height: var(--size-lg);
+    padding: var(--spacing-lg);
+    aspect-ratio: 2.5/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-bg-inverted));
+    border-radius: var(--rounded-md);
+    font-weight: bold;
+    box-shadow:
+        0 0 0 2px var(--color-bg-inverted),
+        2px 2px 0 2px var(--color-bg-inverted);
+    transition: box-shadow 0.075s ease-in-out;
+
+    &:hover {
+        box-shadow:
+            0 0 0 2px var(--color-bg-inverted),
+            4px 4px 0 4px var(--color-bg-inverted);
+    }
 }
 
 .mainContentCTAPlaylist {
-    height: var(--size-lg);
-    padding: var(--spacing-xl);
-    aspect-ratio: 2.5/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--color-bg-inverted);
-    border-radius: var(--rounded-md);
-    font-weight: bold;
 }
 
 .mainContentCTAPropositions {
-    height: var(--size-lg);
-    padding: var(--spacing-xl);
-    aspect-ratio: 2.5/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--color-bg-inverted);
-    border-radius: var(--rounded-md);
-    font-weight: bold;
+}
+
+.mainContentCTAIcon {
+    font-size: var(--text-md);
+    margin-left: var(--spacing-xs);
 }
