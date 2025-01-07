@@ -12,7 +12,7 @@
 
 .FooterSpacer {
     width: 90vw;
-    border-top: 1px dashed var(--color-indigo-pale);
+    border-top: 2px solid var(--color-indigo-pale);
 }
 
 .FooterTop {
@@ -21,6 +21,11 @@
     align-items: center;
     width: 100%;
     max-width: 1200px;
+
+    @media (max-width: 560px) {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
 }
 
 .FooterTopHeader {

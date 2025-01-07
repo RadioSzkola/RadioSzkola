@@ -1,0 +1,7 @@
+.logo {
+}
+
+.logoImg {
+    width: var(--size-lg);
+    height: var(--size-lg);
+}

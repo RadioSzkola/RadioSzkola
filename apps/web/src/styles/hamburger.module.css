@@ -27,6 +27,7 @@
     height: 4px;
     background-color: var(--color-text);
     transition: width 0.125s ease-in-out;
+    border-radius: var(--rounded-full);
 }
 
 .hamburgerDash__colorInverted {

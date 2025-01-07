@@ -1,13 +1,15 @@
 .toggle {
-    --padding: var(--spacing-xs);
-
     position: relative;
     height: var(--size-md);
+    padding: 0 var(--spacing-xs);
     aspect-ratio: 2/1;
-    padding: var(--padding);
-    box-shadow: 0 0 0 2px var(--color-bg-inverted) inset;
+    box-shadow: 0 0 0 2px var(--color-bg-inverted);
     border-radius: var(--rounded-full);
     cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .toggle__off {
@@ -18,10 +20,10 @@
 
 .toggleSwitch {
     position: absolute;
-    top: 0;
-    left: 0;
-    height: calc(100%);
-    width: calc(50%);
+    top: var(--spacing-xs);
+    left: var(--spacing-xs);
+    height: calc(100% - 2 * var(--spacing-xs));
+    width: calc(50% - var(--spacing-xs));
     background-color: var(--color-bg-inverted);
     border-radius: var(--rounded-full);
 
@@ -37,21 +39,11 @@
 }
 
 .slotLeft {
-    position: absolute;
-    top: var(--padding);
-    left: var(--padding);
-    height: calc(100% - 2 * var(--padding));
-    width: calc(50% - 1 * var(--padding));
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .slotRight {
-    position: absolute;
-    top: var(--padding);
-    right: var(--padding);
-    height: calc(100% - 2 * var(--padding));
-    width: calc(50% - 1 * var(--padding));
     display: flex;
     align-items: center;
     justify-content: center;

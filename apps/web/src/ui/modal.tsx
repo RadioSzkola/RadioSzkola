@@ -1,6 +1,7 @@
 import { createPortal } from "react-dom";
 
 import styles from "../styles/modal.module.css";
+import { useRef } from "react";
 
 type ModalProps = {
     children: React.ReactElement;
@@ -19,6 +20,8 @@ export default function Modal({
     wrapperClass,
     wrapperClassOpen,
 }: ModalProps) {
+    const wraperRef = useRef<HTMLDivElement>(null);
+
     return createPortal(
         <>
             <div
@@ -36,6 +39,7 @@ export default function Modal({
                     ${wrapperClass ? wrapperClass : ""}
                     ${open && wrapperClassOpen ? wrapperClassOpen : ""}
                 `}
+                ref={wraperRef}
             >
                 {children}
             </div>
