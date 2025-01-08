@@ -6,7 +6,7 @@ export const userRoleSchema = z.enum([
     "member", // A standard user of the app
     "creator", // A user able to create content
     "admin", // A local (school) admin
-    "systemadmin", // A global admin (all of schools)
+    "systemadmin", // A global admin with all privileges
 ]);
 
 export const userPasswordSchema = z.string().min(8).max(128);

@@ -3,6 +3,8 @@ import { integer, text, sqliteTable } from "drizzle-orm/sqlite-core";
 import { UserRole } from "../models";
 import { schoolTable } from "./school";
 import { sessionTable } from "./session";
+import { timestamp } from "./utils";
+import { authIdTable } from "./auth-id";
 
 export const userTable = sqliteTable("user", {
     id: text("id").primaryKey(),
@@ -13,13 +15,7 @@ export const userTable = sqliteTable("user", {
     schoolId: integer("schoolId")
         .notNull()
         .references(() => schoolTable.id),
-    createdAt: integer("createdAt")
-        .notNull()
-        .$defaultFn(() => Date.now()),
-    updatedAt: integer("updatedAt")
-        .notNull()
-        .$default(() => Date.now())
-        .$onUpdateFn(() => Date.now()),
+    ...timestamp,
 });
 
 export const userRelatons = relations(userTable, relation => ({

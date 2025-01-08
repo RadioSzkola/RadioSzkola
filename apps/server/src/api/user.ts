@@ -34,7 +34,7 @@ userRouterV1.get("/", paginationValidatorMiddleware, async c => {
 
     if (error) return c.json(error, statusCode);
 
-    let users: User[];
+    let users: User[] = [];
 
     if (user.role === "admin") {
         users = await db.query.userTable.findMany({
@@ -43,7 +43,7 @@ userRouterV1.get("/", paginationValidatorMiddleware, async c => {
             where: (fields, operators) =>
                 operators.eq(fields.schoolId, user.schoolId),
         });
-    } else {
+    } else if (user.role === "systemadmin") {
         users = await db.query.userTable.findMany({
             limit,
             offset,
