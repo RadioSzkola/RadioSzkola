@@ -8,6 +8,9 @@ export const ENV = (process.env.NODE_ENV || "development") as
 export const DATABASE_PATH = process.env.DATABASE_PATH || "./.local/sqlite.db";
 export const DATABASE_MIGRATIONS_FOLDER = "./migrations";
 
+// For now
+export const AUTH_ALLOW_ALL = true;
+
 export function getAllowedOrigins(): string[] {
     return [
         `http://localhost:${WEB_APP_PORT}`,

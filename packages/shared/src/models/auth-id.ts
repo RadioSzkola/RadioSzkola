@@ -2,16 +2,22 @@ import { createSelectSchema } from "drizzle-zod";
 import { authIdTable } from "../schemas";
 import { z } from "zod";
 
-export const authIdSchema = createSelectSchema(authIdTable);
+export const authIdSchema = createSelectSchema(authIdTable, {
+    inUse: z.boolean(),
+});
 
-export const createAuthIdSchema = createSelectSchema(authIdTable).omit({
+export const createAuthIdSchema = createSelectSchema(authIdTable, {
+    inUse: z.boolean(),
+}).omit({
     createdAt: true,
     updatedAt: true,
     expiresAt: true,
     inUse: true,
 });
 
-export const updateAuthIdSchema = createSelectSchema(authIdTable).omit({
+export const updateAuthIdSchema = createSelectSchema(authIdTable, {
+    inUse: z.boolean(),
+}).omit({
     createdAt: true,
     updatedAt: true,
 });

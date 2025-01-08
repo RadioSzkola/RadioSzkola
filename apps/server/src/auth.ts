@@ -2,7 +2,7 @@ import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
 import { db } from "./db";
 import { sessionTable, userTable } from "@rs/shared/schemas";
 import { Lucia } from "lucia";
-import { ENV } from "./const";
+import { AUTH_ALLOW_ALL, ENV } from "./const";
 import { ApiContext } from "./context";
 import { Session, User, UserRole, userRoleSchema } from "@rs/shared/models";
 import { Context } from "hono";
@@ -76,6 +76,10 @@ export function useAuthRules(
         }
     } else if (typeof matcher === "boolean") {
         isAuthorized = matcher;
+    }
+
+    if (AUTH_ALLOW_ALL) {
+        isAuthorized = true;
     }
 
     if (isAuthorized) {
