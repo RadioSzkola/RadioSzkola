@@ -32,11 +32,11 @@ authIdRouterV1.use(
 authIdRouterV1.get("/", paginationValidatorMiddleware, async c => {
     const { limit, offset } = c.req.valid("query");
 
-    const { user, error, statusCode } = useAuthRules(c, {
-        systemadmin: true,
-    });
+    // const { error, statusCode } = useAuthRules(c, {
+    //     systemadmin: true,
+    // });
 
-    if (error) return c.json(error, statusCode);
+    // if (error) return c.json(error, statusCode);
 
     let ids: AuthId[] = await db.query.authIdTable.findMany({
         limit,

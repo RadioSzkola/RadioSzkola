@@ -78,10 +78,6 @@ export function useAuthRules(
         isAuthorized = matcher;
     }
 
-    if (AUTH_ALLOW_ALL) {
-        isAuthorized = true;
-    }
-
     if (isAuthorized) {
         return {
             user,

@@ -40,11 +40,13 @@ export const authMiddleware = createMiddleware<ApiContext>(async (c, next) => {
         return c.json<AppError>({ code: "DATABASE" }, 500);
     }
 
-    c.set("session", {
-        expiresAt: session.expiresAt.getDate(),
-        id: session.id,
-        userId: session.userId,
+    const dbSession = await db.query.sessionTable.findFirst({
+        where: (fields, operators) => operators.eq(fields.id, session.id),
     });
+
+    if (!dbSession) return c.json<AppError>({ code: "DATABASE" }, 500);
+
+    c.set("session", dbSession);
     c.set("user", user);
 
     await next();
