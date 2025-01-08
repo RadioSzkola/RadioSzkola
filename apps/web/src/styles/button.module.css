@@ -1,0 +1,59 @@
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--button-size);
+    padding: var(--button-spacing);
+    color: var(--button-color);
+    border-radius: var(--rounded-md);
+    background-color: var(--button-color-bg);
+
+    box-shadow:
+        0 0 0 2px var(--color-bg-inverted),
+        2px 2px 0 2px var(--color-bg-inverted);
+}
+
+.button__sm {
+    --button-size: var(--size-md);
+    --button-spacing: var(--spacing-md);
+}
+
+.button__md {
+    --button-size: var(--size-lg);
+    --button-spacing: var(--spacing-lg);
+}
+
+.button__lg {
+    --button-size: var(--size-xl);
+    --button-spacing: var(--spacing-xl);
+}
+
+.button__neutral {
+    --button-color: var(--color-text);
+    --button-color-bg: var(--color-bg);
+}
+
+.button__inverted {
+    --button-color: var(--color-text-inverted);
+    --button-color-bg: var(--color-bg-inverted);
+}
+
+.button__primary {
+    --button-color: var(--color-primary);
+    --button-color-bg: var(--color-bg);
+}
+
+.button__secondary {
+    --button-color: var(--color-secondary);
+    --button-color-bg: var(--color-bg);
+}
+
+.button__animated {
+    transition: box-shadow 0.075s ease-in-out;
+
+    &:hover {
+        box-shadow:
+            0 0 0 2px var(--color-bg-inverted),
+            4px 4px 0 4px var(--color-bg-inverted);
+    }
+}

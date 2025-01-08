@@ -1,4 +1,5 @@
-.indexRoute {}
+.indexRoute {
+}
 
 .mainWraper {
     display: flex;
@@ -12,7 +13,6 @@
 
     @media (min-width: 760px) {
         flex-direction: row-reverse;
-
     }
 }
 
@@ -63,8 +63,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-bg-inverted));
+    color: var(--color-bg-inverted);
     border-radius: var(--rounded-md);
+    background-color: var(--color-bg);
     font-weight: bold;
     box-shadow:
         0 0 0 2px var(--color-bg-inverted),

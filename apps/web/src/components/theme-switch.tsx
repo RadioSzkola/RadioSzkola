@@ -2,7 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import styles from "../styles/theme-switch.module.css";
 import { useContext, useState } from "react";
 import { themeContext, themeDispatchContext } from "../stores/theme";
-import Toggle from "../ui/toggle";
+import Switch from "../ui/switch";
 
 export default function ThemeSwitch() {
     const theme = useContext(themeContext);
@@ -15,7 +15,9 @@ export default function ThemeSwitch() {
     };
 
     return (
-        <Toggle
+        <Switch
+            size="md"
+            variant="neutral"
             on={toggleOn}
             onToggle={handleThemeToggle}
             offSlot={

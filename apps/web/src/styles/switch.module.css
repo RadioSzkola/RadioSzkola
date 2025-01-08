@@ -1,0 +1,65 @@
+.switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    aspect-ratio: 2/1;
+    box-shadow:
+        0 0 0 2px var(--color),
+        2px 2px 0 2px var(--color);
+    border-radius: var(--rounded-md);
+    cursor: pointer;
+}
+
+.switch__neutral {
+    --color: var(--color-bg-inverted);
+}
+
+.switch__inverted {
+    --color: var(--color-bg);
+}
+
+.switch__sm {
+    height: var(--size-sm);
+    padding: 0 var(--spacing-xxs);
+    --spacing: var(--spacing-xxs);
+}
+
+.switch__md {
+    height: var(--size-md);
+    padding: 0 var(--spacing-xs);
+    --spacing: var(--spacing-xs);
+}
+
+.switch__lg {
+    height: var(--size-lg);
+    padding: 0 var(--spacing-sm);
+    --spacing: var(--spacing-sm);
+}
+
+.switchDot {
+    position: absolute;
+    top: var(--spacing);
+    left: var(--spacing);
+    height: calc(100% - 2 * var(--spacing));
+    width: calc(50% - var(--spacing));
+    background-color: var(--color-bg-inverted);
+    border-radius: var(--rounded-md);
+
+    transition: transform 0.125s ease-in-out;
+}
+
+.switchDot__off {
+    transform: translateX(0);
+}
+
+.switchDot__on {
+    transform: translateX(100%);
+}
+
+.switchSlot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
