@@ -27,7 +27,7 @@ a {
 }
 
 html {
-    --color-indigo: #140b5c;
+    --color-indigo: #150685;
     --color-indigo-light: #2f209c;
     --color-indigo-lighter: #746fdd;
     --color-indigo-pale: #dcd8ff;
@@ -39,9 +39,9 @@ html {
     --color-red-light: #ff4d4d;
     --color-red-lighter: #ff7a7a;
     --color-red-pale: #ffcccc;
-    --color-red-dark: #920f0f;
-    --color-red-darker: #920f0f;
-    --color-red-black: #920f0f;
+    --color-red-dark: #cf0000;
+    --color-red-darker: #9b0000;
+    --color-red-black: #7a0000;
 
     --color-neutral-light: #e7e7e7;
     --color-neutral-white: #ffffff;

@@ -1,8 +1,9 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import Hamburger from "../ui/hamburger";
 import styles from "../styles/index-route.module.css";
 import ImgSpeaker from "../img/speaker.png";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Button from "../ui/button";
+import Playlist from "../components/playlist";
 
 export const Route = createLazyFileRoute("/")({
     component: RouteComponent,
@@ -26,31 +27,42 @@ function RouteComponent() {
                         przerwach!
                     </p>
                     <div className={styles.mainContentCTAWraper}>
-                        <a
-                            href="#playlista"
-                            className={`
-                                ${styles.mainContentCTAPlaylist}
-                                ${styles.mainContentCTA}
-                            `}
-                        >
-                            Playlista
-                            <Icon
-                                className={styles.mainContentCTAIcon}
-                                icon="fluent:arrow-down-12-filled"
-                            />
+                        <a href="#playlista">
+                            <Button
+                                size="md"
+                                variant="neutral"
+                                animated
+                                className={styles.mainContentCTAButton}
+                            >
+                                <>
+                                    Playlista
+                                    <Icon
+                                        className={styles.mainContentCTAIcon}
+                                        icon="fluent:arrow-down-12-filled"
+                                    />
+                                </>
+                            </Button>
                         </a>
-                        <a
-                            href="#"
-                            className={`
-                                ${styles.mainContentCTAPropositions}
-                                ${styles.mainContentCTA}
-                            `}
-                        >
-                            Propozycje (Wkrótce)
+                        <a href="#">
+                            <Button
+                                size="md"
+                                variant="neutral"
+                                animated
+                                className={styles.mainContentCTAButton}
+                            >
+                                <>
+                                    Propozycje (Wkrótce)
+                                    <Icon
+                                        className={styles.mainContentCTAIcon}
+                                        icon="fluent:arrow-down-12-filled"
+                                    />
+                                </>
+                            </Button>
                         </a>
                     </div>
                 </div>
             </main>
+            <Playlist />
         </div>
     );
 }

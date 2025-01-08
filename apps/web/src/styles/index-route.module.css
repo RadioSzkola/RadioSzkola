@@ -41,7 +41,7 @@
 
 .mainContentParagraph {
     font-size: var(--text-md);
-    max-width: 600px;
+    max-width: 500px;
     align-self: center;
     line-height: 1.5em;
 }
@@ -56,33 +56,9 @@
     }
 }
 
-.mainContentCTA {
-    height: var(--size-lg);
-    padding: var(--spacing-lg);
-    aspect-ratio: 2.5/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-bg-inverted);
-    border-radius: var(--rounded-md);
-    background-color: var(--color-bg);
+.mainContentCTAButton {
     font-weight: bold;
-    box-shadow:
-        0 0 0 2px var(--color-bg-inverted),
-        2px 2px 0 2px var(--color-bg-inverted);
-    transition: box-shadow 0.075s ease-in-out;
-
-    &:hover {
-        box-shadow:
-            0 0 0 2px var(--color-bg-inverted),
-            4px 4px 0 4px var(--color-bg-inverted);
-    }
-}
-
-.mainContentCTAPlaylist {
-}
-
-.mainContentCTAPropositions {
+    cursor: pointer;
 }
 
 .mainContentCTAIcon {
