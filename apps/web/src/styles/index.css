@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Domine:wght@400..700&display=swap");
 
 *,
 *::before,
@@ -11,7 +11,9 @@
     background-color: transparent;
 }
 
-button {
+button,
+select,
+input {
     outline: none;
     border: none;
 }
@@ -32,8 +34,8 @@ html {
     --color-indigo-lighter: #746fdd;
     --color-indigo-pale: #dcd8ff;
     --color-indigo-dark: #0c063a;
-    --color-indigo-darker: #0c063a;
-    --color-indigo-black: #0c063a;
+    --color-indigo-darker: #07032c;
+    --color-indigo-black: #090914;
 
     --color-red: #ff0000;
     --color-red-light: #ff4d4d;
@@ -41,7 +43,7 @@ html {
     --color-red-pale: #ffcccc;
     --color-red-dark: #cf0000;
     --color-red-darker: #9b0000;
-    --color-red-black: #7a0000;
+    --color-red-black: #2c0101;
 
     --color-neutral-light: #e7e7e7;
     --color-neutral-white: #ffffff;
@@ -111,16 +113,16 @@ html {
     --mobile-size-xxs: 0.5rem;
     --mobile-size-xs: 1rem;
     --mobile-size-sm: 1.5rem;
-    --mobile-size-md: 1.85rem;
+    --mobile-size-md: 2rem;
     --mobile-size-lg: 3rem;
-    --mobile-size-xl: 6.5rem;
+    --mobile-size-xl: 4rem;
 
     --desktop-size-xxs: 0.5rem;
     --desktop-size-xs: 1rem;
     --desktop-size-sm: 1.5rem;
-    --desktop-size-md: 1.85rem;
+    --desktop-size-md: 2rem;
     --desktop-size-lg: 3rem;
-    --desktop-size-xl: 6.5rem;
+    --desktop-size-xl: 4rem;
 
     --spacing-xxs: var(--mobile-spacing-xxs);
     --spacing-xs: var(--mobile-spacing-xs);
@@ -188,7 +190,7 @@ html.dark {
     --color-text-inverted: var(--color-neutral-black);
     --color-text-inverted-alt: var(--color-neutral-dark);
 
-    --color-bg: var(--color-neutral-black);
+    --color-bg: var(--color-indigo-black);
     --color-bg-alt: var(--color-neutral-dark);
     --color-bg-inverted: var(--color-neutral-white);
     --color-bg-inverted-alt: var(--color-neutral-light);
@@ -205,6 +207,9 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+
+    font-family: "Domine", serif;
+    font-optical-sizing: auto;
 }
 
 #root {

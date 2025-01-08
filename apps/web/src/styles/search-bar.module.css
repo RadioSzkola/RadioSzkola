@@ -1,51 +1,53 @@
 .searchBar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    height: var(--size-md);
     gap: var(--spacing-md);
-    padding: var(--spacing-md);
     border-radius: var(--rounded-md);
-    background-color: var(--color-bg);
+    background-color: var(--color-primary-pale);
     box-shadow:
         0 0 0 2px var(--color-bg-inverted),
         2px 2px 0 2px var(--color-bg-inverted);
+
+    transition: box-shadow 0.075s ease-in-out;
+
+    &:focus-within,
+    &:hover {
+        box-shadow:
+            0 0 0 2px var(--color-bg-inverted),
+            4px 4px 0 4px var(--color-bg-inverted);
+    }
 }
 
 .searchInput {
-    flex: 1;
-    padding: var(--spacing-sm);
-    border: 1px solid var(--color-neutral-dark);
-    border-radius: var(--rounded-md);
-    font-size: var(--text-md);
+    height: 100%;
     color: var(--color-text);
-    background-color: var(--color-bg-alt);
+    font-size: var(--text-md);
+}
+
+.searchSelectWraper {
+    height: 100%;
+    padding: 0 var(--spacing-md);
+    display: grid;
+    place-items: center;
+    border-right: 2px solid var(--color-text);
 }
 
 .searchSelect {
-    padding: var(--spacing-sm);
-    border: 1px solid var(--color-neutral-dark);
-    border-radius: var(--rounded-md);
-    font-size: var(--text-md);
+    font-size: var(--text-sm);
+    font-weight: bold;
     color: var(--color-text);
-    background-color: var(--color-bg-alt);
 }
 
 .searchButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--spacing-sm);
-    border: none;
-    border-radius: var(--rounded-md);
-    background-color: var(--color-primary);
-    color: var(--color-text-inverted);
+    height: 100%;
+    aspect-ratio: 1/1;
+    border-left: 2px solid var(--color-text);
     cursor: pointer;
-    transition: background-color 0.125s ease-in-out;
-}
-
-.searchButton:hover {
-    background-color: var(--color-primary-dark);
 }
 
 .searchButtonIcon {
-    font-size: var(--text-lg);
+    color: var(--color-text);
+    font-size: var(--text-md);
 }

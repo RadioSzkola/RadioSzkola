@@ -1,9 +1,16 @@
+import { useState } from "react";
 import styles from "../styles/playlist.module.css";
 import SearchBar from "../ui/search-bar";
 
 export type PlaylistProps = {};
 
+export type SearchCategory = "artist" | "album" | "genre";
+
 export default function Playlist({}: PlaylistProps) {
+    const [searchCategory, setSearchCategory] =
+        useState<SearchCategory>("artist");
+    const [searchTerm, setSearchTerm] = useState<string>("");
+
     return (
         <div className={styles.playlist} id="playlista">
             <a
@@ -19,8 +26,12 @@ export default function Playlist({}: PlaylistProps) {
                     { value: "album", text: "album" },
                     { value: "genre", text: "gatunek" },
                 ]}
-                defaultSearchCategory="album"
-                defaultSearchTerm=""
+                searchCategory={searchCategory}
+                searchTerm={searchTerm}
+                onSelectChange={ev =>
+                    setSearchCategory(ev.target.value as SearchCategory)
+                }
+                onInputChange={ev => setSearchTerm(ev.target.value)}
             />
         </div>
     );
