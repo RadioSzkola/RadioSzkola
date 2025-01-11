@@ -134,6 +134,7 @@ webAuthRouterV1.post(
                         statusCode: 400 as ResponseInit,
                     };
                 }
+
                 const insertedUser = insertedUsers[0];
                 const user: User = {
                     id: insertedUser.id,
@@ -178,7 +179,16 @@ webAuthRouterV1.post(
             return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
         }
 
-        const { passwordHash, ...user } = selectedUser;
+        const passwordHash = selectedUser.passwordHash;
+        const user: User = {
+            id: selectedUser.id,
+            email: selectedUser.email,
+            name: selectedUser.name,
+            role: selectedUser.role,
+            schoolId: selectedUser.schoolId,
+            createdAt: selectedUser.createdAt,
+            updatedAt: selectedUser.updatedAt,
+        };
 
         const isPasswordValid = await verifyPassword(
             passwordHash,
