@@ -45,9 +45,16 @@ export const userLoginSchema = z.object({
     password: userPasswordSchema,
 });
 
+export const signupSchema = createUserSchema.omit({ role: true });
+export const signupIdSchema = createUserSchema
+    .omit({ role: true })
+    .extend({ authId: z.string() });
+
 export type UserRole = z.infer<typeof userRoleSchema>;
 export type CreateUser = z.infer<typeof createUserSchema>;
 export type UpdateUser = z.infer<typeof updateUserSchema>;
 export type DbUser = z.infer<typeof dbUserSchema>;
 export type User = z.infer<typeof userSchema>;
 export type UserLogin = z.infer<typeof userLoginSchema>;
+export type Signup = z.infer<typeof signupSchema>;
+export type SignupId = z.infer<typeof signupIdSchema>;

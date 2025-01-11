@@ -1,7 +1,14 @@
-import { createUserSchema, userLoginSchema } from "@rs/shared/models";
+import {
+    createUserSchema,
+    signupIdSchema,
+    signupSchema,
+    User,
+    userLoginSchema,
+    UserRole,
+} from "@rs/shared/models";
 import { Hono } from "hono";
 import { db } from "../db";
-import { userTable } from "@rs/shared/schemas";
+import { authIdTable, userTable } from "@rs/shared/schemas";
 import { SqliteError } from "better-sqlite3";
 import { lucia } from "../auth";
 import { ApiContext } from "../context";
@@ -22,24 +29,27 @@ webAuthRouterV1.use(
 
 webAuthRouterV1.post(
     "/signup",
-    bodyValidatorMiddleware(createUserSchema),
+    bodyValidatorMiddleware(signupSchema),
     async c => {
         const signupData = c.req.valid("json");
 
         const passwordHash = await hashPassword(signupData.password);
         const id = createUserId();
 
+        // The default role
+        const role: UserRole = "member";
+
         try {
             const { passwordHash: _, ...user } = (
                 await db
                     .insert(userTable)
-                    // @ts-ignore
                     .values({
                         email: signupData.email,
                         name: signupData.name,
-                        role: signupData.role,
+                        role: role,
                         id,
                         passwordHash,
+                        schoolId: signupData.schoolId,
                     })
                     .returning()
             )[0];
@@ -55,10 +65,97 @@ webAuthRouterV1.post(
                 e instanceof SqliteError &&
                 e.code === "SQLITE_CONSTRAINT_UNIQUE"
             ) {
-                return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
+                return c.json<AppError>({ code: "DATABASE" }, 401);
             }
-            return c.json<AppError>({ code: "DATABASE" }, 400);
+            return c.json<AppError>({ code: "UNKNOWN" }, 400);
         }
+    },
+);
+
+webAuthRouterV1.post(
+    "/signupid",
+    bodyValidatorMiddleware(signupIdSchema),
+    async c => {
+        const signupData = c.req.valid("json");
+
+        const passwordHash = await hashPassword(signupData.password);
+        const userId = createUserId();
+
+        // The default role
+        const role: UserRole = "member";
+
+        const result:
+            | { user: User; error: null; statusCode: null }
+            | { user: null; error: AppError; statusCode: ResponseInit } =
+            await db.transaction(async tx => {
+                const authId = await db.query.authIdTable.findFirst({
+                    where: (fields, operators) =>
+                        operators.eq(fields.id, signupData.authId),
+                });
+
+                if (!authId) {
+                    return {
+                        user: null,
+                        error: { code: "DATABASE" } as AppError,
+                        statusCode: 400 as ResponseInit,
+                    };
+                }
+
+                if (authId.inUse) {
+                    return {
+                        user: null,
+                        error: { code: "DATABASE" } as AppError,
+                        statusCode: 400 as ResponseInit,
+                    };
+                }
+
+                await db.update(authIdTable).set({
+                    inUse: true,
+                    userId: userId,
+                });
+
+                const insertedUsers = await db
+                    .insert(userTable)
+                    .values({
+                        email: signupData.email,
+                        name: signupData.name,
+                        role: role,
+                        id: userId,
+                        passwordHash,
+                        schoolId: signupData.schoolId,
+                    })
+                    .returning();
+
+                if (insertedUsers.length !== 1) {
+                    return {
+                        user: null,
+                        error: { code: "UNKNOWN" } as AppError,
+                        statusCode: 400 as ResponseInit,
+                    };
+                }
+                const insertedUser = insertedUsers[0];
+                const user: User = {
+                    id: insertedUser.id,
+                    email: insertedUser.email,
+                    name: insertedUser.name,
+                    role: insertedUser.role,
+                    schoolId: insertedUser.schoolId,
+                    createdAt: insertedUser.createdAt,
+                    updatedAt: insertedUser.updatedAt,
+                };
+
+                return {
+                    user: user,
+                    error: null,
+                    statusCode: null,
+                };
+            });
+
+        if (result.error) {
+            return c.json<AppError>(result.error, result.statusCode);
+        }
+
+        return c.json(result.user);
     },
 );
 
