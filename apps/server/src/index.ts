@@ -1,10 +1,10 @@
 import { serve } from "@hono/node-server";
-import { PORT, setupConst } from "./const";
+import { SERVER_PORT, setupDotenv } from "./const";
 import { api } from "./api";
 
-setupConst();
+setupDotenv();
 
 serve({
     fetch: api.fetch,
-    port: parseInt(PORT),
+    port: parseInt(SERVER_PORT()),
 });

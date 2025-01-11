@@ -2,7 +2,7 @@ import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
 import { db } from "./db";
 import { sessionTable, userTable } from "@rs/shared/schemas";
 import { Lucia } from "lucia";
-import { AUTH_ALLOW_ALL, ENV } from "./const";
+import { ENV } from "./const";
 import { ApiContext } from "./context";
 import { Session, User, UserRole, userRoleSchema } from "@rs/shared/models";
 import { Context } from "hono";
@@ -12,7 +12,7 @@ const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
 export const lucia = new Lucia(adapter, {
     sessionCookie: {
         attributes: {
-            secure: ENV === "production",
+            secure: ENV() === "production",
         },
     },
 });
