@@ -9,7 +9,6 @@ import {
 import { Hono } from "hono";
 import { db } from "../db";
 import { authIdTable, userTable } from "@rs/shared/schemas";
-import { SqliteError } from "better-sqlite3";
 import { lucia } from "../auth";
 import { ApiContext } from "../context";
 import { AppError } from "@rs/shared/error";
@@ -34,41 +33,43 @@ webAuthRouterV1.post(
         const signupData = c.req.valid("json");
 
         const passwordHash = await hashPassword(signupData.password);
-        const id = createUserId();
+        const userId = createUserId();
 
         // The default role
         const role: UserRole = "member";
 
-        try {
-            const { passwordHash: _, ...user } = (
-                await db
-                    .insert(userTable)
-                    .values({
-                        email: signupData.email,
-                        name: signupData.name,
-                        role: role,
-                        id,
-                        passwordHash,
-                        schoolId: signupData.schoolId,
-                    })
-                    .returning()
-            )[0];
+        const insertedUsers = await db
+            .insert(userTable)
+            .values({
+                email: signupData.email,
+                name: signupData.name,
+                role: role,
+                id: userId,
+                passwordHash,
+                schoolId: signupData.schoolId,
+            })
+            .returning();
 
-            const session = await lucia.createSession(id, {});
-            const cookie = lucia.createSessionCookie(session.id).serialize();
-
-            c.header("Set-Cookie", cookie, { append: true });
-
-            return c.json(user);
-        } catch (e) {
-            if (
-                e instanceof SqliteError &&
-                e.code === "SQLITE_CONSTRAINT_UNIQUE"
-            ) {
-                return c.json<AppError>({ code: "DATABASE" }, 401);
-            }
-            return c.json<AppError>({ code: "UNKNOWN" }, 400);
+        if (insertedUsers.length !== 1) {
+            return c.json<AppError>({ code: "DATABASE" });
         }
+
+        const insertedUser = insertedUsers[0];
+        const user: User = {
+            id: insertedUser.id,
+            email: insertedUser.email,
+            name: insertedUser.name,
+            role: insertedUser.role,
+            schoolId: insertedUser.schoolId,
+            createdAt: insertedUser.createdAt,
+            updatedAt: insertedUser.updatedAt,
+        };
+
+        const session = await lucia.createSession(user.id, {});
+        const cookie = lucia.createSessionCookie(session.id).serialize();
+        c.header("Set-Cookie", cookie, { append: true });
+
+        return c.json(user);
     },
 );
 
@@ -155,6 +156,10 @@ webAuthRouterV1.post(
             return c.json<AppError>(result.error, result.statusCode);
         }
 
+        const session = await lucia.createSession(result.user.id, {});
+        const cookie = lucia.createSessionCookie(session.id).serialize();
+        c.header("Set-Cookie", cookie, { append: true });
+
         return c.json(result.user);
     },
 );
@@ -165,25 +170,27 @@ webAuthRouterV1.post(
     async c => {
         const loginData = c.req.valid("json");
 
-        const dbUser = await db.query.userTable.findFirst({
+        const selectedUser = await db.query.userTable.findFirst({
             where: (table, { eq }) => eq(table.email, loginData.email),
         });
 
-        if (!dbUser) return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
+        if (!selectedUser) {
+            return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
+        }
 
-        const { passwordHash, ...user } = dbUser;
+        const { passwordHash, ...user } = selectedUser;
 
         const isPasswordValid = await verifyPassword(
             passwordHash,
             loginData.password,
         );
 
-        if (!isPasswordValid)
+        if (!isPasswordValid) {
             return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
+        }
 
         const session = await lucia.createSession(user.id, {});
         const cookie = lucia.createSessionCookie(session.id).serialize();
-
         c.header("Set-Cookie", cookie, { append: true });
 
         return c.json(user);
@@ -193,11 +200,12 @@ webAuthRouterV1.post(
 webAuthRouterV1.post("/logout", async c => {
     const session = c.get("session");
 
-    if (!session) return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
+    if (!session) {
+        return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
+    }
 
     await lucia.invalidateSession(session.id);
     const cookie = lucia.createBlankSessionCookie().serialize();
-
     c.header("Set-Cookie", cookie);
 
     return c.json({ message: "Wylogowanie powiodło się" });
