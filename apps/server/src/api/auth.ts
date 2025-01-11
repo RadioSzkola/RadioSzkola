@@ -89,11 +89,13 @@ webAuthRouterV1.post(
             | { user: User; error: null; statusCode: null }
             | { user: null; error: AppError; statusCode: ResponseInit } =
             await db.transaction(async tx => {
+                console.log("1");
                 const authId = await db.query.authIdTable.findFirst({
                     where: (fields, operators) =>
                         operators.eq(fields.id, signupData.authId),
                 });
 
+                console.log("2");
                 if (!authId) {
                     return {
                         user: null,
@@ -102,6 +104,7 @@ webAuthRouterV1.post(
                     };
                 }
 
+                console.log("3");
                 if (authId.inUse) {
                     return {
                         user: null,
@@ -109,12 +112,15 @@ webAuthRouterV1.post(
                         statusCode: 400 as ResponseInit,
                     };
                 }
+                console.log("4");
 
                 await db.update(authIdTable).set({
-                    inUse: true,
+                    // @ts-ignore
+                    inUse: 1,
                     userId: userId,
                 });
 
+                console.log("5");
                 const insertedUsers = await db
                     .insert(userTable)
                     .values({
@@ -126,6 +132,7 @@ webAuthRouterV1.post(
                         schoolId: signupData.schoolId,
                     })
                     .returning();
+                console.log("6");
 
                 if (insertedUsers.length !== 1) {
                     return {
@@ -134,6 +141,7 @@ webAuthRouterV1.post(
                         statusCode: 400 as ResponseInit,
                     };
                 }
+                console.log("7");
 
                 const insertedUser = insertedUsers[0];
                 const user: User = {
@@ -145,6 +153,7 @@ webAuthRouterV1.post(
                     createdAt: insertedUser.createdAt,
                     updatedAt: insertedUser.updatedAt,
                 };
+                console.log("8");
 
                 return {
                     user: user,
