@@ -60,6 +60,7 @@
 .desktopLinksLink {
     font-size: var(--text-md);
     font-weight: bold;
+    cursor: pointer !important;
 
     &:hover {
         text-decoration: underline;

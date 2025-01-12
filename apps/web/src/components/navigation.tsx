@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Hamburger from "../ui/hamburger";
 
+import signUpStyles from "../styles/signup.module.css";
 import styles from "../styles/navigation.module.css";
 import Modal from "../ui/modal";
 import ThemeSwitch from "./theme-switch";
@@ -23,6 +24,12 @@ export default function Navigation() {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    const handleLoginClick = () => {
+        document
+            .getElementById("signup-container")
+            ?.classList.remove(signUpStyles.signVisibilityContainerHidden);
+    };
 
     return (
         <nav className={styles.nav}>
@@ -48,9 +55,12 @@ export default function Navigation() {
                     </a>
                 </li>
                 <li className={styles.desktopLinksItem}>
-                    <a href="#" className={styles.desktopLinksLink}>
+                    <button
+                        className={styles.desktopLinksLink}
+                        onClick={handleLoginClick}
+                    >
                         Zaloguj się
-                    </a>
+                    </button>
                 </li>
             </ul>
             <div className={styles.desktopOnly}>
