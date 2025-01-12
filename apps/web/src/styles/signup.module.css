@@ -21,6 +21,76 @@
 .signUpClose {
     align-self: flex-end;
     cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.signForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.passwordContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.signEmailInput {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--color-neutral-light);
+}
+
+.signPasswordInput {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--color-neutral-light);
+    width: 100%;
+}
+
+.signSchoolIdInput {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--color-neutral-light);
+}
+
+.signButton {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: var(--color-primary);
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--color-primary-darker);
+    }
+}
+
+.showPasswordCheckbox {
+    display: none;
+}
+
+.showPasswordCheckboxLabel {
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.toggleSignUpIn {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+.toggleSignUpInButton {
+    color: var(--color-secondary);
+    cursor: pointer;
+
+    &:hover {
+        color: var(--color-secondary-darker);
+        text-decoration: underline;
+    }
 }
 
 .signVisibilityContainerHidden {
