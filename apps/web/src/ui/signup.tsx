@@ -204,7 +204,7 @@ export default function SignUp() {
                 )}
                 {signUpOrIn === 1 ? (
                     <span className={styles.toggleSignUpIn}>
-                        Nie masz konta?{" "}
+                        Masz już konto?{" "}
                         <button
                             className={styles.toggleSignUpInButton}
                             onClick={handleSignUpOrIn}
