@@ -56,16 +56,21 @@ export default function SignUp() {
             id="signup-container"
         >
             <div className={styles.signContainer}>
-                <button
-                    className={styles.signUpClose}
-                    onClick={e => handleClose(e)}
-                >
-                    <Icon
-                        icon="material-symbols:close"
-                        width="24"
-                        height="24"
-                    />
-                </button>
+                <div className={styles.signUpperSection}>
+                    <h4 className={styles.signTitle}>
+                        {signUpOrIn === 1 ? "Zarejestruj się" : "Zaloguj się"}
+                    </h4>
+                    <button
+                        className={styles.signUpClose}
+                        onClick={e => handleClose(e)}
+                    >
+                        <Icon
+                            icon="material-symbols:close"
+                            width="24"
+                            height="24"
+                        />
+                    </button>
+                </div>
                 {signUpOrIn === 1 ? (
                     <form
                         onSubmit={e => handleSubmit(e)}
