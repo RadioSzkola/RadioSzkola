@@ -4,7 +4,6 @@ import { z } from "zod";
 
 export const schoolSchema = createSelectSchema(schoolTable);
 export const createSchoolSchema = createInsertSchema(schoolTable).omit({
-    id: true,
     updatedAt: true,
     createdAt: true,
 });

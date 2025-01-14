@@ -48,7 +48,12 @@ schoolRouterV1.post(
         const createSchoolData = c.req.valid("json");
         const schools = await db
             .insert(schoolTable)
-            .values(createSchoolData)
+            .values({
+                id: createSchoolData.id,
+                adress: createSchoolData.adress,
+                city: createSchoolData.city,
+                name: createSchoolData.name,
+            })
             .returning();
 
         if (schools.length === 0)
@@ -60,7 +65,7 @@ schoolRouterV1.post(
 
 schoolRouterV1.get(
     "/:id",
-    paramsValidatorMiddleware(z.object({ id: z.number() })),
+    paramsValidatorMiddleware(z.object({ id: z.string() })),
     async c => {
         const params = c.req.valid("param");
 
@@ -76,7 +81,7 @@ schoolRouterV1.get(
 
 schoolRouterV1.patch(
     "/:id",
-    paramsValidatorMiddleware(z.object({ id: z.number() })),
+    paramsValidatorMiddleware(z.object({ id: z.string() })),
     bodyValidatorMiddleware(updateSchoolSchema),
     async c => {
         const params = c.req.valid("param");
@@ -110,7 +115,7 @@ schoolRouterV1.patch(
 
 schoolRouterV1.delete(
     "/:id",
-    paramsValidatorMiddleware(z.object({ id: z.number() })),
+    paramsValidatorMiddleware(z.object({ id: z.string() })),
     async c => {
         const params = c.req.valid("param");
 
