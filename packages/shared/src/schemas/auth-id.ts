@@ -5,10 +5,6 @@ import { relations } from "drizzle-orm";
 
 export const authIdTable = sqliteTable("authId", {
     id: text("id").primaryKey(),
-    inUse: integer("inUse")
-        .notNull()
-        .$type<boolean>()
-        .$default(() => false),
     userId: text("userId").references(() => userTable.id),
     expiresAt: integer("expiresAt")
         .notNull()
