@@ -86,6 +86,10 @@
     font-size: 12px;
     margin-top: 3px;
     cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .toggleSignUpIn {

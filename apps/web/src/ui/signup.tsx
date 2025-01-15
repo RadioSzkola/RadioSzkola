@@ -1,4 +1,4 @@
-import { signupSchema } from "@rs/shared/models";
+import { signupSchema, userLoginSchema } from "@rs/shared/models";
 import { parseBySchema } from "@rs/shared/validation";
 import { Icon } from "@iconify/react";
 import styles from "../styles/signup.module.css";
@@ -11,26 +11,49 @@ export default function SignUp() {
     const [passwordVisibility, setPasswordVisibility] = useState<
         "password" | "text"
     >("text");
-    const [signUpOrIn, setSignUpOrIn] = useState<0 | 1>(1);
+    const [signUpOrIn, setSignUpOrIn] = useState<0 | 1>(0);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const { data, error } = parseBySchema(
-            {
-                email: email,
-                password: password,
-                schoolId: schoolId,
-            },
-            signupSchema,
-        );
 
-        if (error) {
-            console.log(error);
-        } else if (data) {
-            console.log("email: ", data.email);
-            console.log("password: ", data.password);
-            console.log("schoolId: ", data.schoolId);
-            console.log(data);
+        if (signUpOrIn === 0) {
+            const { data, error } = parseBySchema(
+                {
+                    email: email,
+                    password: password,
+                },
+                userLoginSchema,
+            );
+
+            if (error) {
+                console.error(error);
+                console.log(email, password);
+                return;
+            }
+
+            if (data) {
+                console.log(email, password);
+                console.log("User logged in successfully");
+            }
+        } else {
+            const { data, error } = parseBySchema(
+                {
+                    email: email,
+                    password: password,
+                    schoolId: schoolId,
+                },
+                signupSchema,
+            );
+
+            if (error) {
+                console.error(error);
+                console.log(email, password, schoolId);
+                return;
+            }
+
+            if (data) {
+                console.log("User signed up successfully");
+            }
         }
     };
 
@@ -48,6 +71,10 @@ export default function SignUp() {
 
     const handleSignUpOrIn = async () => {
         setSignUpOrIn(prevState => (prevState === 0 ? 1 : 0));
+        setEmail("");
+        setPassword("");
+        setSchoolId("");
+        setPasswordVisibility("text");
     };
 
     return (
@@ -147,14 +174,6 @@ export default function SignUp() {
                             placeholder="Email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
-                            required
-                        />
-                        <input
-                            type="text"
-                            className={styles.signSchoolIdInput}
-                            placeholder="ID użytkownika"
-                            value={schoolId}
-                            onChange={e => setSchoolId(e.target.value)}
                             required
                         />
                         <div className={styles.passwordContainer}>
