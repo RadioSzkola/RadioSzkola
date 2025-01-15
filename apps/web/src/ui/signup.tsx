@@ -2,10 +2,11 @@ import { signupSchema, userLoginSchema } from "@rs/shared/models";
 import { parseBySchema } from "@rs/shared/validation";
 import { Icon } from "@iconify/react";
 import styles from "../styles/signup.module.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function SignUp() {
     const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [schoolId, setSchoolId] = useState("");
     const [passwordVisibility, setPasswordVisibility] = useState<
@@ -27,17 +28,17 @@ export default function SignUp() {
 
             if (error) {
                 console.error(error);
-                console.log(email, password);
                 return;
             }
 
             if (data) {
-                console.log(email, password);
                 console.log("User logged in successfully");
+                return;
             }
         } else {
             const { data, error } = parseBySchema(
                 {
+                    name: name,
                     email: email,
                     password: password,
                     schoolId: schoolId,
@@ -47,12 +48,12 @@ export default function SignUp() {
 
             if (error) {
                 console.error(error);
-                console.log(email, password, schoolId);
                 return;
             }
 
             if (data) {
                 console.log("User signed up successfully");
+                return;
             }
         }
     };
@@ -63,6 +64,7 @@ export default function SignUp() {
             .getElementById("signup-container")
             ?.classList.add(styles.signVisibilityContainerHidden);
 
+        setName("");
         setEmail("");
         setPassword("");
         setSchoolId("");
@@ -71,6 +73,7 @@ export default function SignUp() {
 
     const handleSignUpOrIn = async () => {
         setSignUpOrIn(prevState => (prevState === 0 ? 1 : 0));
+        setName("");
         setEmail("");
         setPassword("");
         setSchoolId("");
@@ -103,6 +106,14 @@ export default function SignUp() {
                         onSubmit={e => handleSubmit(e)}
                         className={styles.signForm}
                     >
+                        <input
+                            type="text"
+                            className={styles.signNameInput}
+                            placeholder="Nazwa użytkownika"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            required
+                        />
                         <input
                             type="email"
                             className={styles.signEmailInput}
