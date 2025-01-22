@@ -30,6 +30,8 @@ html {
     --color-indigo: #150685;
     --color-indigo-light: #2f209c;
     --color-indigo-lighter: #746fdd;
+    --color-indigo-secondary-lighter: #685dba;
+    --color-indigo-secondary-lighter-alt: #685dba;
     --color-indigo-pale: #dcd8ff;
     --color-indigo-dark: #0c063a;
     --color-indigo-darker: #07032c;
@@ -55,6 +57,7 @@ html {
     --color-primary-dark: var(--color-indigo-dark);
     --color-primary-darker: var(--color-indigo-darker);
     --color-primary-black: var(--color-indigo-black);
+    --color-primary-lighter-alt: var(--color-indigo-secondary-lighter-alt);
 
     --color-secondary: var(--color-red);
     --color-secondary-light: var(--color-red-light);
@@ -73,6 +76,10 @@ html {
     --color-bg-alt: var(--color-neutral-light);
     --color-bg-inverted: var(--color-neutral-black);
     --color-bg-inverted-alt: var(--color-neutral-dark);
+
+    --color-sign-input: var(--color-neutral-black);
+    --color-sign-submit: var(--color-indigo);
+    --color-sign-submit-hover: var(--color-indigo-darker);
 
     --color-shadow: #0c063a10;
 
@@ -170,8 +177,10 @@ html.dark {
     --color-primary: var(--color-indigo-light);
     --color-primary-light: var(--color-indigo);
     --color-primary-lighter: var(--color-indigo-dark);
+
     --color-primary-pale: var(--color-indigo-darker);
     --color-primary-dark: var(--color-indigo-lighter);
+    --color-primary-lighter-alt: var(--color-indigo-secondary-lighter);
     --color-primary-darker: var(--color-indigo-pale);
     --color-primary-black: var(--color-indigo-pale);
 
@@ -192,6 +201,10 @@ html.dark {
     --color-bg-alt: var(--color-neutral-dark);
     --color-bg-inverted: var(--color-neutral-white);
     --color-bg-inverted-alt: var(--color-neutral-light);
+
+    --color-sign-input: var(--color-primary-lighter-alt);
+    --color-sign-submit: var(--color-indigo-light);
+    --color-sign-submit-hover: var(--color-primary-dark);
 
     --color-shadow: #dcd8ff20;
 
