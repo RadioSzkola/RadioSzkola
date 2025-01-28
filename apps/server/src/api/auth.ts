@@ -102,7 +102,12 @@ webAuthRouterV1.post(
                     };
                 }
 
-                if (authId.inUse) {
+                const school = await db.query.schoolTable.findFirst({
+                    where: (fields, operators) =>
+                        operators.eq(fields.id, signupData.schoolId),
+                });
+
+                if (!school) {
                     return {
                         user: null,
                         error: { code: "DATABASE" } as AppError,
@@ -110,10 +115,13 @@ webAuthRouterV1.post(
                     };
                 }
 
-                await db.update(authIdTable).set({
-                    inUse: true,
-                    userId: userId,
-                });
+                if (authId.userId) {
+                    return {
+                        user: null,
+                        error: { code: "DATABASE" } as AppError,
+                        statusCode: 400 as ResponseInit,
+                    };
+                }
 
                 const insertedUsers = await db
                     .insert(userTable)
@@ -134,6 +142,10 @@ webAuthRouterV1.post(
                         statusCode: 400 as ResponseInit,
                     };
                 }
+
+                await db.update(authIdTable).set({
+                    userId: userId,
+                });
 
                 const insertedUser = insertedUsers[0];
                 const user: User = {
