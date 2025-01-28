@@ -7,9 +7,14 @@ import {
     paramsValidatorMiddleware,
 } from "../middlewares/validation";
 import { db } from "../db";
-import { createSchoolSchema, updateSchoolSchema } from "@rs/shared/models";
+import {
+    createSchoolSchema,
+    paginationOptionsSchema,
+    updateSchoolSchema,
+} from "@rs/shared/models";
 import { z } from "zod";
 import { AppError } from "@rs/shared/error";
+import { parseBySchema } from "@rs/shared/validation";
 import { schoolTable } from "../schema";
 import { eq } from "drizzle-orm";
 import { ApiContext } from "../context";
@@ -24,8 +29,26 @@ schoolRouterV1.use(
     }),
 );
 
-schoolRouterV1.get("/", paginationValidatorMiddleware, async c => {
-    const { limit, offset } = c.req.valid("query");
+schoolRouterV1.get("/", async c => {
+    const { data: queryData, error: queryError } = parseBySchema(
+        {
+            limit: c.req.query("limit"),
+            offset: c.req.query("offset"),
+        },
+        paginationOptionsSchema,
+    );
+
+    if (queryError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: queryError,
+            },
+            422,
+        );
+    }
+
+    const { limit, offset } = queryData;
 
     const schools = await db.query.schoolTable.findMany({
         limit,
@@ -35,104 +58,156 @@ schoolRouterV1.get("/", paginationValidatorMiddleware, async c => {
     return c.json(schools[0]);
 });
 
-schoolRouterV1.post(
-    "/",
-    bodyValidatorMiddleware(createSchoolSchema),
-    async c => {
-        const { error, statusCode } = useAuthRules(c, {
-            systemadmin: true,
-        });
+schoolRouterV1.post("/", async c => {
+    const body = await c.req.json();
+    const { data: createSchoolData, error: bodyError } = parseBySchema(
+        body,
+        createSchoolSchema,
+    );
 
-        if (error) return c.json(error, statusCode);
+    if (bodyError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: bodyError,
+            },
+            422,
+        );
+    }
 
-        const createSchoolData = c.req.valid("json");
-        const schools = await db
-            .insert(schoolTable)
-            .values({
-                id: createSchoolData.id,
-                adress: createSchoolData.adress,
-                city: createSchoolData.city,
-                name: createSchoolData.name,
-            })
-            .returning();
+    const { error: authError, statusCode } = useAuthRules(c, {
+        systemadmin: true,
+    });
 
-        if (schools.length === 0)
-            return c.json<AppError>({ code: "DATABASE" }, 500);
+    if (authError) return c.json(authError, statusCode);
 
-        return c.json(schools[0]);
-    },
-);
+    const schools = await db
+        .insert(schoolTable)
+        .values({
+            id: createSchoolData.id,
+            adress: createSchoolData.adress,
+            city: createSchoolData.city,
+            name: createSchoolData.name,
+        })
+        .returning();
 
-schoolRouterV1.get(
-    "/:id",
-    paramsValidatorMiddleware(z.object({ id: z.string() })),
-    async c => {
-        const params = c.req.valid("param");
+    if (schools.length === 0)
+        return c.json<AppError>({ code: "DATABASE" }, 500);
 
-        const school = await db.query.schoolTable.findFirst({
-            where: (fields, operators) => operators.eq(fields.id, params.id),
-        });
+    return c.json(schools[0]);
+});
 
-        if (!school) c.json<AppError>({ code: "DATABASE" }, 404);
+schoolRouterV1.get("/:id", async c => {
+    const { data: id, error: paramError } = parseBySchema(
+        c.req.param("id"),
+        z.string(),
+    );
 
-        return c.json(school);
-    },
-);
+    if (paramError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: paramError,
+            },
+            422,
+        );
+    }
 
-schoolRouterV1.patch(
-    "/:id",
-    paramsValidatorMiddleware(z.object({ id: z.string() })),
-    bodyValidatorMiddleware(updateSchoolSchema),
-    async c => {
-        const params = c.req.valid("param");
-        const updateSchoolData = c.req.valid("param");
+    const school = await db.query.schoolTable.findFirst({
+        where: (fields, operators) => operators.eq(fields.id, id),
+    });
 
-        const school = await db.query.schoolTable.findFirst({
-            where: (fields, operators) => operators.eq(fields.id, params.id),
-        });
+    if (!school) c.json<AppError>({ code: "DATABASE" }, 404);
 
-        if (!school) return c.json<AppError>({ code: "DATABASE" }, 404);
+    return c.json(school);
+});
 
-        const { error, statusCode } = useAuthRules(c, {
-            admin: user => user.schoolId === school.id,
-            systemadmin: true,
-        });
+schoolRouterV1.patch("/:id", async c => {
+    const { data: id, error: paramError } = parseBySchema(
+        c.req.param("id"),
+        z.string(),
+    );
 
-        if (error) return c.json(error, statusCode);
+    if (paramError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: paramError,
+            },
+            422,
+        );
+    }
 
-        const updatedSchools = await db
-            .update(schoolTable)
-            .set(updateSchoolData)
-            .where(eq(schoolTable.id, params.id))
-            .returning();
+    const body = await c.req.json();
+    const { data: updateSchoolData, error: bodyError } = parseBySchema(
+        body,
+        updateSchoolSchema,
+    );
 
-        if (updatedSchools.length === 0)
-            return c.json<AppError>({ code: "DATABASE" }, 500);
+    if (bodyError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: bodyError,
+            },
+            422,
+        );
+    }
 
-        return c.json(updatedSchools[0]);
-    },
-);
+    const school = await db.query.schoolTable.findFirst({
+        where: (fields, operators) => operators.eq(fields.id, id),
+    });
 
-schoolRouterV1.delete(
-    "/:id",
-    paramsValidatorMiddleware(z.object({ id: z.string() })),
-    async c => {
-        const params = c.req.valid("param");
+    if (!school) return c.json<AppError>({ code: "DATABASE" }, 404);
 
-        const { error, statusCode } = useAuthRules(c, {
-            systemadmin: true,
-        });
+    const { error: authError, statusCode } = useAuthRules(c, {
+        admin: user => user.schoolId === school.id,
+        systemadmin: true,
+    });
 
-        if (error) return c.json(error, statusCode);
+    if (authError) return c.json(authError, statusCode);
 
-        const deletedSchools = await db
-            .delete(schoolTable)
-            .where(eq(schoolTable.id, params.id))
-            .returning();
+    const updatedSchools = await db
+        .update(schoolTable)
+        .set(updateSchoolData)
+        .where(eq(schoolTable.id, id))
+        .returning();
 
-        if (deletedSchools.length === 0)
-            return c.json<AppError>({ code: "DATABASE" }, 500);
+    if (updatedSchools.length === 0)
+        return c.json<AppError>({ code: "DATABASE" }, 500);
 
-        return c.json(deletedSchools[0]);
-    },
-);
+    return c.json(updatedSchools[0]);
+});
+
+schoolRouterV1.delete("/:id", async c => {
+    const { data: id, error: paramError } = parseBySchema(
+        c.req.param("id"),
+        z.string(),
+    );
+
+    if (paramError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: paramError,
+            },
+            422,
+        );
+    }
+
+    const { error: authError, statusCode } = useAuthRules(c, {
+        systemadmin: true,
+    });
+
+    if (authError) return c.json(authError, statusCode);
+
+    const deletedSchools = await db
+        .delete(schoolTable)
+        .where(eq(schoolTable.id, id))
+        .returning();
+
+    if (deletedSchools.length === 0)
+        return c.json<AppError>({ code: "DATABASE" }, 500);
+
+    return c.json(deletedSchools[0]);
+});

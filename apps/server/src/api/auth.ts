@@ -16,6 +16,7 @@ import { bodyValidatorMiddleware } from "../middlewares/validation";
 import { createUserId, hashPassword, verifyPassword } from "../crypto";
 import { getAllowedOrigins } from "../const";
 import { cors } from "hono/cors";
+import { parseBySchema } from "@rs/shared/validation";
 
 export const webAuthRouterV1 = new Hono<ApiContext>();
 
@@ -26,198 +27,228 @@ webAuthRouterV1.use(
     }),
 );
 
-webAuthRouterV1.post(
-    "/signup",
-    bodyValidatorMiddleware(signupSchema),
-    async c => {
-        const signupData = c.req.valid("json");
+webAuthRouterV1.post("/signup", async c => {
+    const body = await c.req.json();
+    const { data: signupData, error: bodyError } = parseBySchema(
+        body,
+        signupSchema,
+    );
 
-        const passwordHash = await hashPassword(signupData.password);
-        const userId = createUserId();
+    if (bodyError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: bodyError,
+            },
+            422,
+        );
+    }
 
-        // The default role
-        const role: UserRole = "member";
+    const passwordHash = await hashPassword(signupData.password);
+    const userId = createUserId();
 
-        const insertedUsers = await db
-            .insert(userTable)
-            .values({
-                email: signupData.email,
-                name: signupData.name,
-                role: role,
-                id: userId,
-                passwordHash,
-                schoolId: signupData.schoolId,
-            })
-            .returning();
+    // The default role
+    const role: UserRole = "member";
 
-        if (insertedUsers.length !== 1) {
-            return c.json<AppError>({ code: "DATABASE" });
-        }
+    const insertedUsers = await db
+        .insert(userTable)
+        .values({
+            email: signupData.email,
+            name: signupData.name,
+            role: role,
+            id: userId,
+            passwordHash,
+            schoolId: signupData.schoolId,
+        })
+        .returning();
 
-        const insertedUser = insertedUsers[0];
-        const user: User = {
-            id: insertedUser.id,
-            email: insertedUser.email,
-            name: insertedUser.name,
-            role: insertedUser.role,
-            schoolId: insertedUser.schoolId,
-            createdAt: insertedUser.createdAt,
-            updatedAt: insertedUser.updatedAt,
-        };
+    if (insertedUsers.length !== 1) {
+        return c.json<AppError>({ code: "DATABASE" });
+    }
 
-        const session = await lucia.createSession(user.id, {});
-        const cookie = lucia.createSessionCookie(session.id).serialize();
-        c.header("Set-Cookie", cookie, { append: true });
+    const insertedUser = insertedUsers[0];
+    const user: User = {
+        id: insertedUser.id,
+        email: insertedUser.email,
+        name: insertedUser.name,
+        role: insertedUser.role,
+        schoolId: insertedUser.schoolId,
+        createdAt: insertedUser.createdAt,
+        updatedAt: insertedUser.updatedAt,
+    };
 
-        return c.json(user);
-    },
-);
+    const session = await lucia.createSession(user.id, {});
+    const cookie = lucia.createSessionCookie(session.id).serialize();
+    c.header("Set-Cookie", cookie, { append: true });
 
-webAuthRouterV1.post(
-    "/signupid",
-    bodyValidatorMiddleware(signupIdSchema),
-    async c => {
-        const signupData = c.req.valid("json");
+    return c.json(user);
+});
 
-        const passwordHash = await hashPassword(signupData.password);
-        const userId = createUserId();
+webAuthRouterV1.post("/signupid", async c => {
+    const body = await c.req.json();
+    const { data: signupData, error: bodyError } = parseBySchema(
+        body,
+        signupIdSchema,
+    );
 
-        // The default role
-        const role: UserRole = "member";
+    if (bodyError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: bodyError,
+            },
+            422,
+        );
+    }
 
-        const result:
-            | { user: User; error: null; statusCode: null }
-            | { user: null; error: AppError; statusCode: ResponseInit } =
-            await db.transaction(async tx => {
-                const authId = await db.query.authIdTable.findFirst({
-                    where: (fields, operators) =>
-                        operators.eq(fields.id, signupData.authId),
-                });
+    const passwordHash = await hashPassword(signupData.password);
+    const userId = createUserId();
 
-                if (!authId) {
-                    return {
-                        user: null,
-                        error: { code: "DATABASE" } as AppError,
-                        statusCode: 400 as ResponseInit,
-                    };
-                }
+    // The default role
+    const userRole: UserRole = "member";
 
-                const school = await db.query.schoolTable.findFirst({
-                    where: (fields, operators) =>
-                        operators.eq(fields.id, signupData.schoolId),
-                });
-
-                if (!school) {
-                    return {
-                        user: null,
-                        error: { code: "DATABASE" } as AppError,
-                        statusCode: 400 as ResponseInit,
-                    };
-                }
-
-                if (authId.userId) {
-                    return {
-                        user: null,
-                        error: { code: "DATABASE" } as AppError,
-                        statusCode: 400 as ResponseInit,
-                    };
-                }
-
-                const insertedUsers = await db
-                    .insert(userTable)
-                    .values({
-                        email: signupData.email,
-                        name: signupData.name,
-                        role: role,
-                        id: userId,
-                        passwordHash,
-                        schoolId: signupData.schoolId,
-                    })
-                    .returning();
-
-                if (insertedUsers.length !== 1) {
-                    return {
-                        user: null,
-                        error: { code: "UNKNOWN" } as AppError,
-                        statusCode: 400 as ResponseInit,
-                    };
-                }
-
-                await db.update(authIdTable).set({
-                    userId: userId,
-                });
-
-                const insertedUser = insertedUsers[0];
-                const user: User = {
-                    id: insertedUser.id,
-                    email: insertedUser.email,
-                    name: insertedUser.name,
-                    role: insertedUser.role,
-                    schoolId: insertedUser.schoolId,
-                    createdAt: insertedUser.createdAt,
-                    updatedAt: insertedUser.updatedAt,
-                };
-
-                return {
-                    user: user,
-                    error: null,
-                    statusCode: null,
-                };
+    const result:
+        | { user: User; error: null; statusCode: null }
+        | { user: null; error: AppError; statusCode: ResponseInit } =
+        await db.transaction(async tx => {
+            const authId = await db.query.authIdTable.findFirst({
+                where: (fields, operators) =>
+                    operators.eq(fields.id, signupData.authId),
             });
 
-        if (result.error) {
-            return c.json<AppError>(result.error, result.statusCode);
-        }
+            if (!authId) {
+                return {
+                    user: null,
+                    error: { code: "DATABASE" } as AppError,
+                    statusCode: 400 as ResponseInit,
+                };
+            }
 
-        const session = await lucia.createSession(result.user.id, {});
-        const cookie = lucia.createSessionCookie(session.id).serialize();
-        c.header("Set-Cookie", cookie, { append: true });
+            const school = await db.query.schoolTable.findFirst({
+                where: (fields, operators) =>
+                    operators.eq(fields.id, signupData.schoolId),
+            });
 
-        return c.json(result.user);
-    },
-);
+            if (!school) {
+                return {
+                    user: null,
+                    error: { code: "DATABASE" } as AppError,
+                    statusCode: 400 as ResponseInit,
+                };
+            }
 
-webAuthRouterV1.post(
-    "/login",
-    bodyValidatorMiddleware(userLoginSchema),
-    async c => {
-        const loginData = c.req.valid("json");
+            if (authId.userId) {
+                return {
+                    user: null,
+                    error: { code: "DATABASE" } as AppError,
+                    statusCode: 400 as ResponseInit,
+                };
+            }
 
-        const selectedUser = await db.query.userTable.findFirst({
-            where: (table, { eq }) => eq(table.email, loginData.email),
+            const insertedUsers = await db
+                .insert(userTable)
+                .values({
+                    email: signupData.email,
+                    name: signupData.name,
+                    role: userRole,
+                    id: userId,
+                    passwordHash,
+                    schoolId: signupData.schoolId,
+                })
+                .returning();
+
+            if (insertedUsers.length !== 1) {
+                return {
+                    user: null,
+                    error: { code: "UNKNOWN" } as AppError,
+                    statusCode: 400 as ResponseInit,
+                };
+            }
+
+            await db.update(authIdTable).set({
+                userId: userId,
+            });
+
+            const insertedUser = insertedUsers[0];
+            const user: User = {
+                id: insertedUser.id,
+                email: insertedUser.email,
+                name: insertedUser.name,
+                role: insertedUser.role,
+                schoolId: insertedUser.schoolId,
+                createdAt: insertedUser.createdAt,
+                updatedAt: insertedUser.updatedAt,
+            };
+
+            return {
+                user: user,
+                error: null,
+                statusCode: null,
+            };
         });
 
-        if (!selectedUser) {
-            return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
-        }
+    if (result.error) {
+        return c.json<AppError>(result.error, result.statusCode);
+    }
 
-        const passwordHash = selectedUser.passwordHash;
-        const user: User = {
-            id: selectedUser.id,
-            email: selectedUser.email,
-            name: selectedUser.name,
-            role: selectedUser.role,
-            schoolId: selectedUser.schoolId,
-            createdAt: selectedUser.createdAt,
-            updatedAt: selectedUser.updatedAt,
-        };
+    const session = await lucia.createSession(result.user.id, {});
+    const cookie = lucia.createSessionCookie(session.id).serialize();
+    c.header("Set-Cookie", cookie, { append: true });
 
-        const isPasswordValid = await verifyPassword(
-            passwordHash,
-            loginData.password,
+    return c.json(result.user);
+});
+
+webAuthRouterV1.post("/login", async c => {
+    const body = await c.req.json();
+    const { data: loginData, error: bodyError } = parseBySchema(
+        body,
+        userLoginSchema,
+    );
+
+    if (bodyError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: bodyError,
+            },
+            422,
         );
+    }
 
-        if (!isPasswordValid) {
-            return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
-        }
+    const selectedUser = await db.query.userTable.findFirst({
+        where: (table, { eq }) => eq(table.email, loginData.email),
+    });
 
-        const session = await lucia.createSession(user.id, {});
-        const cookie = lucia.createSessionCookie(session.id).serialize();
-        c.header("Set-Cookie", cookie, { append: true });
+    if (!selectedUser) {
+        return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
+    }
 
-        return c.json(user);
-    },
-);
+    const passwordHash = selectedUser.passwordHash;
+    const user: User = {
+        id: selectedUser.id,
+        email: selectedUser.email,
+        name: selectedUser.name,
+        role: selectedUser.role,
+        schoolId: selectedUser.schoolId,
+        createdAt: selectedUser.createdAt,
+        updatedAt: selectedUser.updatedAt,
+    };
+
+    const isPasswordValid = await verifyPassword(
+        passwordHash,
+        loginData.password,
+    );
+
+    if (!isPasswordValid) {
+        return c.json<AppError>({ code: "AUTHENTICATION" }, 401);
+    }
+
+    const session = await lucia.createSession(user.id, {});
+    const cookie = lucia.createSessionCookie(session.id).serialize();
+    c.header("Set-Cookie", cookie, { append: true });
+
+    return c.json(user);
+});
 
 webAuthRouterV1.post("/logout", async c => {
     const session = c.get("session");

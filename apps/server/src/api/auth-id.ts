@@ -12,6 +12,7 @@ import { db } from "../db";
 import {
     AuthId,
     createAuthIdSchema,
+    paginationOptionsSchema,
     updateAuthIdSchema,
     User,
 } from "@rs/shared/models";
@@ -19,6 +20,7 @@ import { AppError } from "@rs/shared/error";
 import { z } from "zod";
 import { authIdTable } from "../schema";
 import { eq } from "drizzle-orm";
+import { parseBySchema } from "@rs/shared/validation";
 
 export const authIdRouterV1 = new Hono<ApiContext>();
 
@@ -29,14 +31,32 @@ authIdRouterV1.use(
     }),
 );
 
-authIdRouterV1.get("/", paginationValidatorMiddleware, async c => {
-    const { limit, offset } = c.req.valid("query");
+authIdRouterV1.get("/", async c => {
+    const { data: queryData, error: queryError } = parseBySchema(
+        {
+            limit: c.req.query("limit"),
+            offset: c.req.query("offset"),
+        },
+        paginationOptionsSchema,
+    );
 
-    const { error, statusCode } = useAuthRules(c, {
+    if (queryError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: queryError,
+            },
+            422,
+        );
+    }
+
+    const { limit, offset } = queryData;
+
+    const { error: authError, statusCode } = useAuthRules(c, {
         systemadmin: true,
     });
 
-    if (error) return c.json(error, statusCode);
+    if (authError) return c.json(authError, statusCode);
 
     let ids: AuthId[] = await db.query.authIdTable.findMany({
         limit,
@@ -46,106 +66,143 @@ authIdRouterV1.get("/", paginationValidatorMiddleware, async c => {
     return c.json(ids);
 });
 
-authIdRouterV1.get(
-    "/:id",
-    paramsValidatorMiddleware(z.object({ id: z.string() })),
-    async c => {
-        const { id } = c.req.valid("param");
+authIdRouterV1.get("/:id", async c => {
+    const { data: id, error: paramError } = parseBySchema(
+        c.req.param("id"),
+        z.string(),
+    );
 
-        const authId = await db.query.authIdTable.findFirst({
-            where: (fields, operators) => operators.eq(fields.id, id),
-        });
+    if (paramError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: paramError,
+            },
+            422,
+        );
+    }
 
-        if (!authId) {
-            return c.json<AppError>({ code: "DATABASE" }, 404);
-        }
+    const authId = await db.query.authIdTable.findFirst({
+        where: (fields, operators) => operators.eq(fields.id, id),
+    });
 
-        const authIdUser = await db.query.userTable.findFirst({
-            where: (fields, operators) =>
-                operators.eq(fields.id, authId.userId ?? ""),
-        });
+    if (!authId) {
+        return c.json<AppError>({ code: "DATABASE" }, 404);
+    }
 
-        const { error, statusCode } = useAuthRules(c, {
-            member: u => u.id === authIdUser?.id,
-            creator: u => u.id === authIdUser?.id,
-            admin: u => u.schoolId === authIdUser?.schoolId,
-            systemadmin: true,
-        });
+    const authIdUser = await db.query.userTable.findFirst({
+        where: (fields, operators) =>
+            operators.eq(fields.id, authId.userId ?? ""),
+    });
 
-        if (error) return c.json(error, statusCode);
+    const { error: authError, statusCode } = useAuthRules(c, {
+        member: u => u.id === authIdUser?.id,
+        creator: u => u.id === authIdUser?.id,
+        admin: u => u.schoolId === authIdUser?.schoolId,
+        systemadmin: true,
+    });
 
-        return c.json(authId);
-    },
-);
+    if (authError) return c.json(authError, statusCode);
 
-authIdRouterV1.post(
-    "/",
-    bodyValidatorMiddleware(createAuthIdSchema),
-    async c => {
-        const createAuthId = c.req.valid("json");
+    return c.json(authId);
+});
 
-        const { error, statusCode } = useAuthRules(c, {
-            systemadmin: true,
-        });
+authIdRouterV1.post("/", async c => {
+    const body = await c.req.json();
+    const { data: createAuthIdData, error: bodyError } = parseBySchema(
+        body,
+        createAuthIdSchema,
+    );
 
-        if (error) return c.json(error, statusCode);
+    if (bodyError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: bodyError,
+            },
+            422,
+        );
+    }
 
-        const authIds = await db
-            .insert(authIdTable)
-            .values(createAuthId)
-            .returning();
+    const { error: authError, statusCode } = useAuthRules(c, {
+        systemadmin: true,
+    });
 
-        if (authIds.length === 0)
-            return c.json<AppError>({ code: "DATABASE" }, 500);
+    if (authError) return c.json(authError, statusCode);
 
-        return c.json(authIds[0]);
-    },
-);
+    const authIds = await db
+        .insert(authIdTable)
+        .values(createAuthIdData)
+        .returning();
 
-authIdRouterV1.patch(
-    "/",
-    bodyValidatorMiddleware(updateAuthIdSchema),
-    async c => {
-        const updateAuthId = c.req.valid("json");
+    if (authIds.length === 0)
+        return c.json<AppError>({ code: "DATABASE" }, 500);
 
-        const { error, statusCode } = useAuthRules(c, {
-            systemadmin: true,
-        });
+    return c.json(authIds[0]);
+});
 
-        if (error) return c.json(error, statusCode);
+authIdRouterV1.patch("/", async c => {
+    const body = await c.req.json();
+    const { data: updateAuthIdData, error: bodyError } = parseBySchema(
+        body,
+        updateAuthIdSchema,
+    );
 
-        const authIds = await db
-            .update(authIdTable)
-            .set(updateAuthId)
-            .returning();
+    if (bodyError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: bodyError,
+            },
+            422,
+        );
+    }
 
-        if (authIds.length === 0)
-            return c.json<AppError>({ code: "DATABASE" }, 500);
+    const { error: authError, statusCode } = useAuthRules(c, {
+        systemadmin: true,
+    });
 
-        return c.json(authIds[0]);
-    },
-);
+    if (authError) return c.json(authError, statusCode);
 
-authIdRouterV1.delete(
-    "/:id",
-    paramsValidatorMiddleware(z.object({ id: z.string() })),
-    async c => {
-        const { id } = c.req.valid("param");
+    const authIds = await db
+        .update(authIdTable)
+        .set(updateAuthIdData)
+        .returning();
 
-        const { error, statusCode } = useAuthRules(c, {
-            systemadmin: true,
-        });
+    if (authIds.length === 0)
+        return c.json<AppError>({ code: "DATABASE" }, 500);
 
-        if (error) return c.json(error, statusCode);
+    return c.json(authIds[0]);
+});
 
-        const authId = await db
-            .delete(authIdTable)
-            .where(eq(authIdTable.id, id))
-            .returning();
+authIdRouterV1.delete("/:id", async c => {
+    const { data: id, error: paramError } = parseBySchema(
+        c.req.param("id"),
+        z.string(),
+    );
 
-        if (authId.length === 0)
-            return c.json<AppError>({ code: "DATABASE" }, 500);
+    if (paramError) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                data: paramError,
+            },
+            422,
+        );
+    }
 
-        return c.json(authId[0]);
-    },
-);
+    const { error: authError, statusCode } = useAuthRules(c, {
+        systemadmin: true,
+    });
+
+    if (authError) return c.json(authError, statusCode);
+
+    const authId = await db
+        .delete(authIdTable)
+        .where(eq(authIdTable.id, id))
+        .returning();
+
+    if (authId.length === 0) return c.json<AppError>({ code: "DATABASE" }, 500);
+
+    return c.json(authId[0]);
+});
