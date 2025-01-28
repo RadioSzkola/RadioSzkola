@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1734198198304,
-      "tag": "0000_nervous_revanche",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1736357432036,
-      "tag": "0001_shiny_dark_beast",
+      "when": 1738087370259,
+      "tag": "0000_perfect_vulture",
       "breakpoints": true
     }
   ]
