@@ -23,6 +23,28 @@ export default function SearchBar({
 }: SearchBarProps) {
     return (
         <div className={styles.searchBar}>
+            <div className={styles.searchWraper}>
+                <button
+                    className={styles.searchButton}
+                    aria-label="Search button"
+                >
+                    <Icon
+                        className={styles.searchButtonIcon}
+                        icon="mdi:magnify"
+                    />
+                </button>
+
+                <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Szukaj..."
+                    className={styles.searchInput}
+                    value={searchTerm}
+                    onChange={onInputChange}
+                    aria-label="Search input"
+                />
+            </div>
+
             <div className={styles.searchSelectWraper}>
                 <select
                     id="search-category"
@@ -38,19 +60,6 @@ export default function SearchBar({
                     ))}
                 </select>
             </div>
-            <input
-                id="search-input"
-                type="text"
-                placeholder="Szukaj..."
-                className={styles.searchInput}
-                value={searchTerm}
-                onChange={onInputChange}
-                aria-label="Search input"
-            />
-
-            <button className={styles.searchButton} aria-label="Search button">
-                <Icon className={styles.searchButtonIcon} icon="mdi:magnify" />
-            </button>
         </div>
     );
 }
