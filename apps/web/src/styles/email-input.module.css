@@ -1,0 +1,69 @@
+.textInputWraper {
+    position: relative;
+}
+
+.textInputWraper__neutral {
+    --text-input-color: var(--color-bg-inverted);
+}
+
+.textInputWraper__error {
+    --text-input-color: var(--color-red);
+}
+
+.textInputWraper__ok {
+    --text-input-color: var(--color-indigo);
+}
+
+.textInputWraper__sm {
+    --text-input-text: var(--text-sm);
+    height: var(--size-sm);
+    min-width: calc(6 * var(--size-sm));
+}
+
+.textInputWraper__md {
+    --text-input-text: var(--text-md);
+    height: var(--size-md);
+    min-width: calc(6 * var(--size-md));
+}
+
+.textInputWraper__lg {
+    --text-input-text: var(--text-lg);
+    height: var(--size-lg);
+    min-width: calc(6 * var(--size-lg));
+}
+
+.textInput {
+    z-index: 50;
+    width: 100%;
+    height: 100%;
+    font-size: var(--text-input-text);
+    padding: var(--spacing-sm) var(--spacing-md);
+
+    box-shadow: 0 0 0 3px var(--text-input-color);
+}
+
+.textInputLabel {
+    z-index: 40;
+    position: absolute;
+    padding: var(--spacing-xs);
+    font-size: var(--text-input-text);
+    left: calc(var(--spacing-md) - var(--spacing-xs));
+    top: 50%;
+
+    transition:
+        transform 0.05s ease-in-out,
+        background-color 0.05s ease-in-out,
+        color 0.05s ease-in-out;
+}
+
+.textInputLabel__touched {
+    transform: translateY(-140%);
+    background-color: var(--color-bg);
+    color: var(--text-input-color);
+}
+
+.textInputLabel__placeholder {
+    transform: translateY(-50%);
+    color: var(--color-text-inverted-alt);
+    background-color: transparent;
+}

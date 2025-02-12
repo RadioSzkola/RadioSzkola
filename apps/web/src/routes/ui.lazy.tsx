@@ -3,6 +3,8 @@ import Button from "../ui/button";
 import SearchBar from "../ui/search-bar";
 import { useState } from "react";
 import TextInput from "../ui/text-input";
+import EmailInput from "../ui/email-input";
+import PasswordInput from "../ui/password-input";
 
 export const Route = createLazyFileRoute("/ui")({
     component: RouteComponent,
@@ -35,25 +37,25 @@ function RouteComponent() {
                     ]}
                 />
                 <TextInput
-                    id="random"
-                    value={""}
+                    id="name"
+                    value=""
                     label="name"
                     size="md"
                     variant="neutral"
                 />
-                <TextInput
-                    id="random"
-                    value={""}
-                    label="name"
-                    size="lg"
-                    variant="ok"
+                <EmailInput
+                    id="email"
+                    value=""
+                    label="email"
+                    size="md"
+                    variant="neutral"
                 />
-                <TextInput
-                    id="random"
-                    value={""}
-                    label="name"
-                    size="sm"
-                    variant="error"
+                <PasswordInput
+                    id="password"
+                    value=""
+                    label="password"
+                    size="md"
+                    variant="neutral"
                 />
             </div>
         </div>
