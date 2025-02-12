@@ -6,12 +6,14 @@ import { useEffect, useState } from "react";
 export type APICallProps = {
     endpoint: string;
     method: "GET" | "POST" | "DELETE" | "PATCH" | "PUT";
+    body?: any;
     axiosRequestConfig?: AxiosRequestConfig;
 };
 
 export async function fetchAPI<T>({
     endpoint,
     method,
+    body,
     axiosRequestConfig,
 }: APICallProps): Promise<
     { data: T; error: null } | { data: null; error: AppError }
@@ -19,8 +21,9 @@ export async function fetchAPI<T>({
     try {
         const response = await axios(SERVER_HOST + endpoint, {
             timeout: 5000,
-            ...axiosRequestConfig,
             method,
+            data: body,
+            ...axiosRequestConfig,
         });
 
         return {
@@ -44,38 +47,43 @@ export async function fetchAPI<T>({
     }
 }
 
-export function useAPI<T>(fetchProps: APICallProps):
+export function useAPIEndpoint<T>(fetchProps: APICallProps):
     | {
           data: T;
           error: null;
           pending: false;
-          call: () => void;
+          call: (data?: unknown) => void;
       }
     | {
           data: null;
           error: null;
           pending: true;
-          call: () => void;
+          call: (data?: unknown) => void;
       }
     | {
           data: null;
           error: AppError;
           pending: false;
-          call: () => void;
+          call: (data?: unknown) => void;
       } {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<AppError | null>(null);
-    const [pending, setPending] = useState<boolean>(true);
-    const [initial, setInitial] = useState<boolean>(true);
+    const [pending, setPending] = useState<boolean>(false);
 
-    const call = () => {
-        if (pending && !initial) {
+    const call = (data?: unknown) => {
+        if (pending) {
             console.error("Cannot call API if another call is pending");
             return;
         }
 
         setPending(true);
-        fetchAPI<T>(fetchProps)
+
+        const promise =
+            data === null
+                ? fetchAPI<T>(fetchProps)
+                : fetchAPI<T>({ ...fetchProps, body: data });
+
+        promise
             .then(response => {
                 if (response.error) {
                     setData(null);
@@ -91,7 +99,6 @@ export function useAPI<T>(fetchProps: APICallProps):
                     data: reason,
                 };
 
-                console.error(e);
                 setData(null);
                 setError(e);
             })
@@ -99,11 +106,6 @@ export function useAPI<T>(fetchProps: APICallProps):
                 setPending(false);
             });
     };
-
-    useEffect(() => {
-        call();
-        setInitial(false);
-    }, []);
 
     if (error) {
         return {

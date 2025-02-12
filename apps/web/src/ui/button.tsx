@@ -8,6 +8,7 @@ export type ButtonProps = {
     onClick?: () => void;
     children?: React.ReactNode;
     className?: string;
+    type?: "button" | "reset" | "submit";
 };
 
 export default function Button({
@@ -18,9 +19,11 @@ export default function Button({
     onClick,
     children,
     className,
+    type,
 }: ButtonProps) {
     return (
         <button
+            type={type ?? "button"}
             className={`
                 ${styles.button}
                 ${size === "sm" ? styles.button__sm : ""}

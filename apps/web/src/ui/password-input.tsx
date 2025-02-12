@@ -35,6 +35,7 @@ export default function PasswordInput({
             <input
                 type="password"
                 id={id}
+                name={id}
                 className={styles.textInput}
                 defaultValue={value}
                 onKeyDown={ev => {

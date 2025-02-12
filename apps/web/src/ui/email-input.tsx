@@ -34,6 +34,7 @@ export default function EmailInput({
         >
             <input
                 type="email"
+                name={id}
                 id={id}
                 className={styles.textInput}
                 defaultValue={value}

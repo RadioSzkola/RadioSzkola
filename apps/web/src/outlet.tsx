@@ -5,7 +5,7 @@ import {
     themeDispatchContext,
 } from "./stores/theme";
 import { authReducer, authContext, authDispatchContext } from "./stores/auth";
-import { useAPI } from "./hooks/api";
+import { useAPIEndpoint } from "./hooks/api";
 import { User } from "@rs/shared/models";
 
 export type OutletProps = {
@@ -15,7 +15,7 @@ export type OutletProps = {
 export default function Outlet({ children }: OutletProps) {
     const [theme, themeDispatch] = useReducer(themeReducer, "light");
     const [auth, authDispatch] = useReducer(authReducer, null);
-    const userQuery = useAPI<User>({
+    const userEndpoint = useAPIEndpoint<User>({
         endpoint: "/v1/auth/web/me",
         method: "GET",
     });
@@ -29,16 +29,17 @@ export default function Outlet({ children }: OutletProps) {
     }, [theme]);
 
     useEffect(() => {
-        if (userQuery.error) {
-            console.error(userQuery.error);
+        userEndpoint.call();
+
+        if (userEndpoint.error) {
+            console.error(userEndpoint.error);
             authDispatch({ type: "unset-user" });
-        } else if (userQuery.data) {
-            console.log({ user: userQuery.data });
-            authDispatch({ type: "set-usser", user: userQuery.data });
+        } else if (userEndpoint.data) {
+            console.log({ user: userEndpoint.data });
+            authDispatch({ type: "set-usser", user: userEndpoint.data });
         } else {
-            console.log(userQuery);
         }
-    }, [userQuery.pending]);
+    }, []);
 
     return (
         <authContext.Provider value={auth}>

@@ -20,8 +20,8 @@
     font-size: var(--text-md);
 
     box-shadow:
-        0 0 0 3px var(--color-bg-inverted),
-        4px 4px 0 3px var(--color-bg-inverted);
+        0 0 0 2px var(--color-bg-inverted),
+        4px 4px 0 2px var(--color-bg-inverted);
 }
 
 .button__lg {
@@ -69,8 +69,8 @@
 
     &:hover.button__md {
         box-shadow:
-            0 0 0 3px var(--color-bg-inverted),
-            2px 2px 0 3px var(--color-bg-inverted);
+            0 0 0 2px var(--color-bg-inverted),
+            2px 2px 0 2px var(--color-bg-inverted);
 
         transform: translate(2px, 2px);
     }

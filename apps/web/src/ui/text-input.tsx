@@ -35,6 +35,7 @@ export default function TextInput({
             <input
                 type="text"
                 id={id}
+                name={id}
                 className={styles.textInput}
                 defaultValue={value}
                 onKeyDown={ev => {
