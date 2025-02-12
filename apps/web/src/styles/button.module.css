@@ -2,58 +2,84 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: var(--button-size);
-    padding: var(--button-spacing);
-    color: var(--button-color);
-    border-radius: var(--rounded-md);
-    background-color: var(--button-color-bg);
-
-    box-shadow:
-        0 0 0 2px var(--color-bg-inverted),
-        2px 2px 0 2px var(--color-bg-inverted);
 }
 
 .button__sm {
-    --button-size: var(--size-md);
-    --button-spacing: var(--spacing-md);
+    height: var(--size-sm);
+    padding: var(--spacing-sm);
+    font-size: var(--text-sm);
+
+    box-shadow:
+        0 0 0 2px var(--color-bg-inverted),
+        3px 3px 0 2px var(--color-bg-inverted);
 }
 
 .button__md {
-    --button-size: var(--size-lg);
-    --button-spacing: var(--spacing-lg);
+    height: var(--size-md);
+    padding: var(--spacing-md);
+    font-size: var(--text-md);
+
+    box-shadow:
+        0 0 0 3px var(--color-bg-inverted),
+        4px 4px 0 3px var(--color-bg-inverted);
 }
 
 .button__lg {
-    --button-size: var(--size-xl);
-    --button-spacing: var(--spacing-xl);
+    height: var(--size-lg);
+    padding: var(--spacing-lg);
+    font-size: var(--text-lg);
+
+    box-shadow:
+        0 0 0 4px var(--color-bg-inverted),
+        5px 5px 0 4px var(--color-bg-inverted);
 }
 
 .button__neutral {
-    --button-color: var(--color-text);
-    --button-color-bg: var(--color-bg);
+    color: var(--color-text);
 }
 
 .button__inverted {
-    --button-color: var(--color-text-inverted);
-    --button-color-bg: var(--color-bg-inverted);
+    color: var(--color-text-inverted);
+    background-color: var(--color-bg-inverted);
+    border: 1px solid var(--color-bg);
 }
 
 .button__primary {
-    --button-color: var(--color-primary);
-    --button-color-bg: var(--color-bg);
+    color: var(--color-text);
+    background-color: var(--color-primary);
 }
 
 .button__secondary {
-    --button-color: var(--color-secondary);
-    --button-color-bg: var(--color-bg);
+    color: var(--color-text);
+    background-color: var(--color-secondary);
 }
 
 .button__animated {
-    transition: box-shadow 0.075s ease-in-out;
+    transition:
+        transform 0.05s ease-in-out,
+        box-shadow 0.05s ease-in-out;
 
-    &:hover {
+    &:hover.button__sm {
         box-shadow:
             0 0 0 2px var(--color-bg-inverted),
-            4px 4px 0 4px var(--color-bg-inverted);
+            1px 1px 0 2px var(--color-bg-inverted);
+
+        transform: translate(2px, 2px);
+    }
+
+    &:hover.button__md {
+        box-shadow:
+            0 0 0 3px var(--color-bg-inverted),
+            2px 2px 0 3px var(--color-bg-inverted);
+
+        transform: translate(2px, 2px);
+    }
+
+    &:hover.button__lg {
+        box-shadow:
+            0 0 0 4px var(--color-bg-inverted),
+            2px 2px 0 4px var(--color-bg-inverted);
+
+        transform: translate(3px, 3px);
     }
 }

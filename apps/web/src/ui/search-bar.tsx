@@ -32,7 +32,9 @@ export default function SearchBar({
                     aria-label="Search category"
                 >
                     {searchCategories.map(({ value, text }) => (
-                        <option value={value}>{text}</option>
+                        <option key={value + text} value={value}>
+                            {text}
+                        </option>
                     ))}
                 </select>
             </div>

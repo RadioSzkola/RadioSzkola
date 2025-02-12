@@ -6,7 +6,7 @@ export type ButtonProps = {
     animated?: boolean;
     label?: string;
     onClick?: () => void;
-    children?: React.ReactElement;
+    children?: React.ReactNode;
     className?: string;
 };
 
