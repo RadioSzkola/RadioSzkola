@@ -1,9 +1,9 @@
 import React, { createContext } from "react";
 
-type Theme = "light" | "dark";
-type ThemeReducerAction = "toggle" | "set-light" | "set-dark";
+export type Theme = "light" | "dark";
+export type ThemeReducerAction = "toggle" | "set-light" | "set-dark";
 
-type ThemeState = Theme;
+export type ThemeState = Theme;
 
 export function themeReducer(
     state: ThemeState,

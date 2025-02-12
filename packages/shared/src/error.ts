@@ -29,6 +29,11 @@ export type AppError<T = any> =
           code: "AUTHORIZATION";
           data?: any;
           message?: string;
+      }
+    | {
+          code: "FETCH";
+          data: AppError;
+          message?: string;
       };
 
 export const customZodErrorMap: ZodErrorMap = (error, ctx) => {

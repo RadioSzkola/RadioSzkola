@@ -9,7 +9,7 @@ import {
 import { Hono } from "hono";
 import { db } from "../db";
 import { authIdTable, userTable } from "@rs/shared/schemas";
-import { lucia } from "../auth";
+import { lucia, useAuthRules } from "../auth";
 import { ApiContext } from "../context";
 import { AppError } from "@rs/shared/error";
 import { bodyValidatorMiddleware } from "../middlewares/validation";
@@ -23,7 +23,7 @@ export const webAuthRouterV1 = new Hono<ApiContext>();
 webAuthRouterV1.use(
     cors({
         origin: getAllowedOrigins(),
-        allowMethods: ["POST"],
+        allowMethods: ["POST", "GET"],
     }),
 );
 
@@ -262,4 +262,14 @@ webAuthRouterV1.post("/logout", async c => {
     c.header("Set-Cookie", cookie);
 
     return c.json({ message: "Wylogowanie powiodło się" });
+});
+
+webAuthRouterV1.get("/me", async c => {
+    const { user, error, statusCode } = useAuthRules(c);
+
+    if (error) {
+        return c.json<AppError>(error, statusCode);
+    }
+
+    return c.json(user);
 });
