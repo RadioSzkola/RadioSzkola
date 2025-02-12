@@ -2,15 +2,13 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import Button from "../ui/button";
 import SearchBar from "../ui/search-bar";
 import { useState } from "react";
+import TextInput from "../ui/text-input";
 
 export const Route = createLazyFileRoute("/ui")({
     component: RouteComponent,
 });
 
 function RouteComponent() {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [searchCategory, setSearchCategory] = useState("album");
-
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <div style={{ display: "flex", gap: "1rem", flexDirection: "row" }}>
@@ -29,16 +27,33 @@ function RouteComponent() {
             </div>
             <div style={{ display: "flex", gap: "1rem", flexDirection: "row" }}>
                 <SearchBar
-                    searchTerm={searchTerm}
-                    searchCategory={searchCategory}
+                    searchTerm={"album"}
+                    searchCategory={"album"}
                     searchCategories={[
                         { text: "album", value: "utwor" },
                         { text: "utwor", value: "album" },
                     ]}
-                    onInputChange={ev => setSearchTerm(ev.currentTarget.value)}
-                    onSelectChange={ev =>
-                        setSearchCategory(ev.currentTarget.value)
-                    }
+                />
+                <TextInput
+                    id="random"
+                    value={""}
+                    label="name"
+                    size="md"
+                    variant="neutral"
+                />
+                <TextInput
+                    id="random"
+                    value={""}
+                    label="name"
+                    size="lg"
+                    variant="ok"
+                />
+                <TextInput
+                    id="random"
+                    value={""}
+                    label="name"
+                    size="sm"
+                    variant="error"
                 />
             </div>
         </div>

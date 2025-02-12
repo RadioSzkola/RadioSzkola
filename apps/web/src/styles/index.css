@@ -45,7 +45,7 @@ html {
     --color-red-darker: #9b0000;
     --color-red-black: #2c0101;
 
-    --color-neutral-light: #e7e7e7;
+    --color-neutral-light: #bbbbbb;
     --color-neutral-white: #ffffff;
     --color-neutral-dark: #333333;
     --color-neutral-black: #000000;
@@ -111,7 +111,7 @@ html {
 
     --mobile-size-xxs: 0.5rem;
     --mobile-size-xs: 1rem;
-    --mobile-size-sm: 2rem;
+    --mobile-size-sm: 1.25rem;
     --mobile-size-md: 2.5rem;
     --mobile-size-lg: 3.5rem;
     --mobile-size-xl: 5rem;
@@ -119,9 +119,9 @@ html {
     --desktop-size-xxs: 0.5rem;
     --desktop-size-xs: 1rem;
     --desktop-size-sm: 1.5rem;
-    --desktop-size-md: 3rem;
-    --desktop-size-lg: 5rem;
-    --desktop-size-xl: 7rem;
+    --desktop-size-md: 2.75rem;
+    --desktop-size-lg: 4rem;
+    --desktop-size-xl: 6rem;
 
     --spacing-xxs: var(--mobile-spacing-xxs);
     --spacing-xs: var(--mobile-spacing-xs);

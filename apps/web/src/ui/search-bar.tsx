@@ -39,7 +39,7 @@ export default function SearchBar({
                     type="text"
                     placeholder="Szukaj..."
                     className={styles.searchInput}
-                    value={searchTerm}
+                    defaultValue={searchTerm}
                     onChange={onInputChange}
                     aria-label="Search input"
                 />
@@ -49,7 +49,7 @@ export default function SearchBar({
                 <select
                     id="search-category"
                     className={styles.searchSelect}
-                    value={searchCategory}
+                    defaultValue={searchCategory}
                     onChange={onSelectChange}
                     aria-label="Search category"
                 >
