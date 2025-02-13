@@ -8,20 +8,15 @@ import { authMiddleware } from "../middlewares/auth";
 import { authIdRouterV1 } from "./auth-id";
 import { cors } from "hono/cors";
 import { getAllowedOrigins } from "../const";
+import { spotifyRouterV1 } from "./spotify";
 
 export const api = new Hono<ApiContext>();
 
 api.use(logger());
-api.use(
-    "*",
-    cors({
-        origin: getAllowedOrigins(),
-        credentials: true,
-    }),
-);
 api.use("*", authMiddleware);
 
 api.route("/v1/auth/web", webAuthRouterV1);
 api.route("/v1/auth/id", authIdRouterV1);
 api.route("/v1/users", userRouterV1);
 api.route("/v1/schools", schoolRouterV1);
+api.route("/v1/spotify", spotifyRouterV1);
