@@ -16,17 +16,9 @@ export const spotifyTokenTable = sqliteTable("spotifyToken", {
         .references(() => userTable.id),
     access: text("access").notNull(),
     refresh: text("refresh").notNull(),
-    ...timestamp,
-});
-
-export const spotifySchoolTokenTable = sqliteTable("spotifySchoolToken", {
     schoolId: text("schoolId")
         .notNull()
-        .references(() => schoolTable.id)
-        .primaryKey(),
-    spotifyTokenId: integer("spotifyTokenId")
-        .notNull()
-        .references(() => spotifyTokenTable.id),
+        .references(() => schoolTable.id),
     ...timestamp,
 });
 
@@ -35,19 +27,8 @@ export const spotifyTokenRelations = relations(spotifyTokenTable, relation => ({
         fields: [spotifyTokenTable.userId],
         references: [userTable.id],
     }),
-    schoolTokens: relation.many(spotifySchoolTokenTable),
-}));
-
-export const spotifySchoolTokenRelations = relations(
-    spotifySchoolTokenTable,
-    relation => ({
-        token: relation.one(spotifyTokenTable, {
-            fields: [spotifySchoolTokenTable.spotifyTokenId],
-            references: [spotifyTokenTable.id],
-        }),
-        school: relation.one(schoolTable, {
-            fields: [spotifySchoolTokenTable.schoolId],
-            references: [schoolTable.id],
-        }),
+    school: relation.one(schoolTable, {
+        fields: [spotifyTokenTable.schoolId],
+        references: [schoolTable.id],
     }),
-);
+}));

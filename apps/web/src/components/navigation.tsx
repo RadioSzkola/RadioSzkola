@@ -161,24 +161,38 @@ export default function Navigation() {
                                 Szkoła
                             </a>
                         </li>
-                        <li className={styles.mobileLinksItem}>
-                            <a
-                                onClick={openLogin}
-                                href="#"
-                                className={styles.mobileLinksLink}
-                            >
-                                Zaloguj się
-                            </a>
-                        </li>
-                        <li className={styles.mobileLinksItem}>
-                            <a
-                                onClick={openSignup}
-                                href="#"
-                                className={styles.mobileLinksLink}
-                            >
-                                Zarejestruj się
-                            </a>
-                        </li>
+                        {user ? (
+                            <li className={styles.mobileLinksItem}>
+                                <a
+                                    onClick={openLogout}
+                                    href="#"
+                                    className={styles.mobileLinksLink}
+                                >
+                                    Wyloguj się
+                                </a>
+                            </li>
+                        ) : (
+                            <>
+                                <li className={styles.mobileLinksItem}>
+                                    <a
+                                        onClick={openLogin}
+                                        href="#"
+                                        className={styles.mobileLinksLink}
+                                    >
+                                        Zaloguj się
+                                    </a>
+                                </li>
+                                <li className={styles.mobileLinksItem}>
+                                    <a
+                                        onClick={openSignup}
+                                        href="#"
+                                        className={styles.mobileLinksLink}
+                                    >
+                                        Zarejestruj się
+                                    </a>
+                                </li>
+                            </>
+                        )}
                     </ul>
                 </div>
             </Modal>
