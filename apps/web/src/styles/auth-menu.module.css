@@ -1,5 +1,5 @@
 .authMenu {
-    width: 75svw;
+    width: fit-content;
     max-width: 32rem;
     display: flex;
     align-items: center;
@@ -12,6 +12,10 @@
     box-shadow:
         0 0 0 4px var(--color-black),
         4px 4px 0 4px var(--color-black);
+
+    @media (min-width: 760px) {
+        width: 75svw;
+    }
 }
 
 .authMenuLabel {
