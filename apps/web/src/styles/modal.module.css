@@ -1,20 +1,15 @@
 .wrapper {
     z-index: 110 !important;
     position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 50% !important;
+    left: 50% !important;
 
-    transform: translateX(100%) !important;
+    transform: translate(150dvw, -50%) !important;
     transition: transform 0.25s ease-in-out;
 }
 
 .wrapper__open {
-    transform: translateX(0) !important;
+    transform: translate(-50%, -50%) !important;
 }
 
 .overlay {

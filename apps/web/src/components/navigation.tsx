@@ -4,15 +4,14 @@ import Hamburger from "../ui/hamburger";
 import signUpStyles from "../styles/signup.module.css";
 import styles from "../styles/navigation.module.css";
 import Modal from "../ui/modal";
-import ThemeSwitch from "./theme-switch";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Logo from "../ui/logo";
 
 export default function Navigation() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const toggleMobileMenu = () => setIsMenuOpen(open => !open);
     const closeMobileMenu = () => setIsMenuOpen(false);
+    const openMobileMenu = () => setIsMenuOpen(true);
 
     useEffect(() => {
         const handleResize = () => {
@@ -63,22 +62,18 @@ export default function Navigation() {
                     </button>
                 </li>
             </ul>
-            <div className={styles.desktopOnly}>
-                <ThemeSwitch />
-            </div>
             <Hamburger
                 orientation="right"
                 open={isMenuOpen}
-                onClick={toggleMobileMenu}
+                onClick={openMobileMenu}
                 hiddenOnDesktop
             />
-            <Modal open={isMenuOpen}>
+            <Modal open={isMenuOpen} onOverlayClick={closeMobileMenu}>
                 <div className={styles.mobileMenu}>
                     <div className={styles.mobileMenuBar}>
-                        <ThemeSwitch />
                         <button
                             className={styles.mobileMenuBarClose}
-                            onClick={toggleMobileMenu}
+                            onClick={closeMobileMenu}
                         >
                             <Icon icon="ic:round-close" />
                         </button>

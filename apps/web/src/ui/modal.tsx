@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 
 import styles from "../styles/modal.module.css";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type ModalProps = {
     children: React.ReactElement;
@@ -10,6 +10,7 @@ type ModalProps = {
     wrapperClass?: string;
     wrapperClassOpen?: string;
     open: boolean;
+    onOverlayClick?: () => void;
 };
 
 export default function Modal({
@@ -19,9 +20,8 @@ export default function Modal({
     overlayClassOpen,
     wrapperClass,
     wrapperClassOpen,
+    onOverlayClick,
 }: ModalProps) {
-    const wraperRef = useRef<HTMLDivElement>(null);
-
     return createPortal(
         <>
             <div
@@ -31,6 +31,7 @@ export default function Modal({
                     ${overlayClass ? overlayClass : ""}
                     ${open && overlayClassOpen ? overlayClassOpen : ""}
                 `}
+                onClick={onOverlayClick}
             />
             <div
                 className={`
@@ -39,7 +40,6 @@ export default function Modal({
                     ${wrapperClass ? wrapperClass : ""}
                     ${open && wrapperClassOpen ? wrapperClassOpen : ""}
                 `}
-                ref={wraperRef}
             >
                 {children}
             </div>
