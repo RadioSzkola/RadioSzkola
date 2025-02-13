@@ -13,6 +13,8 @@ export const userPasswordSchema = z.string().min(8).max(128);
 
 export const createUserSchema = createInsertSchema(userTable, {
     email: s => s.email.email(),
+    name: s => s.name.min(1),
+    schoolId: s => s.schoolId.min(1),
     role: userRoleSchema,
 })
     .omit({ id: true, passwordHash: true, updatedAt: true, createdAt: true })
@@ -48,7 +50,7 @@ export const userLoginSchema = z.object({
 export const signupSchema = createUserSchema.omit({ role: true });
 export const signupIdSchema = createUserSchema
     .omit({ role: true })
-    .extend({ authId: z.string() });
+    .extend({ authId: z.string().min(1) });
 
 export type UserRole = z.infer<typeof userRoleSchema>;
 export type CreateUser = z.infer<typeof createUserSchema>;
