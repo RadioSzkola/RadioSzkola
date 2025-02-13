@@ -4,7 +4,7 @@ import styles from "../styles/modal.module.css";
 import { useEffect, useRef } from "react";
 
 type ModalProps = {
-    children: React.ReactElement;
+    children: React.ReactNode;
     overlayClass?: string;
     overlayClassOpen?: string;
     wrapperClass?: string;

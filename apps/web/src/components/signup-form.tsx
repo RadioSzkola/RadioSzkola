@@ -9,7 +9,15 @@ import { SignupId, signupIdSchema } from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
 import { useAPIEndpoint } from "../hooks/api";
 
-export default function SignupForm() {
+export type SignupFormProps = {
+    labelClass?: string;
+    errorFieldClass?: string;
+};
+
+export default function SignupForm({
+    labelClass,
+    errorFieldClass,
+}: SignupFormProps) {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [schoolId, setSchoolId] = useState("");
@@ -77,9 +85,12 @@ export default function SignupForm() {
                 }
                 value=""
                 onInputChange={ev => setEmail(ev.currentTarget.value)}
+                labelClass={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.email ? (
-                <span className={styles.signupFormErrorField}>
+                <span
+                    className={`${styles.signupFormErrorField} ${errorFieldClass ? errorFieldClass : ""}`}
+                >
                     {error.data.email[0]}
                 </span>
             ) : (
@@ -96,9 +107,12 @@ export default function SignupForm() {
                 }
                 value=""
                 onInputChange={ev => setPassword(ev.currentTarget.value)}
+                labelClass={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.password ? (
-                <span className={styles.signupFormErrorField}>
+                <span
+                    className={`${styles.signupFormErrorField} ${errorFieldClass ? errorFieldClass : ""}`}
+                >
                     {error.data.password[0]}
                 </span>
             ) : (
@@ -115,9 +129,12 @@ export default function SignupForm() {
                 }
                 value=""
                 onInputChange={ev => setAuthId(ev.currentTarget.value)}
+                labelClass={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.authId ? (
-                <span className={styles.signupFormErrorField}>
+                <span
+                    className={`${styles.signupFormErrorField} ${errorFieldClass ? errorFieldClass : ""}`}
+                >
                     {error.data.authId[0]}
                 </span>
             ) : (
@@ -134,9 +151,12 @@ export default function SignupForm() {
                 }
                 value=""
                 onInputChange={ev => setSchoolId(ev.currentTarget.value)}
+                labelClass={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.schoolId ? (
-                <span className={styles.signupFormErrorField}>
+                <span
+                    className={`${styles.signupFormErrorField} ${errorFieldClass ? errorFieldClass : ""}`}
+                >
                     {error.data.schoolId[0]}
                 </span>
             ) : (
@@ -153,9 +173,12 @@ export default function SignupForm() {
                 }
                 value=""
                 onInputChange={ev => setName(ev.currentTarget.value)}
+                labelClass={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.name ? (
-                <span className={styles.signupFormErrorField}>
+                <span
+                    className={`${styles.signupFormErrorField} ${errorFieldClass ? errorFieldClass : ""}`}
+                >
                     {error.data.name[0]}
                 </span>
             ) : (

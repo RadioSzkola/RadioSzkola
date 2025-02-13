@@ -1,34 +1,52 @@
 import { useEffect, useState } from "react";
 import Hamburger from "../ui/hamburger";
 
-import signUpStyles from "../styles/signup.module.css";
 import styles from "../styles/navigation.module.css";
 import Modal from "../ui/modal";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Logo from "../ui/logo";
+import AuthMenu from "./auth-menu";
 
 export default function Navigation() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const [isAuthOpen, setIsAuthOpen] = useState(false);
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isSignupOpen, setIsSignupOpen] = useState(false);
+    const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
     const closeMobileMenu = () => {
-        setIsAuthOpen(false);
         setIsMenuOpen(false);
     };
+
     const openMobileMenu = () => {
-        setIsAuthOpen(false);
         setIsMenuOpen(true);
     };
 
-    const closeAuth = () => {
+    const openLogin = () => {
         setIsMenuOpen(false);
-        setIsAuthOpen(false);
+        setIsLoginOpen(true);
     };
 
-    const openAuth = () => {
+    const closeLogin = () => {
+        setIsLoginOpen(false);
+    };
+
+    const openSignup = () => {
         setIsMenuOpen(false);
-        setIsAuthOpen(true);
+        setIsSignupOpen(true);
+    };
+
+    const closeSignup = () => {
+        setIsSignupOpen(false);
+    };
+
+    const openLogout = () => {
+        setIsMenuOpen(false);
+        setIsLogoutOpen(true);
+    };
+
+    const closeLogout = () => {
+        setIsMenuOpen(false);
+        setIsLogoutOpen(false);
     };
 
     useEffect(() => {
@@ -41,12 +59,6 @@ export default function Navigation() {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-
-    const handleLoginClick = () => {
-        document
-            .getElementById("signup-container")
-            ?.classList.remove(signUpStyles.signVisibilityContainerHidden);
-    };
 
     return (
         <nav className={styles.nav}>
@@ -74,9 +86,17 @@ export default function Navigation() {
                 <li className={styles.desktopLinksItem}>
                     <button
                         className={styles.desktopLinksLink}
-                        onClick={handleLoginClick}
+                        onClick={openLogin}
                     >
                         Zaloguj się
+                    </button>
+                </li>
+                <li className={styles.desktopLinksItem}>
+                    <button
+                        className={styles.desktopLinksLink}
+                        onClick={openSignup}
+                    >
+                        Zarejestruj się
                     </button>
                 </li>
             </ul>
@@ -127,15 +147,36 @@ export default function Navigation() {
                         </li>
                         <li className={styles.mobileLinksItem}>
                             <a
-                                onClick={closeMobileMenu}
+                                onClick={openLogin}
                                 href="#"
                                 className={styles.mobileLinksLink}
                             >
                                 Zaloguj się
                             </a>
                         </li>
+                        <li className={styles.mobileLinksItem}>
+                            <a
+                                onClick={openSignup}
+                                href="#"
+                                className={styles.mobileLinksLink}
+                            >
+                                Zarejestruj się
+                            </a>
+                        </li>
                     </ul>
                 </div>
+            </Modal>
+            <Modal
+                open={isLoginOpen || isSignupOpen || isLogoutOpen}
+                onOverlayClick={() => {
+                    closeLogin();
+                    closeLogout();
+                    closeSignup();
+                }}
+            >
+                {isLoginOpen ? <AuthMenu page="login" /> : <></>}
+                {isSignupOpen ? <AuthMenu page="signup" /> : <></>}
+                {isLogoutOpen ? <AuthMenu page="logout" /> : <></>}
             </Modal>
         </nav>
     );

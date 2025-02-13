@@ -8,6 +8,7 @@ export type EmailInputProps = {
     onInputChange?: (ev: React.KeyboardEvent<HTMLInputElement>) => void;
     size: "sm" | "md" | "lg";
     variant: "neutral" | "error" | "ok";
+    labelClass?: string;
 };
 
 export default function EmailInput({
@@ -17,6 +18,7 @@ export default function EmailInput({
     onInputChange,
     size,
     variant,
+    labelClass,
 }: EmailInputProps) {
     const [touched, setTouched] = useState<boolean>(false);
 
@@ -47,9 +49,11 @@ export default function EmailInput({
             />
             <label
                 className={`
-                ${styles.textInputLabel}
-                ${touched ? styles.textInputLabel__touched : styles.textInputLabel__placeholder}
-            `}
+                    ${styles.textInputLabel}
+                    ${touched ? styles.textInputLabel__touched : styles.textInputLabel__placeholder}
+                    ${labelClass ? labelClass : ""}
+                    ${variant === "error" ? "error" : ""}
+                `}
                 htmlFor={id}
             >
                 {label}

@@ -1,2 +1,36 @@
 .authMenu {
+    width: 75svw;
+    max-width: 32rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: var(--spacing-xl);
+    gap: var(--spacing-xl);
+
+    background-color: var(--color-green-light);
+    box-shadow:
+        0 0 0 4px var(--color-black),
+        4px 4px 0 4px var(--color-black);
+}
+
+.authMenuLabel {
+    background-color: var(--color-green-light) !important;
+    color: var(--color-darker) !important;
+}
+
+.authMenuBlackbox {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: var(--text-lg);
+}
+
+.authMenuLogoImg {
+    width: calc(2 * var(--size-xl)) !important;
+    height: calc(2 * var(--size-xl)) !important;
+}
+
+.authMenuForm {
+    margin-bottom: var(--spacing-xl);
 }

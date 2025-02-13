@@ -3,10 +3,15 @@ import ImgLogoDark from "../img/logo-dark.png";
 import styles from "../styles/logo.module.css";
 
 import { useContext } from "react";
-import { themeContext } from "../stores/theme";
+import { Theme, themeContext } from "../stores/theme";
 
-export default function Logo() {
-    const theme = useContext(themeContext);
+export type LogoProps = {
+    theme?: Theme;
+    imgClass?: string;
+};
+
+export default function Logo({ theme: providedTheme, imgClass }: LogoProps) {
+    const theme = providedTheme ? providedTheme : useContext(themeContext);
 
     return (
         <div className={styles.logo}>
@@ -14,13 +19,13 @@ export default function Logo() {
                 <img
                     src={ImgLogoLight}
                     alt="jasne logo"
-                    className={styles.logoImg}
+                    className={`${styles.logoImg} ${imgClass ? imgClass : ""}`}
                 />
             ) : (
                 <img
                     src={ImgLogoDark}
                     alt="ciemne logo"
-                    className={styles.logoImg}
+                    className={`${styles.logoImg} ${imgClass ? imgClass : ""}`}
                 />
             )}
         </div>
