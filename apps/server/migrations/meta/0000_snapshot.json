@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "45b9024d-0949-491c-81b7-32a82539d554",
+  "id": "accad862-e3c3-4646-823a-beead6f57d02",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "authId": {
@@ -93,13 +93,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "spotifyTokenId": {
-          "name": "spotifyTokenId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "createdAt": {
           "name": "createdAt",
           "type": "integer",
@@ -116,21 +109,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "school_spotifyTokenId_spotifyToken_id_fk": {
-          "name": "school_spotifyTokenId_spotifyToken_id_fk",
-          "tableFrom": "school",
-          "tableTo": "spotifyToken",
-          "columnsFrom": [
-            "spotifyTokenId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -223,6 +202,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "schoolId": {
+          "name": "schoolId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "createdAt": {
           "name": "createdAt",
           "type": "integer",
@@ -246,6 +232,19 @@
           "tableTo": "user",
           "columnsFrom": [
             "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "spotifyToken_schoolId_school_id_fk": {
+          "name": "spotifyToken_schoolId_school_id_fk",
+          "tableFrom": "spotifyToken",
+          "tableTo": "school",
+          "columnsFrom": [
+            "schoolId"
           ],
           "columnsTo": [
             "id"

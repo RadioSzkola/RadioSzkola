@@ -10,12 +10,13 @@ import {
 import { ApiContext } from "../context";
 import { useAuthRules } from "../auth";
 import { parseBySchema } from "@rs/shared/validation";
-import { spotifyAdminInitSchema } from "@rs/shared/models";
+import { spotifyAdminInitSchema, SpotifyToken, User } from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
 import { db } from "../db";
 import { URLSearchParams } from "node:url";
 import { generateId } from "lucia";
-import { spotifyTokenTable } from "../schema";
+import { schoolTable, spotifyTokenTable } from "../schema";
+import { eq } from "drizzle-orm";
 
 export const spotifyRouterV1 = new Hono<ApiContext>();
 
@@ -23,7 +24,7 @@ export const spotifyRouterV1 = new Hono<ApiContext>();
 // I am a tad too lazy to craft a reasonable solution
 // So here we go
 let __UNSAFE_STATE__: string | null = null;
-let __UNSAFE_USER_ID__: string | null = null;
+let __UNSAFE_USER__: User | null = null;
 
 spotifyRouterV1.use(
     cors({
@@ -34,7 +35,7 @@ spotifyRouterV1.use(
 );
 
 spotifyRouterV1.get("/init-spotify", async c => {
-    if (__UNSAFE_STATE__ !== null || __UNSAFE_USER_ID__ !== null) {
+    if (__UNSAFE_STATE__ !== null || __UNSAFE_USER__ !== null) {
         return c.json<AppError>(
             {
                 code: "UNKNOWN",
@@ -44,43 +45,13 @@ spotifyRouterV1.get("/init-spotify", async c => {
         );
     }
 
-    const body = await c.req.json();
-    const { data: initData, error: validationError } = parseBySchema(
-        body,
-        spotifyAdminInitSchema,
-    );
-
-    if (validationError) {
-        return c.json<AppError>(
-            {
-                code: "VALIDATION",
-                data: validationError,
-            },
-            401,
-        );
-    }
-
-    const token = await db.query.spotifyTokenTable.findFirst({
-        where: (fields, operators) => operators.eq(fields.id, initData.tokenId),
-    });
-
-    if (!token) {
-        return c.json<AppError>(
-            {
-                code: "DATABASE",
-                message: "Token not found.",
-            },
-            404,
-        );
-    }
-
     const {
         error: authError,
         statusCode,
         user,
     } = useAuthRules(c, {
         systemadmin: true,
-        admin: u => u.id === token.userId,
+        admin: true,
     });
 
     if (authError) {
@@ -88,7 +59,7 @@ spotifyRouterV1.get("/init-spotify", async c => {
     }
 
     __UNSAFE_STATE__ = generateId(32).toString();
-    __UNSAFE_USER_ID__ = user.id;
+    __UNSAFE_USER__ = user;
 
     const params = new URLSearchParams({
         response_type: "code",
@@ -104,7 +75,7 @@ spotifyRouterV1.get("/init-spotify", async c => {
 });
 
 spotifyRouterV1.get("/callback", async c => {
-    if (__UNSAFE_STATE__ === null || __UNSAFE_USER_ID__ === null) {
+    if (__UNSAFE_STATE__ === null || __UNSAFE_USER__ === null) {
         return c.json<AppError>({
             code: "UNKNOWN",
             message: "Unsafe state mismatch.",
@@ -167,15 +138,97 @@ spotifyRouterV1.get("/callback", async c => {
     const refreshToken = data.refresh_token;
 
     await db.insert(spotifyTokenTable).values({
-        userId: __UNSAFE_USER_ID__,
+        userId: __UNSAFE_USER__.id,
         access: accessToken,
         refresh: refreshToken,
+        schoolId: __UNSAFE_USER__.schoolId,
     });
 
     __UNSAFE_STATE__ = null;
-    __UNSAFE_USER_ID__ = null;
+    __UNSAFE_USER__ = null;
 
     return c.redirect("/");
 });
 
-spotifyRouterV1.get("/currently-playing", async c => {});
+spotifyRouterV1.get("/currently-playing", async c => {
+    const { schoolId } = c.req.query();
+
+    if (!schoolId) {
+        return c.json<AppError>(
+            {
+                code: "VALIDATION",
+                message: "schoolId query not present",
+                data: {},
+            },
+            400,
+        );
+    }
+
+    const token = await db.query.spotifyTokenTable.findFirst({
+        where: (fields, operators) => operators.eq(fields.schoolId, schoolId),
+    });
+
+    if (!token) {
+        return c.json<AppError>({
+            code: "DATABASE",
+            message: "Spotify token does not exist",
+        });
+    }
+
+    try {
+        const response = await fetch(
+            "https://api.spotify.com/v1/me/player/currently-playing",
+            {
+                headers: {
+                    Authorization: `Bearer ${token.access}`,
+                },
+            },
+        );
+
+        // Handle expired token
+        if (response.status === 401 && token.refresh) {
+            // Refresh the token
+            const refreshResponse = await fetch(SPOTIFY_TOKEN_URL(), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    Authorization:
+                        "Basic " +
+                        Buffer.from(
+                            `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`,
+                        ).toString("base64"),
+                },
+                body: new URLSearchParams({
+                    grant_type: "refresh_token",
+                    refresh_token: token.refresh,
+                }).toString(),
+            });
+
+            const refreshData = await refreshResponse.json();
+            const newAccessToken = refreshData.access_token;
+
+            await db
+                .update(spotifyTokenTable)
+                .set({ access: newAccessToken })
+                .where(eq(spotifyTokenTable.id, token.id));
+
+            // Retry the request with new token
+            return c.redirect("/v1/spotify/currently-playing");
+        }
+
+        const data = await response.json();
+        return c.json(data);
+    } catch (error) {
+        return c.json<AppError>(
+            {
+                code: "FETCH",
+                message: "Failed to fetch currently playing track",
+                data: {
+                    code: "UNKNOWN",
+                    data: error,
+                },
+            },
+            500,
+        );
+    }
+});

@@ -12,10 +12,8 @@ CREATE TABLE `school` (
 	`city` text NOT NULL,
 	`adress` text NOT NULL,
 	`name` text NOT NULL,
-	`spotifyTokenId` integer,
 	`createdAt` integer NOT NULL,
-	`updatedAt` integer NOT NULL,
-	FOREIGN KEY (`spotifyTokenId`) REFERENCES `spotifyToken`(`id`) ON UPDATE no action ON DELETE no action
+	`updatedAt` integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `session` (
@@ -32,9 +30,11 @@ CREATE TABLE `spotifyToken` (
 	`userId` text NOT NULL,
 	`access` text NOT NULL,
 	`refresh` text NOT NULL,
+	`schoolId` text NOT NULL,
 	`createdAt` integer NOT NULL,
 	`updatedAt` integer NOT NULL,
-	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`schoolId`) REFERENCES `school`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `user` (
