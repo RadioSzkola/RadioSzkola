@@ -10,8 +10,26 @@ import Logo from "../ui/logo";
 export default function Navigation() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const closeMobileMenu = () => setIsMenuOpen(false);
-    const openMobileMenu = () => setIsMenuOpen(true);
+    const [isAuthOpen, setIsAuthOpen] = useState(false);
+
+    const closeMobileMenu = () => {
+        setIsAuthOpen(false);
+        setIsMenuOpen(false);
+    };
+    const openMobileMenu = () => {
+        setIsAuthOpen(false);
+        setIsMenuOpen(true);
+    };
+
+    const closeAuth = () => {
+        setIsMenuOpen(false);
+        setIsAuthOpen(false);
+    };
+
+    const openAuth = () => {
+        setIsMenuOpen(false);
+        setIsAuthOpen(true);
+    };
 
     useEffect(() => {
         const handleResize = () => {

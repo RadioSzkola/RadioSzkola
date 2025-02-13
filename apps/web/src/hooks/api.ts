@@ -47,24 +47,36 @@ export async function fetchAPI<T>({
     }
 }
 
+export type UseAPIEndpointStatus = "data" | "error" | "stale" | "pending";
+
 export function useAPIEndpoint<T>(fetchProps: APICallProps):
     | {
           data: T;
           error: null;
           pending: false;
           call: (data?: unknown) => void;
+          status: "data";
       }
     | {
           data: null;
           error: null;
           pending: true;
           call: (data?: unknown) => void;
+          status: "pending";
       }
     | {
           data: null;
           error: AppError;
           pending: false;
           call: (data?: unknown) => void;
+          status: "error";
+      }
+    | {
+          data: null;
+          error: null;
+          pending: false;
+          call: (data?: unknown) => void;
+          status: "stale";
       } {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<AppError | null>(null);
@@ -113,6 +125,7 @@ export function useAPIEndpoint<T>(fetchProps: APICallProps):
             error: error,
             pending: false,
             call,
+            status: "error",
         };
     }
 
@@ -122,13 +135,25 @@ export function useAPIEndpoint<T>(fetchProps: APICallProps):
             error: null,
             pending: false,
             call,
+            status: "data",
+        };
+    }
+
+    if (pending) {
+        return {
+            data: null,
+            error: null,
+            pending: pending,
+            call,
+            status: "pending",
         };
     }
 
     return {
         data: null,
         error: null,
-        pending: true,
+        pending: false,
         call,
+        status: "stale",
     };
 }
