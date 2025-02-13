@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "../styles/signin-form.module.css";
+import styles from "../styles/login-form.module.css";
 import Button from "../ui/button";
 import EmailInput from "../ui/email-input";
 import PasswordInput from "../ui/password-input";
@@ -8,12 +8,12 @@ import { UserLogin, userLoginSchema } from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
 import { useAPIEndpoint } from "../hooks/api";
 
-export default function SigninForm() {
+export default function LoginForm() {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
     const signupIdEndpoint = useAPIEndpoint({
-        endpoint: "/v1/auth/web/signupid",
+        endpoint: "/v1/auth/web/login",
         method: "POST",
     });
 
@@ -58,7 +58,7 @@ export default function SigninForm() {
     }, [error]);
 
     return (
-        <form onSubmit={handleSubmit} className={styles.signinForm}>
+        <form onSubmit={handleSubmit} className={styles.loginForm}>
             <EmailInput
                 id="email"
                 label="email"
@@ -72,7 +72,7 @@ export default function SigninForm() {
                 onInputChange={ev => setEmail(ev.currentTarget.value)}
             />
             {error?.code === "VALIDATION" && error.data.email ? (
-                <span className={styles.signupFormErrorField}>
+                <span className={styles.loginFormErrorField}>
                     {error.data.email[0]}
                 </span>
             ) : (
@@ -91,7 +91,7 @@ export default function SigninForm() {
                 onInputChange={ev => setPassword(ev.currentTarget.value)}
             />
             {error?.code === "VALIDATION" && error.data.password ? (
-                <span className={styles.signupFormErrorField}>
+                <span className={styles.loginFormErrorField}>
                     {error.data.password[0]}
                 </span>
             ) : (

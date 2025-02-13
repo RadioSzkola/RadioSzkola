@@ -10,8 +10,8 @@
     font-size: var(--text-sm);
 
     box-shadow:
-        0 0 0 2px var(--color-bg-inverted),
-        3px 3px 0 2px var(--color-bg-inverted);
+        0 0 0 2px var(--color-black),
+        3px 3px 0 2px var(--color-black);
 }
 
 .button__md {
@@ -20,8 +20,8 @@
     font-size: var(--text-md);
 
     box-shadow:
-        0 0 0 2px var(--color-bg-inverted),
-        4px 4px 0 2px var(--color-bg-inverted);
+        0 0 0 2px var(--color-black),
+        4px 4px 0 2px var(--color-black);
 }
 
 .button__lg {
@@ -30,28 +30,28 @@
     font-size: var(--text-lg);
 
     box-shadow:
-        0 0 0 4px var(--color-bg-inverted),
-        5px 5px 0 4px var(--color-bg-inverted);
+        0 0 0 4px var(--color-black),
+        5px 5px 0 4px var(--color-black);
 }
 
 .button__neutral {
-    color: var(--color-text);
+    color: var(--color-black);
 }
 
 .button__inverted {
-    color: var(--color-text-inverted);
-    background-color: var(--color-bg-inverted);
-    border: 1px solid var(--color-bg);
+    color: var(--color-white);
+    background-color: var(--color-black);
+    border: 1px solid var(--color-white);
 }
 
 .button__primary {
-    color: var(--color-text);
-    background-color: var(--color-primary);
+    color: var(--color-black);
+    background-color: var(--color-red);
 }
 
 .button__secondary {
-    color: var(--color-text);
-    background-color: var(--color-secondary);
+    color: var(--color-black);
+    background-color: var(--color-green);
 }
 
 .button__animated {
@@ -61,24 +61,24 @@
 
     &:hover.button__sm {
         box-shadow:
-            0 0 0 2px var(--color-bg-inverted),
-            1px 1px 0 2px var(--color-bg-inverted);
+            0 0 0 2px var(--color-black),
+            1px 1px 0 2px var(--color-black);
 
         transform: translate(2px, 2px);
     }
 
     &:hover.button__md {
         box-shadow:
-            0 0 0 2px var(--color-bg-inverted),
-            2px 2px 0 2px var(--color-bg-inverted);
+            0 0 0 2px var(--color-black),
+            2px 2px 0 2px var(--color-black);
 
         transform: translate(2px, 2px);
     }
 
     &:hover.button__lg {
         box-shadow:
-            0 0 0 4px var(--color-bg-inverted),
-            2px 2px 0 4px var(--color-bg-inverted);
+            0 0 0 4px var(--color-black),
+            2px 2px 0 4px var(--color-black);
 
         transform: translate(3px, 3px);
     }

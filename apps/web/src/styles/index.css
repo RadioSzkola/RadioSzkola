@@ -27,55 +27,37 @@ a {
 }
 
 html {
-    --color-indigo: #150685;
-    --color-indigo-light: #2f209c;
-    --color-indigo-lighter: #746fdd;
-    --color-indigo-secondary-lighter: #685dba;
-    --color-indigo-secondary-lighter-alt: #685dba;
-    --color-indigo-pale: #dcd8ff;
-    --color-indigo-dark: #0c063a;
-    --color-indigo-darker: #07032c;
-    --color-indigo-black: #090914;
+    --color-blue: #150685;
+    --color-blue-light: #2f209c;
+    --color-blue-lighter: #746fdd;
+    --color-blue-pale: #dcd8ff;
+    --color-blue-dark: #0c063a;
+    --color-blue-darker: #07032c;
+    --color-blue-black: #090914;
 
     --color-red: #ff0000;
-    --color-red-light: #ff4d4d;
+    --color-red-light: #ff1d1d;
     --color-red-lighter: #ff7a7a;
     --color-red-pale: #ffcccc;
     --color-red-dark: #cf0000;
     --color-red-darker: #9b0000;
     --color-red-black: #2c0101;
 
-    --color-neutral-light: #bbbbbb;
-    --color-neutral-white: #ffffff;
-    --color-neutral-dark: #333333;
-    --color-neutral-black: #000000;
+    --color-green: #3cc412;
+    --color-green-light: #5dd837;
+    --color-green-lighter: #7cd361;
+    --color-green-pale: #b7daad;
+    --color-green-dark: #2a8b0c;
+    --color-green-darker: #225c10;
+    --color-green-black: #164707;
 
-    --color-primary: var(--color-indigo);
-    --color-primary-light: var(--color-indigo-light);
-    --color-primary-lighter: var(--color-indigo-lighter);
-    --color-primary-pale: var(--color-indigo-pale);
-    --color-primary-dark: var(--color-indigo-dark);
-    --color-primary-darker: var(--color-indigo-darker);
-    --color-primary-black: var(--color-indigo-black);
-    --color-primary-lighter-alt: var(--color-indigo-secondary-lighter-alt);
+    --color-white: #ffffff;
+    --color-lighter: #dddddd;
+    --color-light: #bbbbbb;
 
-    --color-secondary: var(--color-red);
-    --color-secondary-light: var(--color-red-light);
-    --color-secondary-lighter: var(--color-red-lighter);
-    --color-secondary-pale: var(--color-red-pale);
-    --color-secondary-dark: var(--color-red-dark);
-    --color-secondary-darker: var(--color-red-darker);
-    --color-secondary-black: var(--color-red-black);
-
-    --color-text: var(--color-neutral-black);
-    --color-text-alt: var(--color-neutral-dark);
-    --color-text-inverted: var(--color-neutral-white);
-    --color-text-inverted-alt: var(--color-neutral-light);
-
-    --color-bg: var(--color-neutral-white);
-    --color-bg-alt: var(--color-neutral-light);
-    --color-bg-inverted: var(--color-neutral-black);
-    --color-bg-inverted-alt: var(--color-neutral-dark);
+    --color-black: #000000;
+    --color-darker: #222222;
+    --color-dark: #444444;
 
     --mobile-text-sm: 0.75rem;
     --mobile-text-md: 1rem;
@@ -158,45 +140,6 @@ html {
         --size-lg: var(--desktop-size-lg);
         --size-xl: var(--desktop-size-xl);
     }
-
-    --rounded: 0.35rem;
-    --rounded-full: 999999px;
-}
-
-html.dark {
-    --color-primary: var(--color-indigo-light);
-    --color-primary-light: var(--color-indigo);
-    --color-primary-lighter: var(--color-indigo-dark);
-
-    --color-primary-pale: var(--color-indigo-darker);
-    --color-primary-dark: var(--color-indigo-lighter);
-    --color-primary-lighter-alt: var(--color-indigo-secondary-lighter);
-    --color-primary-darker: var(--color-indigo-pale);
-    --color-primary-black: var(--color-indigo-pale);
-
-    --color-secondary: var(--color-red-light);
-    --color-secondary-light: var(--color-red);
-    --color-secondary-lighter: var(--color-red-dark);
-    --color-secondary-pale: var(--color-red-darker);
-    --color-secondary-dark: var(--color-red-lighter);
-    --color-secondary-darker: var(--color-red-pale);
-    --color-secondary-black: var(--color-red-pale);
-
-    --color-text: var(--color-neutral-white);
-    --color-text-alt: var(--color-neutral-light);
-    --color-text-inverted: var(--color-neutral-black);
-    --color-text-inverted-alt: var(--color-neutral-dark);
-
-    --color-bg: var(--color-indigo-black);
-    --color-bg-alt: var(--color-neutral-dark);
-    --color-bg-inverted: var(--color-neutral-white);
-    --color-bg-inverted-alt: var(--color-neutral-light);
-
-    --color-sign-input: var(--color-primary-lighter-alt);
-    --color-sign-submit: var(--color-indigo-light);
-    --color-sign-submit-hover: var(--color-primary-dark);
-
-    --color-shadow: #dcd8ff20;
 }
 
 body {

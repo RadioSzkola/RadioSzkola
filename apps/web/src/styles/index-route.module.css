@@ -36,7 +36,7 @@
 .mainContentHeader {
     font-size: var(--text-2xl);
     font-weight: bold;
-    color: var(--color-secondary);
+    color: var(--color-red);
 }
 
 .mainContentParagraph {

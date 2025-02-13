@@ -2,9 +2,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 2.5rem;
-    height: 2.5rem;
-    padding: 0.5rem 0.25rem;
+    width: var(--size-md);
+    height: var(--size-md);
+    padding: var(--spacing-xs) var(--spacing-xxs);
     cursor: pointer;
 }
 
@@ -25,13 +25,12 @@
 .hamburgerDash {
     width: 100%;
     height: 4px;
-    background-color: var(--color-text);
+    background-color: var(--color-black);
     transition: width 0.125s ease-in-out;
-    border-radius: var(--rounded-full);
 }
 
 .hamburgerDash__colorInverted {
-    background-color: var(--color-text-inverted);
+    background-color: var(--color-white);
 }
 
 .hamburgerDash__width100 {

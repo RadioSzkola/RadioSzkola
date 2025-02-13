@@ -13,11 +13,11 @@
 }
 
 .switch__neutral {
-    --color: var(--color-bg-inverted);
+    --color: var(--color-black);
 }
 
 .switch__inverted {
-    --color: var(--color-bg);
+    --color: var(--color-white);
 }
 
 .switch__sm {
@@ -44,7 +44,7 @@
     left: var(--spacing);
     height: calc(100% - 2 * var(--spacing));
     width: calc(50% - var(--spacing));
-    background-color: var(--color-bg-inverted);
+    background-color: var(--color-black);
     border-radius: var(--rounded-md);
 
     transition: transform 0.125s ease-in-out;
