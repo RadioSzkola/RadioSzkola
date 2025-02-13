@@ -34,32 +34,6 @@ export const queryValidatorMiddleware = <T>(schema: ZodSchema<T>) =>
         return data as T;
     });
 
-export const paginationValidatorMiddleware = validator<
-    unknown,
-    string,
-    string,
-    "query",
-    PaginationOptions
->("query", (value, c) => {
-    let limit = value.limit ?? 128;
-    let offset = value.offset ?? 0;
-
-    const { data, error } = parseBySchema(
-        { limit, offset },
-        paginationOptionsSchema,
-    );
-
-    if (error) {
-        return c.json<AppError>({
-            code: "VALIDATION",
-            message: "pagination query",
-            data: error,
-        });
-    }
-
-    return data;
-});
-
 export const paramsValidatorMiddleware = <T>(schema: ZodSchema<T>) =>
     validator<unknown, string, string, "param", T>("param", (value, c) => {
         const { data, error } = parseBySchema(value, schema);

@@ -6,8 +6,6 @@ import { userRouterV1 } from "./user";
 import { schoolRouterV1 } from "./school";
 import { authMiddleware } from "../middlewares/auth";
 import { authIdRouterV1 } from "./auth-id";
-import { cors } from "hono/cors";
-import { getAllowedOrigins } from "../const";
 import { spotifyRouterV1 } from "./spotify";
 
 export const api = new Hono<ApiContext>();

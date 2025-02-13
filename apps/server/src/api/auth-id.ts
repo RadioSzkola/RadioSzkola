@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { ApiContext } from "../context";
 import { cors } from "hono/cors";
-import { getAllowedOrigins } from "../const";
+import { ALLOWED_ORIGINS } from "../const";
 import {
     bodyValidatorMiddleware,
     paginationValidatorMiddleware,
@@ -26,7 +26,7 @@ export const authIdRouterV1 = new Hono<ApiContext>();
 
 authIdRouterV1.use(
     cors({
-        origin: getAllowedOrigins(),
+        origin: ALLOWED_ORIGINS(),
         allowMethods: ["POST", "GET", "PATCH", "DELETE"],
         credentials: true,
     }),
