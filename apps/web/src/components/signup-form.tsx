@@ -65,12 +65,8 @@ export default function SignupForm({
     }
 
     useEffect(() => {
-        if (!error && submited) {
-            setSuccess(true);
-        }
-
-        console.log({ error });
-    }, [error]);
+        console.log({ place: "signup-form", data: signupIdEndpoint });
+    }, [signupIdEndpoint.status]);
 
     return (
         <form onSubmit={handleSubmit} className={styles.signupForm}>

@@ -3,6 +3,7 @@ import { ApiContext } from "../context";
 import { lucia } from "../auth";
 import { AppError } from "@rs/shared/error";
 import { db } from "../db";
+import { setCookie } from "hono/cookie";
 
 export const authMiddleware = createMiddleware<ApiContext>(async (c, next) => {
     c.set("session", null);

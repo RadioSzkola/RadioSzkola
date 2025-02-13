@@ -20,7 +20,7 @@ export default function LoginForm({
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
-    const signupIdEndpoint = useAPIEndpoint({
+    const loginEndpoint = useAPIEndpoint({
         endpoint: "/v1/auth/web/login",
         method: "POST",
     });
@@ -53,7 +53,7 @@ export default function LoginForm({
             return;
         }
 
-        signupIdEndpoint.call(validation.data);
+        loginEndpoint.call(validation.data);
         setSubmited(true);
     }
 
@@ -62,8 +62,8 @@ export default function LoginForm({
             setSuccess(true);
         }
 
-        console.log({ error });
-    }, [error]);
+        console.log({ loginEndpoint });
+    }, [loginEndpoint.status]);
 
     return (
         <form onSubmit={handleSubmit} className={styles.loginForm}>

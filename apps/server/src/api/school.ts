@@ -26,6 +26,7 @@ schoolRouterV1.use(
     cors({
         origin: getAllowedOrigins(),
         allowMethods: ["GET", "PATCH", "DELETE", "POST"],
+        credentials: true,
     }),
 );
 

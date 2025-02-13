@@ -23,6 +23,7 @@ export async function fetchFromAPI<T>({
             timeout: 5000,
             method,
             data: body,
+            withCredentials: true,
             ...axiosRequestConfig,
         });
 

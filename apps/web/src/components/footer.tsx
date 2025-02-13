@@ -122,7 +122,7 @@ export default function Footer() {
                                 target="_blank"
                                 href="https://www.instagram.com/mikusshepard/"
                             >
-                                Wykonawca: Mikus
+                                Wykonawca: Kiju, Mikus
                             </a>
                         </li>
                     </ul>

@@ -28,6 +28,7 @@ authIdRouterV1.use(
     cors({
         origin: getAllowedOrigins(),
         allowMethods: ["POST", "GET", "PATCH", "DELETE"],
+        credentials: true,
     }),
 );
 

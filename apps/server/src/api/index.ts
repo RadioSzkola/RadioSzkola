@@ -6,10 +6,19 @@ import { userRouterV1 } from "./user";
 import { schoolRouterV1 } from "./school";
 import { authMiddleware } from "../middlewares/auth";
 import { authIdRouterV1 } from "./auth-id";
+import { cors } from "hono/cors";
+import { getAllowedOrigins } from "../const";
 
 export const api = new Hono<ApiContext>();
 
 api.use(logger());
+api.use(
+    "*",
+    cors({
+        origin: getAllowedOrigins(),
+        credentials: true,
+    }),
+);
 api.use("*", authMiddleware);
 
 api.route("/v1/auth/web", webAuthRouterV1);

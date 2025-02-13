@@ -26,6 +26,7 @@ userRouterV1.use(
     cors({
         origin: getAllowedOrigins(),
         allowMethods: ["GET", "PATCH", "DELETE"],
+        credentials: true,
     }),
 );
 

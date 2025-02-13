@@ -17,6 +17,7 @@ import { createUserId, hashPassword, verifyPassword } from "../crypto";
 import { getAllowedOrigins } from "../const";
 import { cors } from "hono/cors";
 import { parseBySchema } from "@rs/shared/validation";
+import { getCookie } from "hono/cookie";
 
 export const webAuthRouterV1 = new Hono<ApiContext>();
 
@@ -24,6 +25,7 @@ webAuthRouterV1.use(
     cors({
         origin: getAllowedOrigins(),
         allowMethods: ["POST", "GET"],
+        credentials: true,
     }),
 );
 
@@ -193,6 +195,9 @@ webAuthRouterV1.post("/signupid", async c => {
 
     const session = await lucia.createSession(result.user.id, {});
     const cookie = lucia.createSessionCookie(session.id).serialize();
+
+    console.log({ cookie });
+
     c.header("Set-Cookie", cookie, { append: true });
 
     return c.json(result.user);
@@ -247,6 +252,8 @@ webAuthRouterV1.post("/login", async c => {
     const cookie = lucia.createSessionCookie(session.id).serialize();
     c.header("Set-Cookie", cookie, { append: true });
 
+    console.log({ cookie: cookie });
+
     return c.json(user);
 });
 
@@ -265,6 +272,8 @@ webAuthRouterV1.post("/logout", async c => {
 });
 
 webAuthRouterV1.get("/me", async c => {
+    console.log({ cookies: getCookie(c) });
+
     const { user, error, statusCode } = useAuthRules(c);
 
     if (error) {
