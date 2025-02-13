@@ -1,19 +1,15 @@
 import { useEffect, useState } from "react";
-import styles from "../styles/signup-form.module.css";
+import styles from "../styles/signin-form.module.css";
 import Button from "../ui/button";
 import EmailInput from "../ui/email-input";
 import PasswordInput from "../ui/password-input";
-import TextInput from "../ui/text-input";
 import { parseBySchema } from "@rs/shared/validation";
-import { SignupId, signupIdSchema } from "@rs/shared/models";
+import { UserLogin, userLoginSchema } from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
 import { useAPIEndpoint } from "../hooks/api";
 
-export default function SignupForm() {
-    const [name, setName] = useState("");
+export default function SigninForm() {
     const [password, setPassword] = useState("");
-    const [schoolId, setSchoolId] = useState("");
-    const [authId, setAuthId] = useState("");
     const [email, setEmail] = useState("");
 
     const signupIdEndpoint = useAPIEndpoint({
@@ -21,7 +17,7 @@ export default function SignupForm() {
         method: "POST",
     });
 
-    const [error, setError] = useState<AppError<SignupId> | null>(null);
+    const [error, setError] = useState<AppError<UserLogin> | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
     const [submited, setSubmited] = useState<boolean>(false);
 
@@ -34,13 +30,10 @@ export default function SignupForm() {
         setSubmited(false);
         const validation = parseBySchema(
             {
-                name,
-                password,
-                schoolId,
-                authId,
                 email,
+                password,
             },
-            signupIdSchema,
+            userLoginSchema,
         );
 
         if (validation.error) {
@@ -65,7 +58,7 @@ export default function SignupForm() {
     }, [error]);
 
     return (
-        <form onSubmit={handleSubmit} className={styles.signupForm}>
+        <form onSubmit={handleSubmit} className={styles.signinForm}>
             <EmailInput
                 id="email"
                 label="email"
@@ -104,65 +97,8 @@ export default function SignupForm() {
             ) : (
                 <></>
             )}
-            <TextInput
-                id="authId"
-                label="kod"
-                size="md"
-                variant={
-                    error?.code === "VALIDATION" && error.data.authId
-                        ? "error"
-                        : "neutral"
-                }
-                value=""
-                onInputChange={ev => setAuthId(ev.currentTarget.value)}
-            />
-            {error?.code === "VALIDATION" && error.data.authId ? (
-                <span className={styles.signupFormErrorField}>
-                    {error.data.authId[0]}
-                </span>
-            ) : (
-                <></>
-            )}
-            <TextInput
-                id="schoolId"
-                label="kod szkoły"
-                size="md"
-                variant={
-                    error?.code === "VALIDATION" && error.data.schoolId
-                        ? "error"
-                        : "neutral"
-                }
-                value=""
-                onInputChange={ev => setSchoolId(ev.currentTarget.value)}
-            />
-            {error?.code === "VALIDATION" && error.data.schoolId ? (
-                <span className={styles.signupFormErrorField}>
-                    {error.data.schoolId[0]}
-                </span>
-            ) : (
-                <></>
-            )}
-            <TextInput
-                id="name"
-                label="imię i nazwisko"
-                size="md"
-                variant={
-                    error?.code === "VALIDATION" && error.data.name
-                        ? "error"
-                        : "neutral"
-                }
-                value=""
-                onInputChange={ev => setName(ev.currentTarget.value)}
-            />
-            {error?.code === "VALIDATION" && error.data.name ? (
-                <span className={styles.signupFormErrorField}>
-                    {error.data.name[0]}
-                </span>
-            ) : (
-                <></>
-            )}
             <Button size="md" variant="neutral" animated={true} type="submit">
-                Zarejestruj się
+                Zaloguj się
             </Button>
         </form>
     );
