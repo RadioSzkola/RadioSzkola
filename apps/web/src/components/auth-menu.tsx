@@ -2,6 +2,7 @@ import styles from "../styles/auth-menu.module.css";
 import SignupForm from "./signup-form";
 import LoginForm from "./login-form";
 import Logo from "../ui/logo";
+import LogoutForm from "./logout-form";
 
 export type AuthMenuProps = {
     page: "signup" | "login" | "logout";
@@ -24,6 +25,7 @@ export default function AuthMenu({ page }: AuthMenuProps) {
                 ) : (
                     <></>
                 )}
+                {page === "logout" ? <LogoutForm /> : <></>}
             </div>
         </div>
     );

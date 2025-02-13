@@ -34,13 +34,9 @@ export default function Outlet({ children }: OutletProps) {
 
     useEffect(() => {
         if (userEndpoint.error) {
-            console.log({ error: userEndpoint.error });
             authDispatch({ type: "unset-user" });
         } else if (userEndpoint.data) {
-            console.log({ user: userEndpoint.data });
             authDispatch({ type: "set-usser", user: userEndpoint.data });
-        } else {
-            console.log({ userEndpoint });
         }
     }, [userEndpoint.status]);
 

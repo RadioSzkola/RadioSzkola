@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Hamburger from "../ui/hamburger";
 
 import styles from "../styles/navigation.module.css";
@@ -6,8 +6,11 @@ import Modal from "../ui/modal";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Logo from "../ui/logo";
 import AuthMenu from "./auth-menu";
+import { authContext } from "../stores/auth";
 
 export default function Navigation() {
+    const user = useContext(authContext);
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isSignupOpen, setIsSignupOpen] = useState(false);
@@ -83,22 +86,35 @@ export default function Navigation() {
                         Szkoła
                     </a>
                 </li>
-                <li className={styles.desktopLinksItem}>
-                    <button
-                        className={styles.desktopLinksLink}
-                        onClick={openLogin}
-                    >
-                        Zaloguj się
-                    </button>
-                </li>
-                <li className={styles.desktopLinksItem}>
-                    <button
-                        className={styles.desktopLinksLink}
-                        onClick={openSignup}
-                    >
-                        Zarejestruj się
-                    </button>
-                </li>
+                {user ? (
+                    <li className={styles.desktopLinksItem}>
+                        <button
+                            className={styles.desktopLinksLink}
+                            onClick={openLogout}
+                        >
+                            Wyloguj się
+                        </button>
+                    </li>
+                ) : (
+                    <>
+                        <li className={styles.desktopLinksItem}>
+                            <button
+                                className={styles.desktopLinksLink}
+                                onClick={openLogin}
+                            >
+                                Zaloguj się
+                            </button>
+                        </li>
+                        <li className={styles.desktopLinksItem}>
+                            <button
+                                className={styles.desktopLinksLink}
+                                onClick={openSignup}
+                            >
+                                Zarejestruj się
+                            </button>
+                        </li>
+                    </>
+                )}
             </ul>
             <Hamburger
                 orientation="right"
