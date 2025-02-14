@@ -6,11 +6,17 @@ import {
     SPOTIFY_CLIENT_SECRET,
     SPOTIFY_REDIRECT_URI,
     SPOTIFY_TOKEN_URL,
+    SPOTIFY_WEB_REDIRECT_URL,
 } from "../const";
 import { ApiContext } from "../context";
 import { useAuthRules } from "../auth";
 import { parseBySchema } from "@rs/shared/validation";
-import { spotifyAdminInitSchema, SpotifyToken, User } from "@rs/shared/models";
+import {
+    spotifyAdminInitSchema,
+    SpotifyToken,
+    User,
+    userSchema,
+} from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
 import { db } from "../db";
 import { URLSearchParams } from "node:url";
@@ -20,12 +26,6 @@ import { eq } from "drizzle-orm";
 
 export const spotifyRouterV1 = new Hono<ApiContext>();
 
-// A bit of a workaround
-// I am a tad too lazy to craft a reasonable solution
-// So here we go
-let __UNSAFE_STATE__: string | null = null;
-let __UNSAFE_USER__: User | null = null;
-
 spotifyRouterV1.use(
     cors({
         origin: ALLOWED_ORIGINS(),
@@ -34,17 +34,7 @@ spotifyRouterV1.use(
     }),
 );
 
-spotifyRouterV1.get("/init-spotify", async c => {
-    if (__UNSAFE_STATE__ !== null || __UNSAFE_USER__ !== null) {
-        return c.json<AppError>(
-            {
-                code: "UNKNOWN",
-                message: "Too many spotify admin api requests.",
-            },
-            429,
-        );
-    }
-
+spotifyRouterV1.get("/init", async c => {
     const {
         error: authError,
         statusCode,
@@ -58,16 +48,16 @@ spotifyRouterV1.get("/init-spotify", async c => {
         return c.json(authError, statusCode);
     }
 
-    __UNSAFE_STATE__ = generateId(32).toString();
-    __UNSAFE_USER__ = user;
-
+    const state = Buffer.from(JSON.stringify(user)).toString("base64");
     const params = new URLSearchParams({
         response_type: "code",
         client_id: SPOTIFY_CLIENT_ID(),
         redirect_uri: SPOTIFY_REDIRECT_URI(),
         scope: "user-read-currently-playing",
-        state: __UNSAFE_STATE__,
+        state: state,
     });
+
+    console.log({ user, params });
 
     return c.redirect(
         `https://accounts.spotify.com/authorize?${params.toString()}`,
@@ -75,13 +65,6 @@ spotifyRouterV1.get("/init-spotify", async c => {
 });
 
 spotifyRouterV1.get("/callback", async c => {
-    if (__UNSAFE_STATE__ === null || __UNSAFE_USER__ === null) {
-        return c.json<AppError>({
-            code: "UNKNOWN",
-            message: "Unsafe state mismatch.",
-        });
-    }
-
     const { code, state } = c.req.query();
 
     if (!code || !state) {
@@ -91,13 +74,18 @@ spotifyRouterV1.get("/callback", async c => {
         );
     }
 
-    if (state !== __UNSAFE_STATE__) {
+    const { error: validationError, data: user } = parseBySchema(
+        JSON.parse(Buffer.from(state, "base64").toString()),
+        userSchema,
+    );
+
+    if (validationError) {
         return c.json<AppError>(
             {
-                code: "UNKNOWN",
-                message: "State mismatch",
+                code: "VALIDATION",
+                data: validationError,
             },
-            400,
+            422,
         );
     }
 
@@ -138,16 +126,13 @@ spotifyRouterV1.get("/callback", async c => {
     const refreshToken = data.refresh_token;
 
     await db.insert(spotifyTokenTable).values({
-        userId: __UNSAFE_USER__.id,
+        userId: user.id,
         access: accessToken,
         refresh: refreshToken,
-        schoolId: __UNSAFE_USER__.schoolId,
+        schoolId: user.schoolId,
     });
 
-    __UNSAFE_STATE__ = null;
-    __UNSAFE_USER__ = null;
-
-    return c.redirect("/");
+    return c.redirect(SPOTIFY_WEB_REDIRECT_URL());
 });
 
 spotifyRouterV1.get("/currently-playing", async c => {

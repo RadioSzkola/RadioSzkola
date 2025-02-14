@@ -6,7 +6,7 @@ export const SERVER_URL = () =>
 
 export const WEB_APP_PORT = () => process.env.WEB_APP_PORT || "5173";
 export const WEB_APP_URL = () =>
-    process.env.WEB_APP_URL || "http://localhost" + WEB_APP_PORT();
+    process.env.WEB_APP_URL || "http://localhost:" + WEB_APP_PORT();
 
 export const MODE = () =>
     (process.env.NODE_ENV || "development") as "production" | "development";
@@ -27,9 +27,9 @@ export const ALLOWED_ORIGINS = () => {
 export const SPOTIFY_CLIENT_ID = () => process.env.SPOTIFY_CLIENT_ID || "";
 export const SPOTIFY_CLIENT_SECRET = () =>
     process.env.SPOTIFY_CLIENT_SECRET || "";
-export const SPOTIFY_REDIRECT_URI = () =>
-    process.env.SPOTIFY_REDIRECT_URI || "";
+export const SPOTIFY_REDIRECT_URI = () => SERVER_URL() + "/v1/spotify/callback";
 export const SPOTIFY_TOKEN_URL = () => "https://accounts.spotify.com/api/token";
+export const SPOTIFY_WEB_REDIRECT_URL = () => WEB_APP_URL();
 
 export function setupDotenv() {
     if (MODE() === "development") {

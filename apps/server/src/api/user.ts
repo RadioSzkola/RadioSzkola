@@ -9,7 +9,6 @@ import {
 } from "@rs/shared/models";
 import {
     bodyValidatorMiddleware,
-    paginationValidatorMiddleware,
     paramsValidatorMiddleware,
 } from "../middlewares/validation";
 import { db } from "../db";
