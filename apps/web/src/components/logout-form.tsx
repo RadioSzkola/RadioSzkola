@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import styles from "../styles/logout-form.module.css";
 import Button from "../ui/button";
-import EmailInput from "../ui/email-input";
-import PasswordInput from "../ui/password-input";
-import { parseBySchema } from "@rs/shared/validation";
-import { UserLogin, userLoginSchema } from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
 import { useAPIEndpoint } from "../hooks/api";
 
 export default function LogoutForm() {
-    const logoutEndpoint = useAPIEndpoint({
+    const {
+        call: apiCall,
+        data: apiData,
+        error: apiError,
+        pending: apiPending,
+        status: apiStatus,
+    } = useAPIEndpoint({
         endpoint: "/v1/auth/web/logout",
         method: "POST",
     });
@@ -20,36 +22,74 @@ export default function LogoutForm() {
 
     function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
         ev.preventDefault();
+        if (!error && submited) {
+            return;
+        }
+
         setSubmited(false);
-        logoutEndpoint.call();
+        apiCall();
         setSubmited(true);
     }
 
     useEffect(() => {
-        if (!error && submited) {
-            setSuccess(true);
-        }
-
-        if (logoutEndpoint.error) {
-            setError(logoutEndpoint.error);
+        if (apiStatus === "error") {
+            setError(apiError);
             setSuccess(false);
-            console.error({ error });
-        } else if (logoutEndpoint.data) {
+        } else if (apiStatus === "data") {
             setError(null);
             setSuccess(true);
-        } else {
-            setError(null);
-            setSuccess(false);
         }
-
-        console.log({ loginEndpoint: logoutEndpoint });
-    }, [logoutEndpoint.status]);
+    }, [apiStatus]);
 
     return (
-        <form onSubmit={handleSubmit} className={styles.loginForm}>
+        <form onSubmit={handleSubmit} className={styles.logoutForm}>
             <Button size="md" variant="neutral" animated={true} type="submit">
                 Wyloguj się
             </Button>
+
+            {success ? (
+                <div className={styles.logoutFormSuccessMessage}>Sukces!</div>
+            ) : (
+                <></>
+            )}
+
+            {apiPending ? (
+                <div className={styles.logoutFormPendingMessage}>
+                    Ładowanie...
+                </div>
+            ) : (
+                <></>
+            )}
+
+            {error ? (
+                (() => {
+                    switch (error.code) {
+                        case "VALIDATION":
+                            return <></>;
+                        case "DATABASE":
+                            return (
+                                <div className={styles.logoutFormErrorMessage}>
+                                    Niepoprawne dane
+                                </div>
+                            );
+                        case "AUTHENTICATION":
+                            return (
+                                <div className={styles.logoutFormErrorMessage}>
+                                    Niepoprawne dane
+                                </div>
+                            );
+                        default:
+                            console.error({ error });
+                            return (
+                                <div className={styles.logoutFormErrorMessage}>
+                                    Straszne rzeczy, straszny błąd!
+                                </div>
+                            );
+                    }
+                })()
+            ) : (
+                <></>
+            )}
         </form>
     );
 }

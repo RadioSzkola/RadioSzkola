@@ -1,6 +1,30 @@
-.loginForm {
+.logoutForm {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
     width: 20rem;
+}
+
+.logoutFormErrorMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    color: var(--color-red);
+}
+
+.logoutFormSuccessMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    color: var(--color-black);
+}
+
+.logoutFormPendingMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    color: var(--color-green-dark);
 }

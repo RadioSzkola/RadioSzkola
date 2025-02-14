@@ -13,3 +13,27 @@
     color: var(--color-red);
     margin: calc(-1 * var(--spacing-sm)) var(--spacing-md);
 }
+
+.loginFormErrorMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    color: var(--color-red);
+}
+
+.loginFormSuccessMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    color: var(--color-black);
+}
+
+.loginFormPendingMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    color: var(--color-green-dark);
+}

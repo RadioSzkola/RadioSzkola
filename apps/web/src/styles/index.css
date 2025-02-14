@@ -160,9 +160,7 @@ html {
 body {
     color: var(--color-black);
     background-color: var(--color-white);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+    overflow-x: hidden;
 }
 
 #root {

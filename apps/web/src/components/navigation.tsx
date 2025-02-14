@@ -6,10 +6,10 @@ import Modal from "../ui/modal";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Logo from "../ui/logo";
 import AuthMenu from "./auth-menu";
-import { authContext } from "../stores/auth";
+import { useUser } from "../hooks/auth";
 
 export default function Navigation() {
-    const user = useContext(authContext);
+    const { user } = useUser();
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);

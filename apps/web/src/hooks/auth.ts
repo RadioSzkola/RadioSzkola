@@ -1,13 +1,31 @@
 import { User } from "@rs/shared/models";
-import { useContext } from "react";
-import { authContext } from "../stores/auth";
+import { useContext, useEffect } from "react";
+import { authContext, authDispatchContext } from "../stores/auth";
+import { useAPIEndpoint } from "./api";
 
-export function useUser(): User | null {
+export function useUser(): { user: User | null; refresh: () => void } {
     const auth = useContext(authContext);
+    const authDispatch = useContext(authDispatchContext);
 
-    if (auth === null) {
-        return null;
-    }
+    const userEndpoint = useAPIEndpoint<User>({
+        endpoint: "/v1/auth/web/me",
+        method: "GET",
+    });
 
-    return auth;
+    useEffect(() => {
+        if (userEndpoint.error) {
+            authDispatch({ type: "unset-user" });
+        } else if (userEndpoint.data) {
+            authDispatch({ type: "set-usser", user: userEndpoint.data });
+        }
+    }, [userEndpoint.status]);
+
+    const refresh = () => {
+        userEndpoint.call();
+    };
+
+    return {
+        user: auth,
+        refresh,
+    };
 }

@@ -16,7 +16,13 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
-    const loginEndpoint = useAPIEndpoint({
+    const {
+        call: apiCall,
+        data: apiData,
+        error: apiError,
+        pending: apiPending,
+        status: apiStatus,
+    } = useAPIEndpoint({
         endpoint: "/v1/auth/web/login",
         method: "POST",
     });
@@ -49,17 +55,19 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
             return;
         }
 
-        loginEndpoint.call(validation.data);
+        apiCall(validation.data);
         setSubmited(true);
     }
 
     useEffect(() => {
-        if (!error && submited) {
+        if (apiStatus === "error") {
+            setError(apiError);
+            setSuccess(false);
+        } else if (apiStatus === "data") {
+            setError(null);
             setSuccess(true);
         }
-
-        console.log({ loginEndpoint });
-    }, [loginEndpoint.status]);
+    }, [apiStatus]);
 
     return (
         <form onSubmit={handleSubmit} className={styles.loginForm}>
@@ -105,9 +113,54 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
             ) : (
                 <></>
             )}
+
             <Button size="md" variant="neutral" animated={true} type="submit">
                 Zaloguj się
             </Button>
+
+            {success ? (
+                <div className={styles.loginFormSuccessMessage}>Sukces!</div>
+            ) : (
+                <></>
+            )}
+
+            {apiPending ? (
+                <div className={styles.loginFormPendingMessage}>
+                    Ładowanie...
+                </div>
+            ) : (
+                <></>
+            )}
+
+            {error ? (
+                (() => {
+                    switch (error.code) {
+                        case "VALIDATION":
+                            return <></>;
+                        case "DATABASE":
+                            return (
+                                <div className={styles.loginFormErrorMessage}>
+                                    Niepoprawne dane
+                                </div>
+                            );
+                        case "AUTHENTICATION":
+                            return (
+                                <div className={styles.loginFormErrorMessage}>
+                                    Niepoprawne dane
+                                </div>
+                            );
+                        default:
+                            console.error({ error });
+                            return (
+                                <div className={styles.loginFormErrorMessage}>
+                                    Straszne rzeczy, straszny błąd!
+                                </div>
+                            );
+                    }
+                })()
+            ) : (
+                <></>
+            )}
         </form>
     );
 }

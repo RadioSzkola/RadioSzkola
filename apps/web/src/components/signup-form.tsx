@@ -24,7 +24,13 @@ export default function SignupForm({
     const [authId, setAuthId] = useState("");
     const [email, setEmail] = useState("");
 
-    const signupIdEndpoint = useAPIEndpoint({
+    const {
+        call: apiCall,
+        data: apiData,
+        error: apiError,
+        pending: apiPending,
+        status: apiStatus,
+    } = useAPIEndpoint({
         endpoint: "/v1/auth/web/signupid",
         method: "POST",
     });
@@ -60,13 +66,19 @@ export default function SignupForm({
             return;
         }
 
-        signupIdEndpoint.call(validation.data);
+        apiCall(validation.data);
         setSubmited(true);
     }
 
     useEffect(() => {
-        console.log({ place: "signup-form", data: signupIdEndpoint });
-    }, [signupIdEndpoint.status]);
+        if (apiStatus === "error") {
+            setError(apiError);
+            setSuccess(false);
+        } else if (apiStatus === "data") {
+            setError(null);
+            setSuccess(true);
+        }
+    }, [apiStatus]);
 
     return (
         <form onSubmit={handleSubmit} className={styles.signupForm}>
@@ -81,7 +93,6 @@ export default function SignupForm({
                 }
                 value=""
                 onInputChange={ev => setEmail(ev.currentTarget.value)}
-                labelClass={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.email ? (
                 <span
@@ -103,7 +114,6 @@ export default function SignupForm({
                 }
                 value=""
                 onInputChange={ev => setPassword(ev.currentTarget.value)}
-                labelClass={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.password ? (
                 <span
@@ -125,7 +135,6 @@ export default function SignupForm({
                 }
                 value=""
                 onInputChange={ev => setAuthId(ev.currentTarget.value)}
-                labelClassTouched={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.authId ? (
                 <span
@@ -147,7 +156,6 @@ export default function SignupForm({
                 }
                 value=""
                 onInputChange={ev => setSchoolId(ev.currentTarget.value)}
-                labelClassTouched={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.schoolId ? (
                 <span
@@ -169,7 +177,6 @@ export default function SignupForm({
                 }
                 value=""
                 onInputChange={ev => setName(ev.currentTarget.value)}
-                labelClassTouched={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.name ? (
                 <span
@@ -183,6 +190,50 @@ export default function SignupForm({
             <Button size="md" variant="neutral" animated={true} type="submit">
                 Zarejestruj się
             </Button>
+
+            {success ? (
+                <div className={styles.signupFormSuccessMessage}>Sukces!</div>
+            ) : (
+                <></>
+            )}
+
+            {apiPending ? (
+                <div className={styles.signupFormPendingMessage}>
+                    Ładowanie...
+                </div>
+            ) : (
+                <></>
+            )}
+
+            {error ? (
+                (() => {
+                    switch (error.code) {
+                        case "VALIDATION":
+                            return <></>;
+                        case "DATABASE":
+                            return (
+                                <div className={styles.signupFormErrorMessage}>
+                                    Niepoprawne dane
+                                </div>
+                            );
+                        case "AUTHENTICATION":
+                            return (
+                                <div className={styles.signupFormErrorMessage}>
+                                    Niepoprawne dane
+                                </div>
+                            );
+                        default:
+                            console.error({ error });
+                            return (
+                                <div className={styles.signupFormErrorMessage}>
+                                    Straszne rzeczy, straszny błąd!
+                                </div>
+                            );
+                    }
+                })()
+            ) : (
+                <></>
+            )}
         </form>
     );
 }
