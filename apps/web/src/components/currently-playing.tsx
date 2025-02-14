@@ -21,5 +21,11 @@ export default function CurrentlyPLaying() {
         console.log(currentlyPlayingEndpoint);
     }, [currentlyPlayingEndpoint.status]);
 
-    return <div className={styles.currentlyPlaying}></div>;
+    return (
+        <div className={styles.currentlyPlaying}>
+            <img
+                src={currentlyPlayingEndpoint.data?.item.album.images[0].url}
+            />
+        </div>
+    );
 }

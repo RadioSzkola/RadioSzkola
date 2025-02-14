@@ -63,8 +63,8 @@ function RouteComponent() {
                     </div>
                 </div>
             </main>
-            <CurrentlyPLaying />
             <Playlist />
+            <CurrentlyPLaying />
         </div>
     );
 }
