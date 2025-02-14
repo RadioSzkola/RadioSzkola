@@ -3,7 +3,6 @@ import { cors } from "hono/cors";
 import { ALLOWED_ORIGINS } from "../const";
 import {
     bodyValidatorMiddleware,
-    paginationValidatorMiddleware,
     paramsValidatorMiddleware,
 } from "../middlewares/validation";
 import { db } from "../db";

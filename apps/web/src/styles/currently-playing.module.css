@@ -1,0 +1,15 @@
+.currentlyPlaying {
+    width: calc(100vw - var(--spacing-xl) * 2);
+    height: 50vh;
+    margin: 0 var(--spacing-xl);
+    background-color: var(--color-black);
+
+    border: 2px solid var(--color-white);
+    box-shadow:
+        0 0 0 4px var(--color-black),
+        5px 5px 0 4px var(--color-black);
+
+    @media (min-width: 768px) {
+        height: 40vh;
+    }
+}

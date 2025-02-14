@@ -14,6 +14,7 @@ import { parseBySchema } from "@rs/shared/validation";
 import {
     spotifyAdminInitSchema,
     SpotifyToken,
+    SpotifyTrack,
     User,
     userSchema,
 } from "@rs/shared/models";
@@ -25,6 +26,9 @@ import { schoolTable, spotifyTokenTable } from "../schema";
 import { eq } from "drizzle-orm";
 
 export const spotifyRouterV1 = new Hono<ApiContext>();
+
+const spotifyCurrentlyPlayingCache = new Map<string, SpotifyTrack>();
+let spotifyCurrebltPlayingCacheLastEntry = Date.now();
 
 spotifyRouterV1.use(
     cors({
@@ -149,6 +153,14 @@ spotifyRouterV1.get("/currently-playing", async c => {
         );
     }
 
+    if (
+        spotifyCurrentlyPlayingCache.has(schoolId) &&
+        Date.now() - spotifyCurrebltPlayingCacheLastEntry < 2000
+    ) {
+        console.log("spotify -> cache hit!");
+        return c.json(spotifyCurrentlyPlayingCache.get(schoolId));
+    }
+
     const token = await db.query.spotifyTokenTable.findFirst({
         where: (fields, operators) => operators.eq(fields.schoolId, schoolId),
     });
@@ -202,6 +214,9 @@ spotifyRouterV1.get("/currently-playing", async c => {
         }
 
         const data = await response.json();
+
+        spotifyCurrentlyPlayingCache.set(schoolId, data);
+        spotifyCurrebltPlayingCacheLastEntry = Date.now();
         return c.json(data);
     } catch (error) {
         return c.json<AppError>(
