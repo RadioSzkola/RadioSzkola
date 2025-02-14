@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "../styles/email-input.module.css";
+import styles from "../styles/text-input.module.css";
 
 export type EmailInputProps = {
     id: string;
@@ -8,7 +8,7 @@ export type EmailInputProps = {
     onInputChange?: (ev: React.KeyboardEvent<HTMLInputElement>) => void;
     size: "sm" | "md" | "lg";
     variant: "neutral" | "error" | "ok";
-    labelClass?: string;
+    cssVarsClass?: string;
 };
 
 export default function EmailInput({
@@ -18,7 +18,7 @@ export default function EmailInput({
     onInputChange,
     size,
     variant,
-    labelClass,
+    cssVarsClass,
 }: EmailInputProps) {
     const [touched, setTouched] = useState<boolean>(false);
 
@@ -32,6 +32,7 @@ export default function EmailInput({
             ${size === "sm" ? styles.textInputWraper__sm : ""}
             ${size === "md" ? styles.textInputWraper__md : ""}
             ${size === "lg" ? styles.textInputWraper__lg : ""}
+            ${cssVarsClass ? cssVarsClass : ""}
         `}
         >
             <input
@@ -51,9 +52,8 @@ export default function EmailInput({
                 className={`
                     ${styles.textInputLabel}
                     ${touched ? styles.textInputLabel__touched : styles.textInputLabel__placeholder}
-                    ${labelClass ? labelClass : ""}
-                    ${variant === "error" ? "error" : ""}
-                `}
+                    ${variant === "error" ? styles.textInputLabel__error : ""}
+                    `}
                 htmlFor={id}
             >
                 {label}

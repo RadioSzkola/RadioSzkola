@@ -3,31 +3,31 @@
 }
 
 .textInputWraper__neutral {
-    --text-input-color: var(--color-black);
+    --text-input-color: var(--text-input-color-neutral);
 }
 
 .textInputWraper__error {
-    --text-input-color: var(--color-red);
+    --text-input-color: var(--text-input-color-error);
 }
 
 .textInputWraper__ok {
-    --text-input-color: var(--color-green);
+    --text-input-color: var(--text-input-color-ok);
 }
 
 .textInputWraper__sm {
-    --text-input-text: var(--text-sm);
-    height: var(--size-sm);
+    --text-input-font-size: var(--text-sm);
+    height: (--size-sm);
     min-width: calc(6 * var(--size-sm));
 }
 
 .textInputWraper__md {
-    --text-input-text: var(--text-md);
+    --text-input-font-size: var(--text-md);
     height: var(--size-md);
     min-width: calc(6 * var(--size-md));
 }
 
 .textInputWraper__lg {
-    --text-input-text: var(--text-lg);
+    --text-input-font-size: var(--text-lg);
     height: var(--size-lg);
     min-width: calc(6 * var(--size-lg));
 }
@@ -36,8 +36,9 @@
     z-index: 50;
     width: 100%;
     height: 100%;
-    font-size: var(--text-input-text);
+    font-size: var(--text-input-font-size);
     padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--text-input-color-bg);
 
     box-shadow: 0 0 0 2px var(--text-input-color);
 }
@@ -49,6 +50,7 @@
     font-size: var(--text-input-text);
     left: calc(var(--spacing-md) - var(--spacing-xs));
     top: 50%;
+    user-select: none;
 
     transition:
         transform 0.05s ease-in-out,
@@ -58,12 +60,16 @@
 
 .textInputLabel__touched {
     transform: translateY(-140%);
-    background-color: var(--color-white);
+    background-color: var(--text-input-color-bg);
     color: var(--text-input-color);
 }
 
 .textInputLabel__placeholder {
     transform: translateY(-50%);
-    color: var(--color-light);
+    color: var(--text-input-color-placeholder);
     background-color: transparent;
+}
+
+.textInputLabel__error {
+    color: var(--text-input-color-error);
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "../styles/password-input.module.css";
+import styles from "../styles/text-input.module.css";
 
 export type PasswordInputProps = {
     id: string;
@@ -8,7 +8,6 @@ export type PasswordInputProps = {
     onInputChange?: (ev: React.KeyboardEvent<HTMLInputElement>) => void;
     size: "sm" | "md" | "lg";
     variant: "neutral" | "error" | "ok";
-    labelClass?: string;
 };
 
 export default function PasswordInput({
@@ -18,7 +17,6 @@ export default function PasswordInput({
     onInputChange,
     size,
     variant,
-    labelClass,
 }: PasswordInputProps) {
     const [touched, setTouched] = useState<boolean>(false);
 
@@ -51,8 +49,7 @@ export default function PasswordInput({
                 className={`
                     ${styles.textInputLabel}
                     ${touched ? styles.textInputLabel__touched : styles.textInputLabel__placeholder}
-                    ${labelClass ? labelClass : ""}
-                    ${variant === "error" ? "error" : ""}
+                    ${variant === "error" ? styles.textInputLabel__error : ""}
                 `}
                 htmlFor={id}
             >

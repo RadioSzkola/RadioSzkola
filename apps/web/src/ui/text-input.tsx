@@ -8,8 +8,6 @@ export type TextInputProps = {
     onInputChange?: (ev: React.KeyboardEvent<HTMLInputElement>) => void;
     size: "sm" | "md" | "lg";
     variant: "neutral" | "error" | "ok";
-    labelClass?: string;
-    labelClassError?: string;
 };
 
 export default function TextInput({
@@ -19,7 +17,6 @@ export default function TextInput({
     onInputChange,
     size,
     variant,
-    labelClass,
 }: TextInputProps) {
     const [touched, setTouched] = useState<boolean>(false);
 
@@ -52,9 +49,8 @@ export default function TextInput({
                 className={`
                 ${styles.textInputLabel}
                 ${touched ? styles.textInputLabel__touched : styles.textInputLabel__placeholder}
-                ${labelClass ? labelClass : ""}
-                ${variant === "error" ? "error" : ""}
-            `}
+                ${variant === "error" ? styles.textInputLabel__error : ""}    
+                `}
                 htmlFor={id}
             >
                 {label}

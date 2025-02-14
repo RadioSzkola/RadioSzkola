@@ -4,28 +4,24 @@ import styles from "../styles/currently-playing.module.css";
 import { useEffect } from "react";
 
 export default function CurrentlyPLaying() {
-    const currentlyPlayingEndpoint = useAPIEndpoint<SpotifyTrack>({
-        endpoint: "/v1/spotify/currently-playing?schoolId=mickiewicz",
-        method: "GET",
-    });
+    const { call, data, error, pending, status } = useAPIEndpoint<SpotifyTrack>(
+        {
+            endpoint: "/v1/spotify/currently-playing?schoolId=mickiewicz",
+            method: "GET",
+        },
+    );
 
     useEffect(() => {
         const interval = setInterval(() => {
-            currentlyPlayingEndpoint.call();
+            call();
         }, 2000);
 
         return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {
-        console.log(currentlyPlayingEndpoint);
-    }, [currentlyPlayingEndpoint.status]);
+        console.log({ data, error, pending, status });
+    }, [status]);
 
-    return (
-        <div className={styles.currentlyPlaying}>
-            <img
-                src={currentlyPlayingEndpoint.data?.item.album.images[0].url}
-            />
-        </div>
-    );
+    return <div className={styles.currentlyPlaying}></div>;
 }

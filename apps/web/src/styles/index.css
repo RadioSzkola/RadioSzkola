@@ -51,6 +51,14 @@ html {
     --color-green-darker: #225c10;
     --color-green-black: #164707;
 
+    --color-yellow: #f3d112;
+    --color-yellow-light: #ebcd27;
+    --color-yellow-lighter: #e7cd37;
+    --color-yellow-pale: #f3eab9;
+    --color-yellow-dark: #c7aa03;
+    --color-yellow-darker: #806c01;
+    --color-yellow-black: #2b2502;
+
     --color-white: #fff4f4;
     --color-lighter: #dddddd;
     --color-light: #bbbbbb;
@@ -118,6 +126,13 @@ html {
     --size-md: var(--mobile-size-md);
     --size-lg: var(--mobile-size-lg);
     --size-xl: var(--mobile-size-xl);
+
+    /* text-input component */
+    --text-input-color-bg: var(--color-white);
+    --text-input-color-placeholder: var(--color-dark);
+    --text-input-color-neutral: var(--color-black);
+    --text-input-color-error: var(--color-red);
+    --text-input-color-ok: var(--color-black);
 
     @media (min-width: 760px) {
         --text-sm: var(--desktop-text-sm);

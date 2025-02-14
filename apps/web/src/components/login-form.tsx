@@ -9,14 +9,10 @@ import { AppError } from "@rs/shared/error";
 import { useAPIEndpoint } from "../hooks/api";
 
 export type LoginFormProps = {
-    labelClass?: string;
     errorFieldClass?: string;
 };
 
-export default function LoginForm({
-    labelClass,
-    errorFieldClass,
-}: LoginFormProps) {
+export default function LoginForm({ errorFieldClass }: LoginFormProps) {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
@@ -78,7 +74,6 @@ export default function LoginForm({
                 }
                 value=""
                 onInputChange={ev => setEmail(ev.currentTarget.value)}
-                labelClass={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.email ? (
                 <span
@@ -100,7 +95,6 @@ export default function LoginForm({
                 }
                 value=""
                 onInputChange={ev => setPassword(ev.currentTarget.value)}
-                labelClass={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.password ? (
                 <span

@@ -11,7 +11,7 @@
     height: 75svh;
     padding: var(--spacing-md);
 
-    background-color: var(--color-blue-pale);
+    background-color: var(--color-yellow);
     box-shadow:
         0 0 0 4px var(--color-black),
         4px 4px 0 4px var(--color-black);

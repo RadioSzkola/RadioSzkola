@@ -125,7 +125,7 @@ export default function SignupForm({
                 }
                 value=""
                 onInputChange={ev => setAuthId(ev.currentTarget.value)}
-                labelClass={labelClass}
+                labelClassTouched={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.authId ? (
                 <span
@@ -147,7 +147,7 @@ export default function SignupForm({
                 }
                 value=""
                 onInputChange={ev => setSchoolId(ev.currentTarget.value)}
-                labelClass={labelClass}
+                labelClassTouched={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.schoolId ? (
                 <span
@@ -169,7 +169,7 @@ export default function SignupForm({
                 }
                 value=""
                 onInputChange={ev => setName(ev.currentTarget.value)}
-                labelClass={labelClass}
+                labelClassTouched={labelClass}
             />
             {error?.code === "VALIDATION" && error.data.name ? (
                 <span
