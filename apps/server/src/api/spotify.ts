@@ -192,7 +192,7 @@ spotifyRouterV1.get("/currently-playing", async c => {
                     Authorization:
                         "Basic " +
                         Buffer.from(
-                            `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`,
+                            `${SPOTIFY_CLIENT_ID()}:${SPOTIFY_CLIENT_SECRET()}`,
                         ).toString("base64"),
                 },
                 body: new URLSearchParams({
