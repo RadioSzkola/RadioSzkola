@@ -29,6 +29,7 @@ a {
 }
 
 html {
+    /* COLOR */
     --color-blue: #1631ac;
     --color-blue-light: #2f209c;
     --color-blue-lighter: #746fdd;
@@ -69,6 +70,7 @@ html {
     --color-darker: #222222;
     --color-dark: #444444;
 
+    /* TEXT */
     --mobile-text-sm: 0.75rem;
     --mobile-text-md: 1rem;
     --mobile-text-lg: 1.25rem;
@@ -81,12 +83,7 @@ html {
     --desktop-text-xl: 2.5rem;
     --desktop-text-2xl: 3.5rem;
 
-    --text-sm: var(--mobile-text-sm);
-    --text-md: var(--mobile-text-md);
-    --text-lg: var(--mobile-text-lg);
-    --text-xl: var(--mobile-text-xl);
-    --text-2xl: var(--mobile-text-2xl);
-
+    /* SPACING */
     --mobile-spacing-xxs: 0.125rem;
     --mobile-spacing-xs: 0.25rem;
     --mobile-spacing-sm: 0.5rem;
@@ -101,6 +98,7 @@ html {
     --desktop-spacing-lg: 1.75rem;
     --desktop-spacing-xl: 2.5rem;
 
+    /* SIZE */
     --mobile-size-xxs: 0.5rem;
     --mobile-size-xs: 1rem;
     --mobile-size-sm: 1.25rem;
@@ -114,6 +112,26 @@ html {
     --desktop-size-md: 2.75rem;
     --desktop-size-lg: 4rem;
     --desktop-size-xl: 6rem;
+
+    /* text-input ui component */
+    --ui-text-input-size: var(--size-md);
+    --ui-text-input-color-bg: var(--color-white);
+    --ui-text-input-color-placeholder: var(--color-dark);
+    --ui-text-input-color-neutral: var(--color-black);
+    --ui-text-input-color-error: var(--color-red);
+    --ui-text-input-color-ok: var(--color-black);
+
+    /* button ui component */
+    --ui-button-size: var(--size-md);
+    --ui-button-color-bg: transparent;
+    --ui-button-color: var(--color-black);
+
+    /* MOBILE */
+    --text-sm: var(--mobile-text-sm);
+    --text-md: var(--mobile-text-md);
+    --text-lg: var(--mobile-text-lg);
+    --text-xl: var(--mobile-text-xl);
+    --text-2xl: var(--mobile-text-2xl);
 
     --spacing-xxs: var(--mobile-spacing-xxs);
     --spacing-xs: var(--mobile-spacing-xs);
@@ -129,13 +147,7 @@ html {
     --size-lg: var(--mobile-size-lg);
     --size-xl: var(--mobile-size-xl);
 
-    /* text-input component */
-    --text-input-color-bg: var(--color-white);
-    --text-input-color-placeholder: var(--color-dark);
-    --text-input-color-neutral: var(--color-black);
-    --text-input-color-error: var(--color-red);
-    --text-input-color-ok: var(--color-black);
-
+    /* DESKTOP */
     @media (min-width: 760px) {
         --text-sm: var(--desktop-text-sm);
         --text-md: var(--desktop-text-md);
