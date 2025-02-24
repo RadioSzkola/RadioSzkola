@@ -18,6 +18,7 @@ import { Route as AdminSpotifyImport } from './routes/admin/spotify'
 // Create Virtual Routes
 
 const UiLazyImport = createFileRoute('/ui')()
+const KontoLazyImport = createFileRoute('/konto')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
@@ -27,6 +28,12 @@ const UiLazyRoute = UiLazyImport.update({
   path: '/ui',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/ui.lazy').then((d) => d.Route))
+
+const KontoLazyRoute = KontoLazyImport.update({
+  id: '/konto',
+  path: '/konto',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/konto.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -51,6 +58,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/konto': {
+      id: '/konto'
+      path: '/konto'
+      fullPath: '/konto'
+      preLoaderRoute: typeof KontoLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/ui': {
       id: '/ui'
       path: '/ui'
@@ -72,12 +86,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/konto': typeof KontoLazyRoute
   '/ui': typeof UiLazyRoute
   '/admin/spotify': typeof AdminSpotifyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/konto': typeof KontoLazyRoute
   '/ui': typeof UiLazyRoute
   '/admin/spotify': typeof AdminSpotifyRoute
 }
@@ -85,27 +101,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/konto': typeof KontoLazyRoute
   '/ui': typeof UiLazyRoute
   '/admin/spotify': typeof AdminSpotifyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ui' | '/admin/spotify'
+  fullPaths: '/' | '/konto' | '/ui' | '/admin/spotify'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ui' | '/admin/spotify'
-  id: '__root__' | '/' | '/ui' | '/admin/spotify'
+  to: '/' | '/konto' | '/ui' | '/admin/spotify'
+  id: '__root__' | '/' | '/konto' | '/ui' | '/admin/spotify'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  KontoLazyRoute: typeof KontoLazyRoute
   UiLazyRoute: typeof UiLazyRoute
   AdminSpotifyRoute: typeof AdminSpotifyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  KontoLazyRoute: KontoLazyRoute,
   UiLazyRoute: UiLazyRoute,
   AdminSpotifyRoute: AdminSpotifyRoute,
 }
@@ -121,12 +140,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/konto",
         "/ui",
         "/admin/spotify"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/konto": {
+      "filePath": "konto.lazy.tsx"
     },
     "/ui": {
       "filePath": "ui.lazy.tsx"

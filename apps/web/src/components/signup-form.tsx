@@ -8,6 +8,7 @@ import { parseBySchema } from "@rs/shared/validation";
 import { SignupId, signupIdSchema } from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
 import { useAPIEndpoint } from "../hooks/api";
+import { useUser } from "../hooks/auth";
 
 export type SignupFormProps = {
     labelClass?: string;
@@ -34,6 +35,8 @@ export default function SignupForm({
         endpoint: "/v1/auth/web/signupid",
         method: "POST",
     });
+
+    const { refresh } = useUser();
 
     const [error, setError] = useState<AppError<SignupId> | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
@@ -77,6 +80,7 @@ export default function SignupForm({
         } else if (apiStatus === "data") {
             setError(null);
             setSuccess(true);
+            refresh();
         }
     }, [apiStatus]);
 

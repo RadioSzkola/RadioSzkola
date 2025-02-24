@@ -7,6 +7,7 @@ import { parseBySchema } from "@rs/shared/validation";
 import { UserLogin, userLoginSchema } from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
 import { useAPIEndpoint } from "../hooks/api";
+import { useUser } from "../hooks/auth";
 
 export type LoginFormProps = {
     errorFieldClass?: string;
@@ -26,6 +27,8 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
         endpoint: "/v1/auth/web/login",
         method: "POST",
     });
+
+    const { refresh } = useUser();
 
     const [error, setError] = useState<AppError<UserLogin> | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
@@ -66,6 +69,7 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
         } else if (apiStatus === "data") {
             setError(null);
             setSuccess(true);
+            refresh();
         }
     }, [apiStatus]);
 

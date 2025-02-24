@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Button from "../../ui/button";
 import { SERVER_HOST } from "../../const";
+import styles from "../../styles/admin-spotify-route.module.css";
 
 export const Route = createFileRoute("/admin/spotify")({
     component: RouteComponent,
@@ -8,7 +9,7 @@ export const Route = createFileRoute("/admin/spotify")({
 
 function RouteComponent() {
     return (
-        <div>
+        <div className={styles.adminSpotifyRoute}>
             <a href={SERVER_HOST + "/v1/spotify/init"}>
                 <Button size="md" variant="neutral">
                     Połącz się ze spotify

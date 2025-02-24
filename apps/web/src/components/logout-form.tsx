@@ -3,6 +3,7 @@ import styles from "../styles/logout-form.module.css";
 import Button from "../ui/button";
 import { AppError } from "@rs/shared/error";
 import { useAPIEndpoint } from "../hooks/api";
+import { useUser } from "../hooks/auth";
 
 export default function LogoutForm() {
     const {
@@ -15,6 +16,8 @@ export default function LogoutForm() {
         endpoint: "/v1/auth/web/logout",
         method: "POST",
     });
+
+    const { refresh } = useUser();
 
     const [error, setError] = useState<AppError | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
@@ -38,6 +41,7 @@ export default function LogoutForm() {
         } else if (apiStatus === "data") {
             setError(null);
             setSuccess(true);
+            refresh();
         }
     }, [apiStatus]);
 

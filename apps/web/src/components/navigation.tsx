@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import Logo from "../ui/logo";
 import AuthMenu from "./auth-menu";
 import { useUser } from "../hooks/auth";
+import { Link } from "@tanstack/react-router";
 
 export default function Navigation() {
     const { user } = useUser();
@@ -65,7 +66,9 @@ export default function Navigation() {
 
     return (
         <nav className={styles.nav}>
-            <Logo />
+            <Link to="/">
+                <Logo />
+            </Link>
             <ul className={styles.desktopLinks}>
                 <li className={styles.desktopLinksItem}>
                     <a href="#playlista" className={styles.desktopLinksLink}>
@@ -87,14 +90,24 @@ export default function Navigation() {
                     </a>
                 </li>
                 {user ? (
-                    <li className={styles.desktopLinksItem}>
-                        <button
-                            className={styles.desktopLinksLink}
-                            onClick={openLogout}
-                        >
-                            Wyloguj się
-                        </button>
-                    </li>
+                    <>
+                        <li className={styles.desktopLinksItem}>
+                            <Link
+                                to="/konto"
+                                className={styles.desktopLinksLink}
+                            >
+                                Konto
+                            </Link>
+                        </li>
+                        <li className={styles.desktopLinksItem}>
+                            <button
+                                className={styles.desktopLinksLink}
+                                onClick={openLogout}
+                            >
+                                Wyloguj się
+                            </button>
+                        </li>
+                    </>
                 ) : (
                     <>
                         <li className={styles.desktopLinksItem}>
@@ -162,15 +175,25 @@ export default function Navigation() {
                             </a>
                         </li>
                         {user ? (
-                            <li className={styles.mobileLinksItem}>
-                                <a
-                                    onClick={openLogout}
-                                    href="#"
-                                    className={styles.mobileLinksLink}
-                                >
-                                    Wyloguj się
-                                </a>
-                            </li>
+                            <>
+                                <li className={styles.mobileLinksItem}>
+                                    <Link
+                                        to="/konto"
+                                        className={styles.mobileLinksLink}
+                                    >
+                                        Konto
+                                    </Link>
+                                </li>
+                                <li className={styles.mobileLinksItem}>
+                                    <a
+                                        onClick={openLogout}
+                                        href="#"
+                                        className={styles.mobileLinksLink}
+                                    >
+                                        Wyloguj się
+                                    </a>
+                                </li>
+                            </>
                         ) : (
                             <>
                                 <li className={styles.mobileLinksItem}>

@@ -1,9 +1,10 @@
 .currentlyPlaying {
-    width: calc(100vw - var(--spacing-xl) * 2);
-    height: 50vh;
+    height: fit-content;
     margin: 0 var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
     background-color: var(--color-black);
+    display: flex;
+    flex-direction: column;
 
     border: 2px solid var(--color-white);
     box-shadow:
@@ -11,6 +12,40 @@
         5px 5px 0 4px var(--color-black);
 
     @media (min-width: 768px) {
-        height: 40vh;
+        aspect-ratio: 2/1;
+        flex-direction: row;
+        height: 50svh;
+        max-width: 90svw;
     }
+}
+
+.currentlyPlayingCover {
+    width: 100%;
+    aspect-ratio: 3/2;
+    object-fit: cover;
+
+    @media (min-width: 768px) {
+        aspect-ratio: 1/1;
+        height: 100%;
+    }
+}
+
+.currentlyPlayingInfo {
+    width: 100%;
+    aspect-ratio: 3/1;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xl);
+
+    @media (min-width: 768px) {
+        aspect-ratio: 1/1;
+        height: 100%;
+    }
+}
+
+.currentlyPlayingInfoItem {
+    color: var(--color-white);
 }
