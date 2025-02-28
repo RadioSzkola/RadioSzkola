@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import SignupForm from "../components/signup-form";
+import TextInput from "../ui/text-input";
 
 export const Route = createLazyFileRoute("/ui")({
     component: RouteComponent,
@@ -8,7 +8,9 @@ export const Route = createLazyFileRoute("/ui")({
 function RouteComponent() {
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-            <SignupForm />
+            <TextInput label="name" />
+            <TextInput label="name" variant="error" />
+            <TextInput label="name" variant="valid" />
         </div>
     );
 }

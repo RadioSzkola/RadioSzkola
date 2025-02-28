@@ -71,55 +71,56 @@ html {
     --color-dark: #444444;
 
     /* TEXT */
-    --mobile-text-sm: 0.75rem;
+    --mobile-text-sm: 0.5rem;
     --mobile-text-md: 1rem;
-    --mobile-text-lg: 1.25rem;
-    --mobile-text-xl: 1.75rem;
-    --mobile-text-2xl: 2.5rem;
+    --mobile-text-lg: 2rem;
+    --mobile-text-xl: 4rem;
+    --mobile-text-2xl: 8rem;
 
-    --desktop-text-sm: 0.75rem;
+    --desktop-text-sm: 0.5rem;
     --desktop-text-md: 1rem;
-    --desktop-text-lg: 1.5rem;
-    --desktop-text-xl: 2.5rem;
-    --desktop-text-2xl: 3.5rem;
+    --desktop-text-lg: 2rem;
+    --desktop-text-xl: 4rem;
+    --desktop-text-2xl: 8rem;
 
     /* SPACING */
     --mobile-spacing-xxs: 0.125rem;
     --mobile-spacing-xs: 0.25rem;
     --mobile-spacing-sm: 0.5rem;
     --mobile-spacing-md: 1rem;
-    --mobile-spacing-lg: 1.5rem;
-    --mobile-spacing-xl: 2rem;
+    --mobile-spacing-lg: 2rem;
+    --mobile-spacing-xl: 4rem;
 
     --desktop-spacing-xxs: 0.125rem;
     --desktop-spacing-xs: 0.25rem;
-    --desktop-spacing-sm: 0.75rem;
-    --desktop-spacing-md: 1.25rem;
-    --desktop-spacing-lg: 1.75rem;
-    --desktop-spacing-xl: 2.5rem;
+    --desktop-spacing-sm: 0.5rem;
+    --desktop-spacing-md: 1rem;
+    --desktop-spacing-lg: 2rem;
+    --desktop-spacing-xl: 4rem;
 
     /* SIZE */
-    --mobile-size-xxs: 0.5rem;
-    --mobile-size-xs: 1rem;
-    --mobile-size-sm: 1.25rem;
-    --mobile-size-md: 2.5rem;
-    --mobile-size-lg: 3.5rem;
-    --mobile-size-xl: 5rem;
+    --mobile-size-xxs: 0.25rem;
+    --mobile-size-xs: 0.5rem;
+    --mobile-size-sm: 1rem;
+    --mobile-size-md: 2rem;
+    --mobile-size-lg: 4rem;
+    --mobile-size-xl: 8rem;
 
-    --desktop-size-xxs: 0.5rem;
-    --desktop-size-xs: 1rem;
-    --desktop-size-sm: 1.5rem;
-    --desktop-size-md: 2.75rem;
+    --desktop-size-xxs: 0.25rem;
+    --desktop-size-xs: 0.5rem;
+    --desktop-size-sm: 1rem;
+    --desktop-size-md: 2rem;
     --desktop-size-lg: 4rem;
-    --desktop-size-xl: 6rem;
+    --desktop-size-xl: 8rem;
 
     /* text-input ui component */
     --ui-text-input-size: var(--size-md);
+    --ui-text-input-text: var(--text-md);
+    --ui-text-input-color: var(--color-black);
     --ui-text-input-color-bg: var(--color-white);
     --ui-text-input-color-placeholder: var(--color-dark);
-    --ui-text-input-color-neutral: var(--color-black);
     --ui-text-input-color-error: var(--color-red);
-    --ui-text-input-color-ok: var(--color-black);
+    --ui-text-input-color-valid: var(--color-black);
 
     /* button ui component */
     --ui-button-size: var(--size-md);

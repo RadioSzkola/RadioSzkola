@@ -1,75 +1,71 @@
 .textInputWraper {
     position: relative;
+    font-size: var(--ui-text-input-text);
+    height: var(--ui-text-input-size);
+    min-width: calc(6 * var(--ui-text-input-size));
 }
 
 .textInputWraper__neutral {
-    --text-input-color: var(--text-input-color-neutral);
+    box-shadow: 0 0 0 2px var(--ui-text-input-color);
 }
 
 .textInputWraper__error {
-    --text-input-color: var(--text-input-color-error);
+    box-shadow: 0 0 0 2px var(--ui-text-input-color-error);
 }
 
-.textInputWraper__ok {
-    --text-input-color: var(--text-input-color-ok);
-}
-
-.textInputWraper__sm {
-    --text-input-font-size: var(--text-sm);
-    height: (--size-sm);
-    min-width: calc(6 * var(--size-sm));
-}
-
-.textInputWraper__md {
-    --text-input-font-size: var(--text-md);
-    height: var(--size-md);
-    min-width: calc(6 * var(--size-md));
-}
-
-.textInputWraper__lg {
-    --text-input-font-size: var(--text-lg);
-    height: var(--size-lg);
-    min-width: calc(6 * var(--size-lg));
+.textInputWraper__valid {
+    box-shadow: 0 0 0 2px var(--ui-text-input-color-valid);
 }
 
 .textInput {
-    z-index: 50;
     width: 100%;
     height: 100%;
-    font-size: var(--text-input-font-size);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background-color: var(--text-input-color-bg);
+    padding: 0 calc(var(--ui-text-input-size) / 2);
+}
 
-    box-shadow: 0 0 0 2px var(--text-input-color);
+.textInput__neutral {
+    box-shadow: 0 0 0 2px var(--ui-text-input-color);
+}
+
+.textInput__error {
+    box-shadow: 0 0 0 2px var(--ui-text-input-color-error);
+}
+
+.textInput__valid {
+    box-shadow: 0 0 0 2px var(--ui-text-input-color-valid);
 }
 
 .textInputLabel {
-    z-index: 40;
     position: absolute;
-    padding: var(--spacing-xs);
-    font-size: var(--text-input-text);
-    left: calc(var(--spacing-md) - var(--spacing-xs));
-    top: 50%;
+    left: calc(var(--ui-text-input-size) / 2 - var(--spacing-xs));
     user-select: none;
+    font-size: var(--ui-text-input-text);
+    padding: 0 var(--spacing-xs);
 
-    transition:
-        transform 0.05s ease-in-out,
-        background-color 0.05s ease-in-out,
-        color 0.05s ease-in-out;
+    transition: all 0.125s ease-in-out;
 }
 
-.textInputLabel__touched {
-    transform: translateY(-140%);
-    background-color: var(--text-input-color-bg);
-    color: var(--text-input-color);
-}
-
-.textInputLabel__placeholder {
-    transform: translateY(-50%);
-    color: var(--text-input-color-placeholder);
-    background-color: transparent;
+.textInputLabel_neutral {
+    color: var(--ui-text-input-color);
 }
 
 .textInputLabel__error {
-    color: var(--text-input-color-error);
+    color: var(--ui-text-input-color-error);
+}
+
+.textInputLabel__valid {
+    color: var(--ui-text-input-color-valid);
+}
+
+.textInputLabel__hidden {
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: var(--ui-text-input-color-placeholder) !important;
+}
+
+.textInputLabel__active {
+    top: 0;
+    transform: translateY(-60%);
+    background-color: var(--ui-text-input-color-bg);
 }
