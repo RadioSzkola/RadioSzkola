@@ -2,58 +2,79 @@ import { useState } from "react";
 import styles from "../styles/text-input.module.css";
 
 export type EmailInputProps = {
-    id: string;
-    value: string;
-    label: string;
-    onInputChange?: (ev: React.KeyboardEvent<HTMLInputElement>) => void;
-    size: "sm" | "md" | "lg";
-    variant: "neutral" | "error" | "ok";
-    cssVarsClass?: string;
+    id?: string;
+    value?: string;
+    label?: string;
+    variant?: "valid" | "error" | "neutral";
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 export default function EmailInput({
     id,
     value,
     label,
-    onInputChange,
-    size,
     variant,
-    cssVarsClass,
+    onChange,
 }: EmailInputProps) {
-    const [touched, setTouched] = useState<boolean>(false);
+    const [isInputActive, setIsInputActive] = useState(false);
+    if (!variant) {
+        variant = "neutral";
+    }
 
     return (
         <div
-            className={`
-            ${styles.textInputWraper}
-            ${variant === "neutral" ? styles.textInputWraper__neutral : ""}
-            ${variant === "error" ? styles.textInputWraper__error : ""}
-            ${variant === "ok" ? styles.textInputWraper__ok : ""}
-            ${size === "sm" ? styles.textInputWraper__sm : ""}
-            ${size === "md" ? styles.textInputWraper__md : ""}
-            ${size === "lg" ? styles.textInputWraper__lg : ""}
-            ${cssVarsClass ? cssVarsClass : ""}
-        `}
+            className={
+                styles.textInputWraper +
+                " " +
+                (!variant ? styles.textInputWraper__neutral : "") +
+                " " +
+                (variant === "error" ? styles.textInputWraper__error : "") +
+                " " +
+                (variant === "valid" ? styles.textInputWraper__valid : "")
+            }
         >
             <input
                 type="email"
-                name={id}
                 id={id}
-                className={styles.textInput}
+                name={id}
+                className={
+                    styles.textInput +
+                    " " +
+                    (variant === "neutral" ? styles.textInput__neutral : "") +
+                    " " +
+                    (variant === "error" ? styles.textInput__error : "") +
+                    " " +
+                    (variant === "valid" ? styles.textInput__valid : "")
+                }
                 defaultValue={value}
-                onKeyDown={ev => {
-                    setTouched(true);
-                    if (onInputChange) {
-                        onInputChange(ev);
+                onChange={ev => {
+                    if (ev.target.value === "") {
+                        setIsInputActive(false);
+                    } else {
+                        setIsInputActive(true);
+                    }
+
+                    if (onChange) {
+                        onChange(ev);
                     }
                 }}
             />
             <label
-                className={`
-                    ${styles.textInputLabel}
-                    ${touched ? styles.textInputLabel__touched : styles.textInputLabel__placeholder}
-                    ${variant === "error" ? styles.textInputLabel__error : ""}
-                    `}
+                className={
+                    styles.textInputLabel +
+                    " " +
+                    (variant === "neutral"
+                        ? styles.textInputLabel__neutral
+                        : "") +
+                    " " +
+                    (variant === "error" ? styles.textInputLabel__error : "") +
+                    " " +
+                    (variant === "valid" ? styles.textInputLabel__valid : "") +
+                    " " +
+                    (isInputActive
+                        ? styles.textInputLabel__active
+                        : styles.textInputLabel__hidden)
+                }
                 htmlFor={id}
             >
                 {label}

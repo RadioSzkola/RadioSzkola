@@ -15,10 +15,7 @@ export type SignupFormProps = {
     errorFieldClass?: string;
 };
 
-export default function SignupForm({
-    labelClass,
-    errorFieldClass,
-}: SignupFormProps) {
+export default function SignupForm({ errorFieldClass }: SignupFormProps) {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [schoolId, setSchoolId] = useState("");
@@ -27,7 +24,6 @@ export default function SignupForm({
 
     const {
         call: apiCall,
-        data: apiData,
         error: apiError,
         pending: apiPending,
         status: apiStatus,
@@ -89,14 +85,13 @@ export default function SignupForm({
             <EmailInput
                 id="email"
                 label="email"
-                size="md"
                 variant={
                     error?.code === "VALIDATION" && error.data.email
                         ? "error"
                         : "neutral"
                 }
                 value=""
-                onInputChange={ev => setEmail(ev.currentTarget.value)}
+                onChange={ev => setEmail(ev.target.value)}
             />
             {error?.code === "VALIDATION" && error.data.email ? (
                 <span
@@ -110,14 +105,13 @@ export default function SignupForm({
             <PasswordInput
                 id="password"
                 label="hasło"
-                size="md"
                 variant={
                     error?.code === "VALIDATION" && error.data.password
                         ? "error"
                         : "neutral"
                 }
                 value=""
-                onInputChange={ev => setPassword(ev.currentTarget.value)}
+                onChange={ev => setPassword(ev.target.value)}
             />
             {error?.code === "VALIDATION" && error.data.password ? (
                 <span
@@ -131,14 +125,13 @@ export default function SignupForm({
             <TextInput
                 id="authId"
                 label="kod"
-                size="md"
                 variant={
                     error?.code === "VALIDATION" && error.data.authId
                         ? "error"
                         : "neutral"
                 }
                 value=""
-                onInputChange={ev => setAuthId(ev.currentTarget.value)}
+                onChange={ev => setAuthId(ev.target.value)}
             />
             {error?.code === "VALIDATION" && error.data.authId ? (
                 <span
@@ -152,14 +145,13 @@ export default function SignupForm({
             <TextInput
                 id="schoolId"
                 label="kod szkoły"
-                size="md"
                 variant={
                     error?.code === "VALIDATION" && error.data.schoolId
                         ? "error"
                         : "neutral"
                 }
                 value=""
-                onInputChange={ev => setSchoolId(ev.currentTarget.value)}
+                onChange={ev => setSchoolId(ev.target.value)}
             />
             {error?.code === "VALIDATION" && error.data.schoolId ? (
                 <span
@@ -173,14 +165,13 @@ export default function SignupForm({
             <TextInput
                 id="name"
                 label="imię i nazwisko"
-                size="md"
                 variant={
                     error?.code === "VALIDATION" && error.data.name
                         ? "error"
                         : "neutral"
                 }
                 value=""
-                onInputChange={ev => setName(ev.currentTarget.value)}
+                onChange={ev => setName(ev.target.value)}
             />
             {error?.code === "VALIDATION" && error.data.name ? (
                 <span

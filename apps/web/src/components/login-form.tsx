@@ -19,7 +19,6 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
 
     const {
         call: apiCall,
-        data: apiData,
         error: apiError,
         pending: apiPending,
         status: apiStatus,
@@ -78,14 +77,13 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
             <EmailInput
                 id="email"
                 label="email"
-                size="md"
                 variant={
                     error?.code === "VALIDATION" && error.data.email
                         ? "error"
                         : "neutral"
                 }
                 value=""
-                onInputChange={ev => setEmail(ev.currentTarget.value)}
+                onChange={ev => setEmail(ev.target.value)}
             />
             {error?.code === "VALIDATION" && error.data.email ? (
                 <span
@@ -99,14 +97,13 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
             <PasswordInput
                 id="password"
                 label="hasło"
-                size="md"
                 variant={
                     error?.code === "VALIDATION" && error.data.password
                         ? "error"
                         : "neutral"
                 }
                 value=""
-                onInputChange={ev => setPassword(ev.currentTarget.value)}
+                onChange={ev => setPassword(ev.target.value)}
             />
             {error?.code === "VALIDATION" && error.data.password ? (
                 <span

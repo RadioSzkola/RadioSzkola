@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import styles from "../styles/text-input.module.css";
 
 export type TextInputProps = {
