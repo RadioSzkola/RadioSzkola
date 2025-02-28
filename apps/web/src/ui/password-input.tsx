@@ -13,13 +13,10 @@ export default function PasswordInput({
     id,
     value,
     label,
-    variant,
+    variant = "neutral",
     onChange,
 }: PasswordInputProps) {
     const [isInputActive, setIsInputActive] = useState(false);
-    if (!variant) {
-        variant = "neutral";
-    }
 
     return (
         <div

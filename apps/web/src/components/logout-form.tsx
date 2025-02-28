@@ -8,7 +8,6 @@ import { useUser } from "../hooks/auth";
 export default function LogoutForm() {
     const {
         call: apiCall,
-        data: apiData,
         error: apiError,
         pending: apiPending,
         status: apiStatus,

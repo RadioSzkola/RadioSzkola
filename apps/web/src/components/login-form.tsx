@@ -87,7 +87,7 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
             />
             {error?.code === "VALIDATION" && error.data.email ? (
                 <span
-                    className={`${styles.signupFormErrorField} ${errorFieldClass ? errorFieldClass : ""}`}
+                    className={`${styles.loginFormErrorField} ${errorFieldClass ? errorFieldClass : ""}`}
                 >
                     {error.data.email[0]}
                 </span>
@@ -107,7 +107,7 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
             />
             {error?.code === "VALIDATION" && error.data.password ? (
                 <span
-                    className={`${styles.signupFormErrorField} ${errorFieldClass ? errorFieldClass : ""}`}
+                    className={`${styles.loginFormErrorField} ${errorFieldClass ? errorFieldClass : ""}`}
                 >
                     {error.data.password[0]}
                 </span>

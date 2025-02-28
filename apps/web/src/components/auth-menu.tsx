@@ -15,16 +15,8 @@ export default function AuthMenu({ page }: AuthMenuProps) {
                 <Logo theme="light" imgClass={styles.authMenuLogoImg} />
             </div>
             <div className={styles.authMenuForm}>
-                {page === "signup" ? (
-                    <SignupForm labelClass={styles.authMenuLabel} />
-                ) : (
-                    <></>
-                )}
-                {page === "login" ? (
-                    <LoginForm labelClass={styles.authMenuLabel} />
-                ) : (
-                    <></>
-                )}
+                {page === "signup" ? <SignupForm /> : <></>}
+                {page === "login" ? <LoginForm /> : <></>}
                 {page === "logout" ? <LogoutForm /> : <></>}
             </div>
         </div>

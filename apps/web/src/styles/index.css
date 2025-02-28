@@ -71,13 +71,13 @@ html {
     --color-dark: #444444;
 
     /* TEXT */
-    --mobile-text-sm: 0.5rem;
+    --mobile-text-sm: 0.75rem;
     --mobile-text-md: 1rem;
     --mobile-text-lg: 2rem;
     --mobile-text-xl: 4rem;
     --mobile-text-2xl: 8rem;
 
-    --desktop-text-sm: 0.5rem;
+    --desktop-text-sm: 0.75rem;
     --desktop-text-md: 1rem;
     --desktop-text-lg: 2rem;
     --desktop-text-xl: 4rem;
@@ -99,19 +99,19 @@ html {
     --desktop-spacing-xl: 4rem;
 
     /* SIZE */
-    --mobile-size-xxs: 0.25rem;
-    --mobile-size-xs: 0.5rem;
-    --mobile-size-sm: 1rem;
-    --mobile-size-md: 2rem;
-    --mobile-size-lg: 4rem;
-    --mobile-size-xl: 8rem;
+    --mobile-size-xxs: 0.4rem;
+    --mobile-size-xs: 0.75rem;
+    --mobile-size-sm: 1.5rem;
+    --mobile-size-md: 3rem;
+    --mobile-size-lg: 6rem;
+    --mobile-size-xl: 12rem;
 
-    --desktop-size-xxs: 0.25rem;
-    --desktop-size-xs: 0.5rem;
-    --desktop-size-sm: 1rem;
-    --desktop-size-md: 2rem;
-    --desktop-size-lg: 4rem;
-    --desktop-size-xl: 8rem;
+    --desktop-size-xxs: 0.4rem;
+    --desktop-size-xs: 0.75rem;
+    --desktop-size-sm: 1.5rem;
+    --desktop-size-md: 3rem;
+    --desktop-size-lg: 6rem;
+    --desktop-size-xl: 12rem;
 
     /* text-input ui component */
     --ui-text-input-size: var(--size-md);
@@ -188,4 +188,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-transition:
+        color 9999s ease-out,
+        background-color 9999s ease-out;
+    -webkit-transition-delay: 9999s;
 }

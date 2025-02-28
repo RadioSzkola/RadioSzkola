@@ -20,7 +20,7 @@
 .textInput {
     width: 100%;
     height: 100%;
-    padding: 0 calc(var(--ui-text-input-size) / 2);
+    padding: calc(var(--ui-text-input-size) / 2);
 }
 
 .textInput__neutral {
@@ -37,24 +37,27 @@
 
 .textInputLabel {
     position: absolute;
-    left: calc(var(--ui-text-input-size) / 2 - var(--spacing-xs));
+    left: calc(var(--ui-text-input-size) / 2 - var(--spacing-sm));
     user-select: none;
     font-size: var(--ui-text-input-text);
-    padding: 0 var(--spacing-xs);
+    padding: 0 var(--spacing-sm);
 
     transition: all 0.125s ease-in-out;
 }
 
-.textInputLabel_neutral {
+.textInputLabel__neutral {
     color: var(--ui-text-input-color);
+    --local-color: var(--ui-text-input-color);
 }
 
 .textInputLabel__error {
     color: var(--ui-text-input-color-error);
+    --local-color: var(--ui-text-input-color-error);
 }
 
 .textInputLabel__valid {
     color: var(--ui-text-input-color-valid);
+    --local-color: var(--ui-text-input-color-valid);
 }
 
 .textInputLabel__hidden {
@@ -62,10 +65,13 @@
     transform: translateY(-50%);
     background-color: transparent;
     color: var(--ui-text-input-color-placeholder) !important;
+    box-shadow: 0 0 0 0 var(--local-color);
 }
 
 .textInputLabel__active {
     top: 0;
-    transform: translateY(-60%);
+    transform: translateY(-75%);
     background-color: var(--ui-text-input-color-bg);
+    color: var(--local-color);
+    box-shadow: 0 0 0 2px var(--local-color);
 }

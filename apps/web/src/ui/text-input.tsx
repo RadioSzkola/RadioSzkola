@@ -13,13 +13,10 @@ export default function TextInput({
     id,
     value,
     label,
-    variant,
+    variant = "neutral",
     onChange,
 }: TextInputProps) {
     const [isInputActive, setIsInputActive] = useState(false);
-    if (!variant) {
-        variant = "neutral";
-    }
 
     return (
         <div

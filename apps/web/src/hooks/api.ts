@@ -1,7 +1,7 @@
 import { AppError } from "@rs/shared/error";
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { SERVER_HOST } from "../const";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export type APICallProps = {
     endpoint: string;

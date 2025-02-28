@@ -1,12 +1,11 @@
 .authMenu {
-    width: 32rem;
-    max-width: 95svw;
+    max-height: 90vh;
+    max-width: 90vw;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: var(--spacing-xl);
-    gap: var(--spacing-xl);
+    padding: 0 var(--spacing-xl);
 
     background-color: var(--color-green-light);
     box-shadow:
@@ -14,13 +13,9 @@
         4px 4px 0 4px var(--color-black);
 
     @media (min-width: 760px) {
-        width: 75svw;
     }
-}
 
-.authMenuLabel {
-    background-color: var(--color-green-light) !important;
-    color: var(--color-darker) !important;
+    --ui-text-input-color-bg: var(--color-green-light);
 }
 
 .authMenuBlackbox {
@@ -31,8 +26,8 @@
 }
 
 .authMenuLogoImg {
-    width: calc(2 * var(--size-xl)) !important;
-    height: calc(2 * var(--size-xl)) !important;
+    width: var(--size-xl) !important;
+    height: var(--size-xl) !important;
 }
 
 .authMenuForm {
