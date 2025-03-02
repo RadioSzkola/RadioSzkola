@@ -1,3 +1,9 @@
+.indexRoute {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .mainWraper {
     display: flex;
     flex-direction: column;

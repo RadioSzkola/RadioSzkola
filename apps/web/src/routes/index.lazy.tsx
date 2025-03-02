@@ -29,12 +29,7 @@ function RouteComponent() {
                     </p>
                     <div className={styles.mainContentCTAWraper}>
                         <a href="#playlista">
-                            <Button
-                                size="md"
-                                variant="neutral"
-                                animated
-                                className={styles.mainContentCTAButton}
-                            >
+                            <Button>
                                 <>
                                     Playlista
                                     <Icon
@@ -45,12 +40,7 @@ function RouteComponent() {
                             </Button>
                         </a>
                         <a href="#">
-                            <Button
-                                size="md"
-                                variant="neutral"
-                                animated
-                                className={styles.mainContentCTAButton}
-                            >
+                            <Button>
                                 <>
                                     Propozycje (Wkrótce)
                                     <Icon
