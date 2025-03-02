@@ -1,0 +1,8 @@
+.close {
+    font-size: var(--text-xl);
+    color: var(--color-black);
+    cursor: pointer;
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+}

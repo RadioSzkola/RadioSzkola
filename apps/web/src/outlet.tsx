@@ -15,6 +15,7 @@ export type OutletProps = {
 export default function Outlet({ children }: OutletProps) {
     const [theme, themeDispatch] = useReducer(themeReducer, "light");
     const [auth, authDispatch] = useReducer(authReducer, null);
+
     const userEndpoint = useAPIEndpoint<User>({
         endpoint: "/v1/auth/web/me",
         method: "GET",

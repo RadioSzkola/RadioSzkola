@@ -37,15 +37,6 @@
     padding: var(--spacing-md);
 }
 
-.mobileMenuBarClose {
-    font-size: var(--text-xl);
-    color: var(--color-black);
-    cursor: pointer;
-    position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-}
-
 .desktopLinks {
     display: flex;
     align-items: center;

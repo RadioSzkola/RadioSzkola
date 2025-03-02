@@ -10,7 +10,7 @@ export type APICallProps = {
     axiosRequestConfig?: AxiosRequestConfig;
 };
 
-export async function fetchFromAPI<T>({
+export async function callAPI<T>({
     endpoint,
     method,
     body,
@@ -93,8 +93,8 @@ export function useAPIEndpoint<T>(fetchProps: APICallProps):
 
         const promise =
             data === null
-                ? fetchFromAPI<T>(fetchProps)
-                : fetchFromAPI<T>({ ...fetchProps, body: data });
+                ? callAPI<T>(fetchProps)
+                : callAPI<T>({ ...fetchProps, body: data });
 
         promise
             .then(response => {

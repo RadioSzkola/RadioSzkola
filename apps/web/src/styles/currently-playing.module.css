@@ -9,9 +9,10 @@
     box-shadow:
         0 0 0 4px var(--color-black),
         5px 5px 0 4px var(--color-black);
-    width: 90vw;
+    width: calc(100vw - 2 * var(--spacing-lg));
 
     @media (min-width: 860px) {
+        width: fit-content;
         aspect-ratio: 2/1;
         flex-direction: row;
         height: 50vh;
@@ -20,8 +21,12 @@
 }
 
 .currentlyPlayingCover {
-    aspect-ratio: 1/1;
+    aspect-ratio: 3/2;
     object-fit: cover;
+
+    @media (min-width: 860px) {
+        aspect-ratio: 1/1;
+    }
 }
 
 .currentlyPlayingInfo {
@@ -29,6 +34,7 @@
     flex-direction: column;
     padding: var(--spacing-lg);
     gap: var(--spacing-md);
+    width: fit-content;
 }
 
 .currentlyPlayingInfoItem {

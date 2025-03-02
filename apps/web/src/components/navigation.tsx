@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Hamburger from "../ui/hamburger";
 
 import styles from "../styles/navigation.module.css";
 import Modal from "../ui/modal";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import Logo from "../ui/logo";
 import AuthMenu from "./auth-menu";
 import { useUser } from "../hooks/auth";
 import { Link } from "@tanstack/react-router";
+import Close from "../ui/close";
 
 export default function Navigation() {
     const { user } = useUser();
@@ -137,12 +137,7 @@ export default function Navigation() {
             />
             <Modal open={isMenuOpen} onOverlayClick={closeMobileMenu}>
                 <div className={styles.mobileMenu}>
-                    <button
-                        className={styles.mobileMenuBarClose}
-                        onClick={closeMobileMenu}
-                    >
-                        <Icon icon="ic:round-close" />
-                    </button>
+                    <Close onClick={closeMobileMenu} />
                     <ul className={styles.mobileLinks}>
                         <li className={styles.mobileLinksItem}>
                             <a
@@ -225,6 +220,13 @@ export default function Navigation() {
                     closeSignup();
                 }}
             >
+                <Close
+                    onClick={() => {
+                        closeLogin();
+                        closeLogout();
+                        closeSignup();
+                    }}
+                />
                 {isLoginOpen ? <AuthMenu page="login" /> : <></>}
                 {isSignupOpen ? <AuthMenu page="signup" /> : <></>}
                 {isLogoutOpen ? <AuthMenu page="logout" /> : <></>}
