@@ -55,7 +55,7 @@ export default function Navigation() {
 
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth > 760) {
+            if (window.innerWidth > 860) {
                 closeMobileMenu();
             }
         };
@@ -137,14 +137,12 @@ export default function Navigation() {
             />
             <Modal open={isMenuOpen} onOverlayClick={closeMobileMenu}>
                 <div className={styles.mobileMenu}>
-                    <div className={styles.mobileMenuBar}>
-                        <button
-                            className={styles.mobileMenuBarClose}
-                            onClick={closeMobileMenu}
-                        >
-                            <Icon icon="ic:round-close" />
-                        </button>
-                    </div>
+                    <button
+                        className={styles.mobileMenuBarClose}
+                        onClick={closeMobileMenu}
+                    >
+                        <Icon icon="ic:round-close" />
+                    </button>
                     <ul className={styles.mobileLinks}>
                         <li className={styles.mobileLinksItem}>
                             <a

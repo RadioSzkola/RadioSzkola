@@ -1,15 +1,21 @@
 .nav {
     width: 100%;
-    padding: var(--spacing-sm) var(--spacing-xl);
+    padding: var(--spacing-sm) var(--spacing-lg);
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @media (min-width: 860px) {
+        padding: var(--spacing-sm) var(--spacing-lg);
+    }
 }
 
 .mobileMenu {
-    width: 75svw;
-    height: 75svh;
+    width: 80svw;
+    height: 80svh;
     padding: var(--spacing-md);
+    position: relative;
+    max-width: 500px;
 
     background-color: var(--color-yellow);
     box-shadow:
@@ -18,7 +24,7 @@
 }
 
 .desktopOnly {
-    @media (max-width: 760px) {
+    @media (max-width: 860px) {
         display: none;
     }
 }
@@ -32,29 +38,23 @@
 }
 
 .mobileMenuBarClose {
-    height: var(--size-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--text-2xl);
-    width: var(--text-2xl);
-    height: var(--text-2xl);
+    font-size: var(--text-xl);
     color: var(--color-black);
     cursor: pointer;
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
 }
 
 .desktopLinks {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-xl);
+    gap: var(--spacing-lg);
 
-    @media (max-width: 760px) {
+    @media (max-width: 860px) {
         display: none;
     }
-}
-
-.desktopLinksItem {
 }
 
 .desktopLinksLink {
@@ -71,12 +71,8 @@
 .mobileLinks {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xl);
-    margin-top: var(--spacing-xl);
-    padding: var(--spacing-xl);
-}
-
-.mobileLinksItem {
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md);
 }
 
 .mobileLinksLink {

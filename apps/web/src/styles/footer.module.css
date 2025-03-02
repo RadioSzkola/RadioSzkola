@@ -12,6 +12,11 @@
     box-shadow:
         0 0 0 4px var(--color-black),
         5px 5px 0 4px var(--color-black);
+
+    @media (max-width: 760px) {
+        width: calc(100% - 2 * var(--spacing-lg));
+        margin: auto var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+    }
 }
 
 .FooterSpacer {
@@ -26,7 +31,7 @@
     width: 100%;
     max-width: 1200px;
 
-    @media (max-width: 560px) {
+    @media (max-width: 760px) {
         flex-direction: column;
         gap: var(--spacing-md);
     }
@@ -34,12 +39,16 @@
 
 .FooterTopHeader {
     font-size: var(--text-lg);
+
+    @media (max-width: 760px) {
+        text-align: center;
+    }
 }
 
 .FooterTopSocials {
     display: flex;
     gap: var(--spacing-sm);
-    font-size: var(--text-xl);
+    font-size: var(--text-lg);
 
     & a {
         padding: var(--spacing-xs);
@@ -59,6 +68,11 @@
     @media (min-width: 1200px) {
         grid-template-columns: repeat(4, auto);
         grid-template-rows: repeat(1, 100%);
+    }
+
+    @media (max-width: 450px) {
+        grid-template-columns: repeat(1, auto);
+        grid-template-rows: repeat(4, 100%);
     }
 }
 
