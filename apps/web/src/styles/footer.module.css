@@ -1,11 +1,11 @@
 .Footer {
-    width: calc(100% - 2 * var(--spacing-xl));
+    width: calc(100% - 2 * var(--spacing-lg));
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: var(--spacing-lg);
     gap: var(--spacing-lg);
-    margin: auto var(--spacing-xl) var(--spacing-xl) var(--spacing-xl);
+    margin: auto var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
     background-color: var(--color-red-light);
     color: var(--color-black);
 
