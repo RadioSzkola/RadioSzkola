@@ -1,30 +1,56 @@
 import { AppError } from "@rs/shared/error";
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError } from "axios";
 import { SERVER_HOST } from "../const";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export type APICallProps = {
+export type APIFetchConfig<Payload = any> = {
     endpoint: string;
     method: "GET" | "POST" | "DELETE" | "PATCH" | "PUT";
-    body?: any;
-    axiosRequestConfig?: AxiosRequestConfig;
+    payload?: Payload;
+    timeout: number;
+    withCredentials: boolean;
+    params: Record<string, string>;
 };
 
-export async function callAPI<T>({
+function resolveURLParams(URL: string, params: Record<string, string>): string {
+    let str = URL;
+
+    for (const [key, value] of Object.entries(params)) {
+        str = str.replaceAll(":" + key, value);
+    }
+
+    return str;
+}
+
+function resolveEndpoint(host: string, endpoint: string): string {
+    if (host[-1] === "/" && endpoint[0] === "/") {
+        return host + endpoint.slice(1);
+    }
+
+    return host + endpoint;
+}
+
+export async function APIFetch<Response = any, Payload = any>({
     endpoint,
     method,
-    body,
-    axiosRequestConfig,
-}: APICallProps): Promise<
-    { data: T; error: null } | { data: null; error: AppError }
+    payload,
+    timeout = 5000,
+    withCredentials = true,
+    params = {},
+}: APIFetchConfig<Payload>): Promise<
+    { data: Response; error: null } | { data: null; error: AppError }
 > {
     try {
-        const response = await axios(SERVER_HOST + endpoint, {
-            timeout: 5000,
+        const URL = resolveURLParams(
+            resolveEndpoint(SERVER_HOST, endpoint),
+            params,
+        );
+
+        const response = await axios(URL, {
+            timeout,
             method,
-            data: body,
-            withCredentials: true,
-            ...axiosRequestConfig,
+            data: payload,
+            withCredentials,
         });
 
         return {
@@ -48,113 +74,189 @@ export async function callAPI<T>({
     }
 }
 
-export type UseAPIEndpointStatus = "data" | "error" | "stale" | "pending";
+export type QueryStatus = "data" | "error" | "stale" | "pending" | "setup";
 
-export function useAPIEndpoint<T>(fetchProps: APICallProps):
+export type QueryResult<Response = any> =
     | {
-          data: T;
+          status: "setup";
+          data: null;
           error: null;
           pending: false;
-          call: (data?: unknown) => void;
-          status: "data";
       }
     | {
+          status: "pending";
           data: null;
           error: null;
           pending: true;
-          call: (data?: unknown) => void;
-          status: "pending";
       }
     | {
+          status: "error";
           data: null;
           error: AppError;
           pending: false;
-          call: (data?: unknown) => void;
-          status: "error";
       }
     | {
-          data: null;
+          status: "data";
+          data: Response;
           error: null;
           pending: false;
-          call: (data?: unknown) => void;
+      }
+    | {
           status: "stale";
-      } {
-    const [data, setData] = useState<T | null>(null);
+          data: Response;
+          error: null;
+          pending: true;
+      };
+
+export type QueryConfig = {
+    retries: number;
+    retryAfter: number;
+};
+
+export function useAPIQuery<Response, Payload = any>(
+    fetchConfig: APIFetchConfig<Payload>,
+    { retries = 3, retryAfter = 500 }: QueryConfig = {
+        retries: 3,
+        retryAfter: 500,
+    },
+): {
+    result: QueryResult<Response>;
+    refresh: (refreshConfig: {
+        payload: Payload | null;
+        params: Record<string, string> | null;
+    }) => void;
+} {
+    if (retries < 0) {
+        throw new Error("Retries must be a positive number.");
+    }
+
+    const [pending, setPending] = useState(false);
     const [error, setError] = useState<AppError | null>(null);
-    const [pending, setPending] = useState<boolean>(false);
+    const [data, setData] = useState<Response | null>(null);
+    const [retriesLeft, setRetriesLeft] = useState(retries);
 
-    const call = (data?: unknown) => {
-        if (pending) {
-            console.error("Cannot call API if another call is pending");
-            return;
-        }
-
+    const refresh = (
+        {
+            payload = null,
+            params = null,
+        }: {
+            payload: Payload | null;
+            params: Record<string, string> | null;
+        } = {
+            payload: null,
+            params: null,
+        },
+    ) => {
         setPending(true);
 
-        const promise =
-            data === null
-                ? callAPI<T>(fetchProps)
-                : callAPI<T>({ ...fetchProps, body: data });
-
-        promise
-            .then(response => {
-                if (response.error) {
-                    setData(null);
-                    setError(response.error);
-                } else {
-                    setData(response.data);
+        APIFetch<Response, Payload>({
+            ...fetchConfig,
+            payload: payload ?? fetchConfig.payload,
+            params: params ?? fetchConfig.params,
+        })
+            .then(res => {
+                if (res.data) {
+                    setData(res.data);
                     setError(null);
+                } else {
+                    setError(res.error);
+                    setData(null);
                 }
             })
-            .catch(reason => {
-                const e: AppError = {
+            .catch(err => {
+                setError({
                     code: "UNKNOWN",
-                    data: reason,
-                };
-
+                    message: "An unexepected error (useAPIQuery)",
+                    data: err,
+                });
                 setData(null);
-                setError(e);
             })
             .finally(() => {
                 setPending(false);
             });
     };
 
-    if (error) {
-        return {
-            data: null,
-            error: error,
-            pending: false,
-            call,
-            status: "error",
-        };
-    }
+    useEffect(() => {
+        setPending(true);
+        refresh();
+    }, []);
 
-    if (data) {
+    useEffect(() => {
+        if (!error) {
+            setRetriesLeft(retries);
+            return;
+        }
+
+        if (retriesLeft <= 0) {
+            setPending(false);
+            return;
+        }
+
+        const timeout = setTimeout(() => {
+            refresh();
+            setRetriesLeft(r => r - 1);
+        }, retryAfter);
+
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, [error, error?.code]);
+
+    if (pending && data) {
         return {
-            data: data,
-            error: null,
-            pending: false,
-            call,
-            status: "data",
+            refresh,
+            result: {
+                status: "stale",
+                data: data,
+                error: null,
+                pending: true,
+            },
         };
     }
 
     if (pending) {
         return {
-            data: null,
-            error: null,
-            pending: pending,
-            call,
-            status: "pending",
+            refresh,
+            result: {
+                status: "pending",
+                data: null,
+                error: null,
+                pending: true,
+            },
+        };
+    }
+
+    if (error) {
+        return {
+            refresh,
+            result: {
+                status: "error",
+                data: null,
+                error: error,
+                pending: false,
+            },
+        };
+    }
+
+    if (data) {
+        return {
+            refresh,
+            result: {
+                status: "data",
+                data: data,
+                error: null,
+                pending: false,
+            },
         };
     }
 
     return {
-        data: null,
-        error: null,
-        pending: false,
-        call,
-        status: "stale",
+        refresh,
+        result: {
+            status: "setup",
+            data: null,
+            error: null,
+            pending: false,
+        },
     };
 }

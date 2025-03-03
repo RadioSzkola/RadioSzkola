@@ -7,7 +7,7 @@ import TextInput from "../ui/text-input";
 import { parseBySchema } from "@rs/shared/validation";
 import { SignupId, signupIdSchema } from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
-import { useAPIEndpoint } from "../hooks/api";
+import { useAPIQuery } from "../hooks/api";
 import { useUser } from "../hooks/auth";
 
 export type SignupFormProps = {
@@ -27,7 +27,7 @@ export default function SignupForm({ errorFieldClass }: SignupFormProps) {
         error: apiError,
         pending: apiPending,
         status: apiStatus,
-    } = useAPIEndpoint({
+    } = useAPIQuery({
         endpoint: "/v1/auth/web/signupid",
         method: "POST",
     });

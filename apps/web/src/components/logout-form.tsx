@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "../styles/logout-form.module.css";
 import Button from "../ui/button";
 import { AppError } from "@rs/shared/error";
-import { useAPIEndpoint } from "../hooks/api";
+import { useAPIQuery } from "../hooks/api";
 import { useUser } from "../hooks/auth";
 
 export default function LogoutForm() {
@@ -11,7 +11,7 @@ export default function LogoutForm() {
         error: apiError,
         pending: apiPending,
         status: apiStatus,
-    } = useAPIEndpoint({
+    } = useAPIQuery({
         endpoint: "/v1/auth/web/logout",
         method: "POST",
     });

@@ -6,7 +6,7 @@ import PasswordInput from "../ui/password-input";
 import { parseBySchema } from "@rs/shared/validation";
 import { UserLogin, userLoginSchema } from "@rs/shared/models";
 import { AppError } from "@rs/shared/error";
-import { useAPIEndpoint } from "../hooks/api";
+import { useAPIQuery } from "../hooks/api";
 import { useUser } from "../hooks/auth";
 
 export type LoginFormProps = {
@@ -22,7 +22,7 @@ export default function LoginForm({ errorFieldClass }: LoginFormProps) {
         error: apiError,
         pending: apiPending,
         status: apiStatus,
-    } = useAPIEndpoint({
+    } = useAPIQuery({
         endpoint: "/v1/auth/web/login",
         method: "POST",
     });

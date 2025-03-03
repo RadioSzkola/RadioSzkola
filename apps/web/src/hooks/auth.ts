@@ -1,13 +1,13 @@
 import { User } from "@rs/shared/models";
 import { useContext, useEffect } from "react";
 import { authContext, authDispatchContext } from "../stores/auth";
-import { useAPIEndpoint } from "./api";
+import { useAPIQuery } from "./api";
 
 export function useUser(): { user: User | null; refresh: () => void } {
     const auth = useContext(authContext);
     const authDispatch = useContext(authDispatchContext);
 
-    const userEndpoint = useAPIEndpoint<User>({
+    const userEndpoint = useAPIQuery<User>({
         endpoint: "/v1/auth/web/me",
         method: "GET",
     });

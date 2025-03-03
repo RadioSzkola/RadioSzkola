@@ -5,7 +5,7 @@ import {
     themeDispatchContext,
 } from "./stores/theme";
 import { authReducer, authContext, authDispatchContext } from "./stores/auth";
-import { useAPIEndpoint } from "./hooks/api";
+import { useAPIQuery } from "./hooks/api";
 import { User } from "@rs/shared/models";
 
 export type OutletProps = {
@@ -16,7 +16,7 @@ export default function Outlet({ children }: OutletProps) {
     const [theme, themeDispatch] = useReducer(themeReducer, "light");
     const [auth, authDispatch] = useReducer(authReducer, null);
 
-    const userEndpoint = useAPIEndpoint<User>({
+    const userEndpoint = useAPIQuery<User>({
         endpoint: "/v1/auth/web/me",
         method: "GET",
     });
