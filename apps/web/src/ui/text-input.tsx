@@ -7,6 +7,8 @@ export type TextInputProps = {
     label?: string;
     variant?: "valid" | "error" | "neutral";
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
+    type?: "text" | "email" | "password";
+    errorMessage?: string;
 };
 
 export default function TextInput({
@@ -15,6 +17,8 @@ export default function TextInput({
     label,
     variant = "neutral",
     onChange,
+    type = "text",
+    errorMessage,
 }: TextInputProps) {
     const [isInputActive, setIsInputActive] = useState(false);
 
@@ -31,7 +35,7 @@ export default function TextInput({
             }
         >
             <input
-                type="text"
+                type={type}
                 id={id}
                 name={id}
                 className={
@@ -76,6 +80,13 @@ export default function TextInput({
             >
                 {label}
             </label>
+            {errorMessage ? (
+                <div className={styles.textInputErrorMessage}>
+                    {errorMessage}
+                </div>
+            ) : (
+                <></>
+            )}
         </div>
     );
 }

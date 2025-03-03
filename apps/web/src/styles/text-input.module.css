@@ -75,3 +75,10 @@
     color: var(--local-color);
     box-shadow: 0 0 0 2px var(--local-color);
 }
+
+.textInputErrorMessage {
+    position: absolute;
+    bottom: 0;
+    font-size: var(--ui-text-input-text);
+    color: var(--ui-text-input-color-error);
+}

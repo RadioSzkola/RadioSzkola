@@ -4,11 +4,7 @@ import Button from "../ui/button";
 import EmailInput from "../ui/email-input";
 import PasswordInput from "../ui/password-input";
 import TextInput from "../ui/text-input";
-import { parseBySchema } from "@rs/shared/validation";
-import { SignupId, signupIdSchema } from "@rs/shared/models";
-import { AppError } from "@rs/shared/error";
-import { useAPIQuery } from "../hooks/api";
-import { useUser } from "../hooks/auth";
+import { useSignupIdQuery, useUser } from "../hooks/auth";
 
 export type SignupFormProps = {
     labelClass?: string;
@@ -23,18 +19,17 @@ export default function SignupForm({ errorFieldClass }: SignupFormProps) {
     const [email, setEmail] = useState("");
 
     const {
-        call: apiCall,
-        error: apiError,
-        pending: apiPending,
-        status: apiStatus,
-    } = useAPIQuery({
-        endpoint: "/v1/auth/web/signupid",
-        method: "POST",
-    });
+        signup,
+        result: {
+            data: apiData,
+            error,
+            pending: apiPending,
+            status: apiStatus,
+        },
+    } = useSignupIdQuery();
 
-    const { refresh } = useUser();
+    const { refreshSession } = useUser();
 
-    const [error, setError] = useState<AppError<SignupId> | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
     const [submited, setSubmited] = useState<boolean>(false);
 
@@ -45,38 +40,14 @@ export default function SignupForm({ errorFieldClass }: SignupFormProps) {
         }
 
         setSubmited(false);
-        const validation = parseBySchema(
-            {
-                name,
-                password,
-                schoolId,
-                authId,
-                email,
-            },
-            signupIdSchema,
-        );
-
-        if (validation.error) {
-            setError({
-                code: "VALIDATION",
-                data: validation.error,
-            });
-
-            return;
-        }
-
-        apiCall(validation.data);
+        signup({ name, email, authId, password, schoolId });
         setSubmited(true);
     }
 
     useEffect(() => {
-        if (apiStatus === "error") {
-            setError(apiError);
-            setSuccess(false);
-        } else if (apiStatus === "data") {
-            setError(null);
+        if (apiStatus === "data") {
+            refreshSession();
             setSuccess(true);
-            refresh();
         }
     }, [apiStatus]);
 
@@ -182,9 +153,7 @@ export default function SignupForm({ errorFieldClass }: SignupFormProps) {
             ) : (
                 <></>
             )}
-            <Button size="md" variant="neutral" animated={true} type="submit">
-                Zarejestruj się
-            </Button>
+            <Button type="submit">Zarejestruj się</Button>
 
             {success ? (
                 <div className={styles.signupFormSuccessMessage}>Sukces!</div>

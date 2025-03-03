@@ -14,12 +14,7 @@ export type OutletProps = {
 
 export default function Outlet({ children }: OutletProps) {
     const [theme, themeDispatch] = useReducer(themeReducer, "light");
-    const [auth, authDispatch] = useReducer(authReducer, null);
-
-    const userEndpoint = useAPIQuery<User>({
-        endpoint: "/v1/auth/web/me",
-        method: "GET",
-    });
+    const [auth, authDispatch] = useReducer(authReducer, { user: null });
 
     useEffect(() => {
         if (theme === "dark") {
@@ -28,18 +23,6 @@ export default function Outlet({ children }: OutletProps) {
             document.querySelector("html")?.classList.remove("dark");
         }
     }, [theme]);
-
-    useEffect(() => {
-        userEndpoint.call();
-    }, []);
-
-    useEffect(() => {
-        if (userEndpoint.error) {
-            authDispatch({ type: "unset-user" });
-        } else if (userEndpoint.data) {
-            authDispatch({ type: "set-usser", user: userEndpoint.data });
-        }
-    }, [userEndpoint.status]);
 
     return (
         <authContext.Provider value={auth}>

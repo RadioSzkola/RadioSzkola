@@ -1,8 +1,6 @@
 import {
-    Signup,
     SignupId,
     signupIdSchema,
-    signupSchema,
     User,
     UserLogin,
     userLoginSchema,
@@ -28,6 +26,10 @@ export function useUser(): { user: User | null; refreshSession: () => void } {
     );
 
     useEffect(() => {
+        if (authStore.user) {
+            return;
+        }
+
         if (
             userQuery.result.status === "data" ||
             userQuery.result.status === "stale"
