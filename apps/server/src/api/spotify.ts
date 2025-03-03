@@ -12,6 +12,7 @@ import { ApiContext } from "../context";
 import { useAuthRules } from "../auth";
 import { parseBySchema } from "@rs/shared/validation";
 import {
+    paginationOptionsSchema,
     spotifyAdminInitSchema,
     SpotifyToken,
     SpotifyTrack,
@@ -24,6 +25,8 @@ import { URLSearchParams } from "node:url";
 import { generateId } from "lucia";
 import { schoolTable, spotifyTokenTable } from "../schema";
 import { eq } from "drizzle-orm";
+import { useValidation } from "../validation";
+import { z } from "zod";
 
 export const spotifyRouterV1 = new Hono<ApiContext>();
 
@@ -223,6 +226,123 @@ spotifyRouterV1.get("/currently-playing", async c => {
             {
                 code: "FETCH",
                 message: "Failed to fetch currently playing track",
+                data: {
+                    code: "UNKNOWN",
+                    data: error,
+                },
+            },
+            500,
+        );
+    }
+});
+
+spotifyRouterV1.get("/search/song", async c => {
+    // const {
+    //     user,
+    //     error: authError,
+    //     statusCode: authStatusCode,
+    // } = useAuthRules(c, {
+    //     member: true,
+    //     admin: true,
+    //     creator: true,
+    //     systemadmin: true,
+    // });
+
+    // if (authError) {
+    //     return c.json(authError, authStatusCode);
+    // }
+
+    const user: User = {
+        createdAt: 0,
+        updatedAt: 0,
+        email: "",
+        id: "",
+        name: "",
+        role: "systemadmin",
+        schoolId: "mickiewicz",
+    };
+
+    const queryParamsData = c.req.query();
+    const {
+        data: queryParams,
+        error: validationError,
+        statusCode: validationStatusCode,
+    } = useValidation(
+        queryParamsData,
+        z.object({ query: z.string(), ...paginationOptionsSchema.shape }),
+    );
+
+    if (validationError) {
+        return c.json(validationError, validationStatusCode);
+    }
+
+    const spotifyToken = await db.query.spotifyTokenTable.findFirst({
+        where: (fields, operators) =>
+            operators.eq(fields.schoolId, user.schoolId),
+    });
+
+    if (!spotifyToken) {
+        return c.json<AppError>({
+            code: "DATABASE",
+            message: "Spotify token does not exist",
+        });
+    }
+
+    try {
+        const URLParams = new URLSearchParams({
+            q: queryParams.query,
+            limit: queryParams.limit?.toString() || "10",
+            offset: queryParams.offset?.toString() || "0",
+            type: "track",
+        }).toString();
+
+        const URL = "https://api.spotify.com/v1/search?" + URLParams;
+
+        const response = await fetch(URL, {
+            headers: {
+                Authorization: `Bearer ${spotifyToken.access}`,
+            },
+        });
+
+        // Handle expired token
+        if (response.status === 401 && spotifyToken.refresh) {
+            // Refresh the token
+            const refreshResponse = await fetch(SPOTIFY_TOKEN_URL(), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    Authorization:
+                        "Basic " +
+                        Buffer.from(
+                            `${SPOTIFY_CLIENT_ID()}:${SPOTIFY_CLIENT_SECRET()}`,
+                        ).toString("base64"),
+                },
+                body: new URLSearchParams({
+                    grant_type: "refresh_token",
+                    refresh_token: spotifyToken.refresh,
+                }).toString(),
+            });
+
+            const refreshData = await refreshResponse.json();
+            const newAccessToken = refreshData.access_token;
+
+            await db
+                .update(spotifyTokenTable)
+                .set({ access: newAccessToken })
+                .where(eq(spotifyTokenTable.id, spotifyToken.id));
+
+            // Retry the request with new token
+            return c.redirect(c.req.path);
+        }
+
+        const data = await response.json();
+
+        return c.json(data);
+    } catch (error) {
+        return c.json<AppError>(
+            {
+                code: "FETCH",
+                message: "Failed to fetch the song",
                 data: {
                     code: "UNKNOWN",
                     data: error,
