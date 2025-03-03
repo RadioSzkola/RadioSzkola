@@ -1,15 +1,16 @@
 import { AppError } from "@rs/shared/error";
 import axios, { AxiosError } from "axios";
 import { SERVER_HOST } from "../const";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type APIFetchConfig<Payload = any> = {
     endpoint: string;
     method: "GET" | "POST" | "DELETE" | "PATCH" | "PUT";
     payload?: Payload;
-    timeout: number;
-    withCredentials: boolean;
-    params: Record<string, string>;
+    timeout?: number;
+    withCredentials?: boolean;
+    params?: Record<string, string>;
+    signal?: AbortSignal;
 };
 
 function resolveURLParams(URL: string, params: Record<string, string>): string {
@@ -37,6 +38,7 @@ export async function APIFetch<Response = any, Payload = any>({
     timeout = 5000,
     withCredentials = true,
     params = {},
+    signal,
 }: APIFetchConfig<Payload>): Promise<
     { data: Response; error: null } | { data: null; error: AppError }
 > {
@@ -51,6 +53,7 @@ export async function APIFetch<Response = any, Payload = any>({
             method,
             data: payload,
             withCredentials,
+            signal,
         });
 
         return {
@@ -76,7 +79,7 @@ export async function APIFetch<Response = any, Payload = any>({
 
 export type QueryStatus = "data" | "error" | "stale" | "pending" | "setup";
 
-export type QueryResult<Response = any> =
+export type QueryResult<Response = any, Payload = any> =
     | {
           status: "setup";
           data: null;
@@ -92,7 +95,7 @@ export type QueryResult<Response = any> =
     | {
           status: "error";
           data: null;
-          error: AppError;
+          error: AppError<Payload>;
           pending: false;
       }
     | {
@@ -109,22 +112,25 @@ export type QueryResult<Response = any> =
       };
 
 export type QueryConfig = {
-    retries: number;
-    retryAfter: number;
+    retries?: number;
+    retryAfter?: number;
+    initial?: boolean;
 };
 
 export function useAPIQuery<Response, Payload = any>(
     fetchConfig: APIFetchConfig<Payload>,
-    { retries = 3, retryAfter = 500 }: QueryConfig = {
+    { retries = 3, retryAfter = 500, initial = true }: QueryConfig = {
         retries: 3,
         retryAfter: 500,
+        initial: true,
     },
 ): {
-    result: QueryResult<Response>;
-    refresh: (refreshConfig: {
-        payload: Payload | null;
-        params: Record<string, string> | null;
+    result: QueryResult<Response, Payload>;
+    refresh: (refreshConfig?: {
+        payload?: Payload;
+        params?: Record<string, string>;
     }) => void;
+    abort: () => void;
 } {
     if (retries < 0) {
         throw new Error("Retries must be a positive number.");
@@ -135,24 +141,49 @@ export function useAPIQuery<Response, Payload = any>(
     const [data, setData] = useState<Response | null>(null);
     const [retriesLeft, setRetriesLeft] = useState(retries);
 
+    const abortController = useRef<AbortController | null>(null);
+
+    const createAbortController = () => {
+        abortController.current = new AbortController();
+        return abortController.current.signal;
+    };
+
+    const abort = () => {
+        if (abortController.current) {
+            abortController.current.abort();
+        }
+
+        abortController.current = null;
+    };
+
+    useEffect(() => {
+        return () => {
+            if (abortController.current) {
+                abortController.current.abort();
+            }
+        };
+    }, []);
+
     const refresh = (
         {
-            payload = null,
-            params = null,
+            payload = undefined,
+            params = undefined,
         }: {
-            payload: Payload | null;
-            params: Record<string, string> | null;
+            payload?: Payload;
+            params?: Record<string, string>;
         } = {
-            payload: null,
-            params: null,
+            payload: undefined,
+            params: undefined,
         },
     ) => {
         setPending(true);
+        const signal = createAbortController();
 
         APIFetch<Response, Payload>({
             ...fetchConfig,
             payload: payload ?? fetchConfig.payload,
             params: params ?? fetchConfig.params,
+            signal,
         })
             .then(res => {
                 if (res.data) {
@@ -177,8 +208,10 @@ export function useAPIQuery<Response, Payload = any>(
     };
 
     useEffect(() => {
-        setPending(true);
-        refresh();
+        if (initial) {
+            setPending(true);
+            refresh();
+        }
     }, []);
 
     useEffect(() => {
@@ -205,6 +238,7 @@ export function useAPIQuery<Response, Payload = any>(
     if (pending && data) {
         return {
             refresh,
+            abort,
             result: {
                 status: "stale",
                 data: data,
@@ -217,6 +251,7 @@ export function useAPIQuery<Response, Payload = any>(
     if (pending) {
         return {
             refresh,
+            abort,
             result: {
                 status: "pending",
                 data: null,
@@ -229,6 +264,7 @@ export function useAPIQuery<Response, Payload = any>(
     if (error) {
         return {
             refresh,
+            abort,
             result: {
                 status: "error",
                 data: null,
@@ -241,6 +277,7 @@ export function useAPIQuery<Response, Payload = any>(
     if (data) {
         return {
             refresh,
+            abort,
             result: {
                 status: "data",
                 data: data,
@@ -252,6 +289,7 @@ export function useAPIQuery<Response, Payload = any>(
 
     return {
         refresh,
+        abort,
         result: {
             status: "setup",
             data: null,
