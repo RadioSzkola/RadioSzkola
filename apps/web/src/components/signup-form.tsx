@@ -103,16 +103,16 @@ export default function SignupForm({
                 id="schoolId"
                 label="identyfikator szkoły"
                 variant={
-                    error?.code === "VALIDATION" && error.data.schoolId
+                    error?.code === "VALIDATION" && error.data.authId
                         ? "error"
                         : "neutral"
                 }
                 errors={
-                    error?.code === "VALIDATION" && error.data.schoolId
-                        ? error.data.schoolId
+                    error?.code === "VALIDATION" && error.data.authId
+                        ? error.data.authId
                         : undefined
                 }
-                onChange={ev => setPassword(ev.target.value)}
+                onChange={ev => setAuthId(ev.target.value)}
             />
             <Button type="submit">Zarejestruj się!</Button>
         </form>

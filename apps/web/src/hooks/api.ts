@@ -133,13 +133,12 @@ export function useAPIQuery<Response, Payload = any>(
     abort: () => void;
 } {
     if (retries < 0) {
-        throw new Error("Retries must be a positive number.");
+        throw new Error("Retries must be a non-negative number");
     }
 
     const [pending, setPending] = useState(false);
     const [error, setError] = useState<AppError | null>(null);
     const [data, setData] = useState<Response | null>(null);
-    const [retriesLeft, setRetriesLeft] = useState(retries);
 
     const abortController = useRef<AbortController | null>(null);
 
@@ -179,32 +178,48 @@ export function useAPIQuery<Response, Payload = any>(
         setPending(true);
         const signal = createAbortController();
 
-        APIFetch<Response, Payload>({
-            ...fetchConfig,
-            payload: payload ?? fetchConfig.payload,
-            params: params ?? fetchConfig.params,
-            signal,
-        })
-            .then(res => {
-                if (res.data) {
-                    setData(res.data);
-                    setError(null);
-                } else {
-                    setError(res.error);
+        const call = (retriesLeft: number) => {
+            APIFetch<Response, Payload>({
+                ...fetchConfig,
+                payload: payload ?? fetchConfig.payload,
+                params: params ?? fetchConfig.params,
+                signal,
+            })
+                .then(res => {
+                    if (res.data) {
+                        setData(res.data);
+                        setError(null);
+                    } else {
+                        setError(res.error);
+                        setData(null);
+
+                        if (retriesLeft > 0) {
+                            setTimeout(() => {
+                                call(retriesLeft - 1);
+                            }, retryAfter);
+                        }
+                    }
+                })
+                .catch(err => {
+                    setError({
+                        code: "UNKNOWN",
+                        message: "An unexepected error (useAPIQuery)",
+                        data: err,
+                    });
                     setData(null);
-                }
-            })
-            .catch(err => {
-                setError({
-                    code: "UNKNOWN",
-                    message: "An unexepected error (useAPIQuery)",
-                    data: err,
+
+                    if (retriesLeft > 0) {
+                        setTimeout(() => {
+                            call(retriesLeft - 1);
+                        }, retryAfter);
+                    }
+                })
+                .finally(() => {
+                    setPending(false);
                 });
-                setData(null);
-            })
-            .finally(() => {
-                setPending(false);
-            });
+        };
+
+        call(retries);
     };
 
     useEffect(() => {
@@ -213,27 +228,6 @@ export function useAPIQuery<Response, Payload = any>(
             refresh();
         }
     }, []);
-
-    useEffect(() => {
-        if (!error) {
-            setRetriesLeft(retries);
-            return;
-        }
-
-        if (retriesLeft <= 0) {
-            setPending(false);
-            return;
-        }
-
-        const timeout = setTimeout(() => {
-            refresh();
-            setRetriesLeft(r => r - 1);
-        }, retryAfter);
-
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, [error, error?.code]);
 
     if (pending && data) {
         return {
