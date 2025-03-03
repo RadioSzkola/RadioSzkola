@@ -1,8 +1,13 @@
+.textInputContainer {
+    width: calc(6 * var(--ui-text-input-size));
+    position: relative;
+}
+
 .textInputWraper {
     position: relative;
     font-size: var(--ui-text-input-text);
     height: var(--ui-text-input-size);
-    min-width: calc(6 * var(--ui-text-input-size));
+    min-width: 100%;
 }
 
 .textInputWraper__neutral {
@@ -76,9 +81,14 @@
     box-shadow: 0 0 0 2px var(--local-color);
 }
 
-.textInputErrorMessage {
-    position: absolute;
-    bottom: 0;
-    font-size: var(--ui-text-input-text);
+.textInputErrors {
+    font-size: var(--text-sm);
     color: var(--ui-text-input-color-error);
+    margin-top: var(--spacing-xs);
+    /* position: absolute; */
+}
+
+.textInputErrorBox {
+    margin-right: var(--spacing-xs);
+    user-select: none;
 }

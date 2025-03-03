@@ -4,7 +4,6 @@ import Hamburger from "../ui/hamburger";
 import styles from "../styles/navigation.module.css";
 import Modal from "../ui/modal";
 import Logo from "../ui/logo";
-import AuthMenu from "./auth-menu";
 import { useUser } from "../hooks/auth";
 import { Link } from "@tanstack/react-router";
 import Close from "../ui/close";
@@ -227,9 +226,6 @@ export default function Navigation() {
                         closeSignup();
                     }}
                 />
-                {isLoginOpen ? <AuthMenu page="login" /> : <></>}
-                {isSignupOpen ? <AuthMenu page="signup" /> : <></>}
-                {isLogoutOpen ? <AuthMenu page="logout" /> : <></>}
             </Modal>
         </nav>
     );

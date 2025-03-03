@@ -112,7 +112,7 @@ export function useSignupIdQuery(): {
 
     const query = useAPIQuery<User, SignupId>(
         {
-            endpoint: "/v1/auth/web/signup",
+            endpoint: "/v1/auth/web/signupid",
             method: "POST",
         },
         {
