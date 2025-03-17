@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { ALLOWED_ORIGINS } from "../const";
+import { CORS_ALLOWED_ORIGINS } from "../const";
 import { AppError } from "@rs/shared/error";
 import {
     paginationOptionsSchema,
@@ -23,7 +23,7 @@ export const userRouterV1 = new Hono<ApiContext>();
 
 userRouterV1.use(
     cors({
-        origin: ALLOWED_ORIGINS(),
+        origin: CORS_ALLOWED_ORIGINS,
         allowMethods: ["GET", "PATCH", "DELETE"],
         credentials: true,
     }),

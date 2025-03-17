@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { ALLOWED_ORIGINS } from "../const";
+import { CORS_ALLOWED_ORIGINS } from "../const";
 import {
     bodyValidatorMiddleware,
     paramsValidatorMiddleware,
@@ -23,7 +23,7 @@ export const schoolRouterV1 = new Hono<ApiContext>();
 
 schoolRouterV1.use(
     cors({
-        origin: ALLOWED_ORIGINS(),
+        origin: CORS_ALLOWED_ORIGINS,
         allowMethods: ["GET", "PATCH", "DELETE", "POST"],
         credentials: true,
     }),

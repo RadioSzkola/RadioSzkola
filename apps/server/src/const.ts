@@ -1,38 +1,69 @@
-import dotenv from "dotenv";
+loadEnvFile(".env");
 
-export const SERVER_PORT = () => process.env.SERVER_PORT || "8080";
-export const SERVER_URL = () =>
-    process.env.SERVER_URL || "http://localhost:" + SERVER_PORT();
+export const SERVER_PORT = process.env.SERVER_PORT as string;
+export const SERVER_URL = process.env.SERVER_URL as string;
 
-export const WEB_APP_PORT = () => process.env.WEB_APP_PORT || "5173";
-export const WEB_APP_URL = () =>
-    process.env.WEB_APP_URL || "http://localhost:" + WEB_APP_PORT();
+export const WEB_APP_URL = process.env.WEB_APP_URL as string;
 
-export const MODE = () =>
-    (process.env.NODE_ENV || "development") as "production" | "development";
+export const MODE = process.env.MODE as "development" | "production";
 
-export const DATABASE_PATH = () =>
-    process.env.DATABASE_PATH || "./.local/sqlite.db";
-export const DATABASE_MIGRATIONS_FOLDER = () => "./migrations";
+export const DATABASE_PATH = process.env.DATABASE_PATH as string;
+export const DATABASE_MIGRATIONS_FOLDER = process.env
+    .DATABASE_MIGRATIONS_FOLDER as string;
 
-export const ALLOWED_ORIGINS = () => {
-    return [
-        `http://localhost:${WEB_APP_PORT()}`,
-        `http://192.168.55.119:${WEB_APP_PORT()}`,
-        `http://192.168.68.131:${WEB_APP_PORT()}`,
-        WEB_APP_URL(),
+export const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID as string;
+export const SPOTIFY_CLIENT_SECRET = process.env
+    .SPOTIFY_CLIENT_SECRET as string;
+export const SPOTIFY_REDIRECT_URI = SERVER_URL + "/v1/spotify/callback";
+export const SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token";
+export const SPOTIFY_WEB_REDIRECT_URL = WEB_APP_URL;
+
+export const CORS_ALLOWED_ORIGINS = [WEB_APP_URL];
+
+export const CRYPTO_PEPPER = process.env.CRYPTO_PEPPER as string;
+export const CRYPTO_ROOT_USER_PASSWORD = process.env
+    .CRYPTO_ROOT_USER_PASSWORD as string;
+
+export function loadEnvFile(path: string) {
+    process.loadEnvFile(path);
+    validateEnvVariables();
+}
+
+export function validateEnvVariables() {
+    const requiredEnvVars = [
+        "SERVER_PORT",
+        "SERVER_URL",
+
+        "WEB_APP_URL",
+
+        "MODE",
+
+        "DATABASE_PATH",
+        "DATABASE_MIGRATIONS_FOLDER",
+
+        "SPOTIFY_CLIENT_ID",
+        "SPOTIFY_CLIENT_SECRET",
+
+        "CRYPTO_PEPPER",
+        "CRYPTO_ROOT_USER_PASSWORD",
     ];
-};
 
-export const SPOTIFY_CLIENT_ID = () => process.env.SPOTIFY_CLIENT_ID || "";
-export const SPOTIFY_CLIENT_SECRET = () =>
-    process.env.SPOTIFY_CLIENT_SECRET || "";
-export const SPOTIFY_REDIRECT_URI = () => SERVER_URL() + "/v1/spotify/callback";
-export const SPOTIFY_TOKEN_URL = () => "https://accounts.spotify.com/api/token";
-export const SPOTIFY_WEB_REDIRECT_URL = () => WEB_APP_URL();
+    const missingEnvVars = requiredEnvVars.filter(
+        envVar => !process.env[envVar],
+    );
 
-export function setupDotenv() {
-    if (MODE() === "development") {
-        dotenv.config();
+    if (missingEnvVars.length > 0) {
+        throw new Error(
+            `Missing required environment variables: ${missingEnvVars.join(", ")}`,
+        );
+    }
+
+    if (
+        process.env.MODE !== "development" &&
+        process.env.MODE !== "production"
+    ) {
+        throw new Error(
+            `Invalid MODE value: ${process.env.MODE}. Allowed values are "development" and "production".`,
+        );
     }
 }

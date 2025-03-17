@@ -1,10 +1,11 @@
 import { serve } from "@hono/node-server";
-import { SERVER_PORT, setupDotenv } from "./const";
+import { CORS_ALLOWED_ORIGINS, loadEnvFile, SERVER_PORT } from "./const";
 import { api } from "./api";
+import { setupDatabase } from "./db";
 
-setupDotenv();
+setupDatabase();
 
 serve({
     fetch: api.fetch,
-    port: parseInt(SERVER_PORT()),
+    port: parseInt(SERVER_PORT),
 });

@@ -2,8 +2,9 @@
     "name": "radio-szkola-monorepo",
     "private": true,
     "scripts": {
-        "build": "turbo run build && rm -rf ./dist && mkdir ./dist && cp -r ./apps/server/dist ./dist/server && cp -r ./apps/client/dist ./dist/client",
-        "dev": "turbo run dev"
+        "build": "turbo run build",
+        "dev": "turbo run dev",
+        "start": "turbo run start"
     },
     "packageManager": "pnpm@9.10.0",
     "devDependencies": {

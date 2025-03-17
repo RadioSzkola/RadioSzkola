@@ -7,10 +7,15 @@ export default function CurrentlyPLaying() {
     const {
         refresh,
         result: { data, error, pending, status },
-    } = useAPIQuery<SpotifyTrack>({
-        endpoint: "/v1/spotify/currently-playing?schoolId=mickiewicz",
-        method: "GET",
-    });
+    } = useAPIQuery<SpotifyTrack>(
+        {
+            endpoint: "/v1/spotify/currently-playing?schoolId=mickiewicz",
+            method: "GET",
+        },
+        {
+            retries: 0,
+        },
+    );
 
     useEffect(() => {
         const interval = setInterval(() => {

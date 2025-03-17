@@ -4,7 +4,7 @@
     "scripts": {
         "dev": "conc \"tsx watch src/index.ts\" \"pnpm db:studio\"",
         "build": "pkgroll",
-        "start": "pkgroll",
+        "start": "node ./dist/index.cjs",
         "db:migrate:generate": "drizzle-kit generate",
         "db:migrate:run": "tsx src/migrate.ts",
         "db:migrate": "pnpm db:migrate:generate && pnpm db:migrate:run",
@@ -17,7 +17,6 @@
         "@node-rs/argon2": "^1.8.3",
         "@rs/shared": "workspace:*",
         "better-sqlite3": "^11.3.0",
-        "dotenv": "^16.4.5",
         "drizzle-kit": "^0.24.2",
         "drizzle-orm": "^0.33.0",
         "drizzle-zod": "^0.5.1",

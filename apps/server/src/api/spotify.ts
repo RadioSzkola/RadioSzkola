@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import {
-    ALLOWED_ORIGINS,
+    CORS_ALLOWED_ORIGINS,
     SPOTIFY_CLIENT_ID,
     SPOTIFY_CLIENT_SECRET,
     SPOTIFY_REDIRECT_URI,
@@ -34,7 +34,7 @@ let spotifyCurrebltPlayingCacheLastEntry = Date.now();
 
 spotifyRouterV1.use(
     cors({
-        origin: ALLOWED_ORIGINS(),
+        origin: CORS_ALLOWED_ORIGINS,
         allowMethods: ["GET", "PATCH", "DELETE", "POST"],
         credentials: true,
     }),
@@ -57,8 +57,8 @@ spotifyRouterV1.get("/init", async c => {
     const state = Buffer.from(JSON.stringify(user)).toString("base64");
     const params = new URLSearchParams({
         response_type: "code",
-        client_id: SPOTIFY_CLIENT_ID(),
-        redirect_uri: SPOTIFY_REDIRECT_URI(),
+        client_id: SPOTIFY_CLIENT_ID,
+        redirect_uri: SPOTIFY_REDIRECT_URI,
         scope: "user-read-currently-playing",
         state: state,
     });
@@ -95,20 +95,20 @@ spotifyRouterV1.get("/callback", async c => {
         );
     }
 
-    const response = await fetch(SPOTIFY_TOKEN_URL(), {
+    const response = await fetch(SPOTIFY_TOKEN_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization:
                 "Basic " +
                 Buffer.from(
-                    `${SPOTIFY_CLIENT_ID()}:${SPOTIFY_CLIENT_SECRET()}`,
+                    `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`,
                 ).toString("base64"),
         },
         body: new URLSearchParams({
             grant_type: "authorization_code",
             code: code,
-            redirect_uri: SPOTIFY_REDIRECT_URI(),
+            redirect_uri: SPOTIFY_REDIRECT_URI,
         }).toString(),
     });
 
@@ -138,7 +138,7 @@ spotifyRouterV1.get("/callback", async c => {
         schoolId: user.schoolId,
     });
 
-    return c.redirect(SPOTIFY_WEB_REDIRECT_URL());
+    return c.redirect(SPOTIFY_WEB_REDIRECT_URL);
 });
 
 spotifyRouterV1.get("/currently-playing", async c => {
@@ -187,14 +187,14 @@ spotifyRouterV1.get("/currently-playing", async c => {
         // Handle expired token
         if (response.status === 401 && token.refresh) {
             // Refresh the token
-            const refreshResponse = await fetch(SPOTIFY_TOKEN_URL(), {
+            const refreshResponse = await fetch(SPOTIFY_TOKEN_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                     Authorization:
                         "Basic " +
                         Buffer.from(
-                            `${SPOTIFY_CLIENT_ID()}:${SPOTIFY_CLIENT_SECRET()}`,
+                            `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`,
                         ).toString("base64"),
                 },
                 body: new URLSearchParams({
@@ -306,14 +306,14 @@ spotifyRouterV1.get("/search/song", async c => {
         // Handle expired token
         if (response.status === 401 && spotifyToken.refresh) {
             // Refresh the token
-            const refreshResponse = await fetch(SPOTIFY_TOKEN_URL(), {
+            const refreshResponse = await fetch(SPOTIFY_TOKEN_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                     Authorization:
                         "Basic " +
                         Buffer.from(
-                            `${SPOTIFY_CLIENT_ID()}:${SPOTIFY_CLIENT_SECRET()}`,
+                            `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`,
                         ).toString("base64"),
                 },
                 body: new URLSearchParams({

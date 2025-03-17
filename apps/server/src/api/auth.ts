@@ -14,7 +14,7 @@ import { ApiContext } from "../context";
 import { AppError } from "@rs/shared/error";
 import { bodyValidatorMiddleware } from "../middlewares/validation";
 import { createUserId, hashPassword, verifyPassword } from "../crypto";
-import { ALLOWED_ORIGINS } from "../const";
+import { CORS_ALLOWED_ORIGINS } from "../const";
 import { cors } from "hono/cors";
 import { parseBySchema } from "@rs/shared/validation";
 import { getCookie } from "hono/cookie";
@@ -23,7 +23,7 @@ export const webAuthRouterV1 = new Hono<ApiContext>();
 
 webAuthRouterV1.use(
     cors({
-        origin: ALLOWED_ORIGINS(),
+        origin: CORS_ALLOWED_ORIGINS,
         allowMethods: ["POST", "GET"],
         credentials: true,
     }),
