@@ -3,6 +3,11 @@
     color: var(--color-black);
     cursor: pointer;
     position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    width: var(--size-md);
+    height: var(--size-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

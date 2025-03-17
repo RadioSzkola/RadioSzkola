@@ -7,6 +7,9 @@ import Logo from "../ui/logo";
 import { useUser } from "../hooks/auth";
 import { Link } from "@tanstack/react-router";
 import Close from "../ui/close";
+import LoginForm from "./login-form";
+import SignupForm from "./signup-form";
+import LogoutForm from "./logout-form";
 
 export default function Navigation() {
     const { user } = useUser();
@@ -218,7 +221,11 @@ export default function Navigation() {
                     closeLogout();
                     closeSignup();
                 }}
+                wrapperClass={styles.modalWrapper}
             >
+                {isLoginOpen && <LoginForm />}
+                {isSignupOpen && <SignupForm />}
+                {isLogoutOpen && <LogoutForm />}
                 <Close
                     onClick={() => {
                         closeLogin();

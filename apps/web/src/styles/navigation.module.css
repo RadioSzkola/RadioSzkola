@@ -11,13 +11,11 @@
 }
 
 .mobileMenu {
-    width: 80svw;
-    height: 80svh;
-    padding: var(--spacing-md);
+    padding: var(--spacing-xl);
     position: relative;
-    max-width: 500px;
+    width: fit-content;
 
-    background-color: var(--color-yellow);
+    background-color: var(--color-yellow-pale);
     box-shadow:
         0 0 0 4px var(--color-black),
         4px 4px 0 4px var(--color-black);
@@ -68,9 +66,27 @@
 
 .mobileLinksLink {
     font-size: var(--text-lg);
+    color: var(--color-black);
     font-weight: bold;
+    text-wrap: nowrap;
 
     &:hover {
         text-decoration: underline;
     }
+}
+
+.modalWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: var(--spacing-xl);
+    padding-top: calc(2 * var(--spacing-xl));
+    background-color: var(--color-yellow-pale);
+
+    box-shadow:
+        0 0 0 4px var(--color-black),
+        4px 4px 0 4px var(--color-black);
+
+    --ui-text-input-color-bg: var(--color-yellow-pale);
 }

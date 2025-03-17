@@ -1,2 +1,4 @@
 .accountRoute {
+    margin-bottom: var(--spacing-xl);
+    width: calc(100% - 2 * var(--spacing-lg));
 }

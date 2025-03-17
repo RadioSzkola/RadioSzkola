@@ -14,7 +14,7 @@ export default function SignupForm({
 }: SignupFormProps) {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
-    const [schoolId, setSchoolId] = useState("mickiewicz");
+    const [schoolId] = useState("mickiewicz");
     const [authId, setAuthId] = useState("");
     const [email, setEmail] = useState("");
 

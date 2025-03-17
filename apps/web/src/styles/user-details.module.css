@@ -1,0 +1,31 @@
+.userDetail {
+    padding: var(--spacing-lg);
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: var(--color-white);
+    box-shadow:
+        0 0 0 4px var(--color-black),
+        4px 4px 0 4px var(--color-black);
+}
+
+.userDetailTitle {
+    font-size: var(--text-lg);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+.userDetailItem {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+}
+
+.userDetailLabel {
+    font-weight: bold;
+    margin-right: var(--spacing-md);
+}
+
+.userDetailValue {
+    color: var(--color-black);
+}
