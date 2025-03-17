@@ -3,8 +3,7 @@ import styles from "../styles/index-route.module.css";
 import ImgSpeaker from "../img/speaker.png";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Button from "../ui/button";
-import Playlist from "../components/playlist";
-import CurrentlyPLaying from "../components/currently-playing";
+import CurrentlyPlaying from "../components/currently-playing";
 
 export const Route = createLazyFileRoute("/")({
     component: RouteComponent,
@@ -53,8 +52,7 @@ function RouteComponent() {
                     </div>
                 </div>
             </main>
-            <Playlist />
-            <CurrentlyPLaying />
+            <CurrentlyPlaying />
         </div>
     );
 }

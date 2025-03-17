@@ -13,7 +13,6 @@ import { useAuthRules } from "../auth";
 import { parseBySchema } from "@rs/shared/validation";
 import {
     paginationOptionsSchema,
-    spotifyAdminInitSchema,
     SpotifyToken,
     SpotifyTrack,
     User,

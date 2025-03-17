@@ -4,14 +4,17 @@ import styles from "../styles/currently-playing.module.css";
 import { useEffect } from "react";
 
 export default function CurrentlyPLaying() {
-    const { call, data, error, pending, status } = useAPIQuery<SpotifyTrack>({
+    const {
+        refresh,
+        result: { data, error, pending, status },
+    } = useAPIQuery<SpotifyTrack>({
         endpoint: "/v1/spotify/currently-playing?schoolId=mickiewicz",
         method: "GET",
     });
 
     useEffect(() => {
         const interval = setInterval(() => {
-            call();
+            refresh();
         }, 2000);
 
         return () => clearInterval(interval);
