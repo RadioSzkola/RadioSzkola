@@ -1,5 +1,5 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { sessionTable, userTable } from "../schemas";
+import { userTable } from "../schemas";
 import { z } from "zod";
 
 export const userRoleSchema = z.enum([

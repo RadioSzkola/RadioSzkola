@@ -37,5 +37,6 @@ export type AppError<T = any> =
       };
 
 export const customZodErrorMap: ZodErrorMap = (error, ctx) => {
+    console.log(error.code);
     return { message: ctx.defaultError };
 };

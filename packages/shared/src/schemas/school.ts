@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { userTable } from "./user";
 import { timestamp } from "./utils";
 import { spotifyTokenTable } from "./spotify";

@@ -1,9 +1,4 @@
-import {
-    integer,
-    primaryKey,
-    sqliteTable,
-    text,
-} from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { timestamp } from "./utils";
 import { userTable } from "./user";
 import { relations } from "drizzle-orm";

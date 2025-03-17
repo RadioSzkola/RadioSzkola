@@ -4,7 +4,6 @@ import { UserRole } from "../models";
 import { schoolTable } from "./school";
 import { sessionTable } from "./session";
 import { timestamp } from "./utils";
-import { authIdTable } from "./auth-id";
 import { spotifyTokenTable } from "./spotify";
 
 export const userTable = sqliteTable("user", {

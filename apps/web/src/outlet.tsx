@@ -5,8 +5,6 @@ import {
     themeDispatchContext,
 } from "./stores/theme";
 import { authReducer, authContext, authDispatchContext } from "./stores/auth";
-import { useAPIQuery } from "./hooks/api";
-import { User } from "@rs/shared/models";
 
 export type OutletProps = {
     children?: React.ReactElement;
