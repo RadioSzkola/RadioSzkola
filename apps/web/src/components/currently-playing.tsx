@@ -31,21 +31,25 @@ export default function CurrentlyPLaying() {
 
     return (
         <div className={styles.currentlyPlaying}>
-            <img
-                className={styles.currentlyPlayingCover}
-                src={data?.item.album.images[0].url}
-            />
-            <div className={styles.currentlyPlayingInfo}>
-                <div className={styles.currentlyPlayingInfoItem}>
-                    tytuł: {data?.item.name}
-                </div>
-                <div className={styles.currentlyPlayingInfoItem}>
-                    album: {data?.item.album.name}
-                </div>
-                <div className={styles.currentlyPlayingInfoItem}>
-                    wykonawca: {data?.item.artists[0].name}
-                </div>
-            </div>
+            {data && (
+                <>
+                    <img
+                        className={styles.currentlyPlayingCover}
+                        src={data?.item.album.images[0].url}
+                    />
+                    <div className={styles.currentlyPlayingInfo}>
+                        <div className={styles.currentlyPlayingInfoItem}>
+                            tytuł: {data?.item.name}
+                        </div>
+                        <div className={styles.currentlyPlayingInfoItem}>
+                            album: {data?.item.album.name}
+                        </div>
+                        <div className={styles.currentlyPlayingInfoItem}>
+                            wykonawca: {data?.item.artists[0].name}
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 }

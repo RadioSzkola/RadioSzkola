@@ -168,10 +168,13 @@ spotifyRouterV1.get("/currently-playing", async c => {
     });
 
     if (!token) {
-        return c.json<AppError>({
-            code: "DATABASE",
-            message: "Spotify token does not exist",
-        });
+        return c.json<AppError>(
+            {
+                code: "DATABASE",
+                message: "Spotify token does not exist",
+            },
+            400,
+        );
     }
 
     try {
