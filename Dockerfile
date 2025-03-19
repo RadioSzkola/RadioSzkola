@@ -6,8 +6,8 @@ RUN corepack enable
 COPY . /app
 WORKDIR /app
 
-EXPOSE 5173
-EXPOSE 8090
+EXPOSE 3000
+EXPOSE 8000
 
 RUN pnpm install
 RUN pnpm build
