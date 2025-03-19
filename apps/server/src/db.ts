@@ -1,14 +1,21 @@
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import SqliteDatabase from "better-sqlite3";
-import { CRYPTO_ROOT_USER_PASSWORD, DATABASE_PATH } from "./const";
+import {
+    CRYPTO_ROOT_USER_PASSWORD,
+    DATABASE_MIGRATIONS_FOLDER,
+    DATABASE_PATH,
+} from "./const";
 import * as schema from "@rs/shared/schemas";
 import { hashPassword } from "./crypto";
+import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 
 const sqlite = new SqliteDatabase(DATABASE_PATH);
 export const db = drizzle(sqlite, { schema });
 
 export function setupDatabase() {
     (async () => {
+        migrate(db, { migrationsFolder: DATABASE_MIGRATIONS_FOLDER });
+
         const mickiewicz = await db.query.schoolTable.findFirst({
             where: (fields, operators) => operators.eq(fields.id, "mickiewicz"),
         });

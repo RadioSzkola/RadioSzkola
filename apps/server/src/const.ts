@@ -1,11 +1,15 @@
-loadEnvFile(".env");
+loadEnvFile(
+    process.env.NODE_ENV === "development"
+        ? ".env.development"
+        : ".env.production",
+);
+
+export const MODE = process.env.MODE as "development" | "production";
 
 export const SERVER_PORT = process.env.SERVER_PORT as string;
 export const SERVER_URL = process.env.SERVER_URL as string;
 
 export const WEB_APP_URL = process.env.WEB_APP_URL as string;
-
-export const MODE = process.env.MODE as "development" | "production";
 
 export const DATABASE_PATH = process.env.DATABASE_PATH as string;
 export const DATABASE_MIGRATIONS_FOLDER = process.env
@@ -66,4 +70,6 @@ export function validateEnvVariables() {
             `Invalid MODE value: ${process.env.MODE}. Allowed values are "development" and "production".`,
         );
     }
+
+    console.log(process.env);
 }

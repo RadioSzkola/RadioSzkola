@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+    app:
+        image: kijudev/radio-szkola
+        ports:
+            - "3000:3000" # Frontend
+            - "8000:8000" # Backend
+        volumes:
+            - backend-data:/app/backend/db # Volume for SQLite database
+        restart: unless-stopped
+
+    caddy:
+        image: caddy:latest
+        container_name: caddy
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - /root/Caddyfile:/etc/caddy/Caddyfile
+            - caddy-data:/data
+            - caddy-config:/config
+        restart: unless-stopped
+
+volumes:
+    backend-data:
+    caddy-data:
+    caddy-config:

@@ -1,11 +1,7 @@
 /node_modules
 .git
 .gitignore
-*.md
-dist
-build
-.turbo
-.env
-.env.local
-.env.production
-.env.development
+**/dist
+**/build
+**/.turbo
+**/.local

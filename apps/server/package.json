@@ -2,9 +2,9 @@
     "name": "@rs/server",
     "private": true,
     "scripts": {
-        "dev": "conc \"tsx watch src/index.ts\" \"pnpm db:studio\"",
+        "dev": "NODE_ENV=development conc \"tsx watch src/index.ts\" \"pnpm db:studio\"",
         "build": "pkgroll",
-        "start": "node ./dist/index.cjs",
+        "start": "NODE_ENV=production node ./dist/index.cjs",
         "db:migrate:generate": "drizzle-kit generate",
         "db:migrate:run": "tsx src/migrate.ts",
         "db:migrate": "pnpm db:migrate:generate && pnpm db:migrate:run",
