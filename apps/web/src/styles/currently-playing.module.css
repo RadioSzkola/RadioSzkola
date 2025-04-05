@@ -11,6 +11,8 @@
         5px 5px 0 4px var(--color-black);
     width: calc(100vw - 2 * var(--spacing-lg));
 
+    min-height: 200px;
+
     @media (min-width: 860px) {
         width: fit-content;
         aspect-ratio: 2/1;
@@ -39,4 +41,13 @@
 
 .currentlyPlayingInfoItem {
     color: var(--color-white);
+}
+
+.currentlyPlayingEmpty {
+    color: var(--color-white);
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: var(--spacing-md);
+    margin-left: var(--spacing-md);
 }

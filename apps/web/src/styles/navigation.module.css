@@ -80,13 +80,16 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: var(--spacing-xl);
-    padding-top: calc(2 * var(--spacing-xl));
-    background-color: var(--color-yellow-pale);
+    padding: var(--spacing-lg);
+    padding-top: calc(2 * var(--spacing-lg));
+    background-color: var(--color-green-light);
+    max-width: 90svw;
+    max-width: 90svh;
+    width: fit-content;
 
     box-shadow:
         0 0 0 4px var(--color-black),
         4px 4px 0 4px var(--color-black);
 
-    --ui-text-input-color-bg: var(--color-yellow-pale);
+    --ui-text-input-color-bg: var(--color-green-light);
 }

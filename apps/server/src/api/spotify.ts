@@ -178,6 +178,8 @@ spotifyRouterV1.get("/currently-playing", async c => {
     }
 
     try {
+        console.log({ place: "spotify -> body 0", token });
+
         const response = await fetch(
             "https://api.spotify.com/v1/me/player/currently-playing",
             {
@@ -187,8 +189,12 @@ spotifyRouterV1.get("/currently-playing", async c => {
             },
         );
 
+        console.log({ place: "spotify -> fetch", response });
+
         // Handle expired token
         if (response.status === 401 && token.refresh) {
+            console.log({ place: "spotify -> refresh 1" });
+
             // Refresh the token
             const refreshResponse = await fetch(SPOTIFY_TOKEN_URL, {
                 method: "POST",
@@ -206,24 +212,50 @@ spotifyRouterV1.get("/currently-playing", async c => {
                 }).toString(),
             });
 
+            console.log({ place: "spotify -> refresh 2" });
+
             const refreshData = await refreshResponse.json();
+
+            console.log({ place: "spotify -> refresh 3" });
+
             const newAccessToken = refreshData.access_token;
+
+            console.log({ place: "spotify -> refresh 4" });
 
             await db
                 .update(spotifyTokenTable)
                 .set({ access: newAccessToken })
                 .where(eq(spotifyTokenTable.id, token.id));
 
+            console.log({ place: "spotify -> refresh 5" });
+
             // Retry the request with new token
             return c.redirect("/v1/spotify/currently-playing");
         }
 
+        console.log({
+            place: "spotify -> body 1",
+        });
+
         const data = await response.json();
 
+        console.log({ place: "spotify -> body 2", data });
+
         spotifyCurrentlyPlayingCache.set(schoolId, data);
+
+        console.log({ place: "spotify -> body 3", data });
+
         spotifyCurrebltPlayingCacheLastEntry = Date.now();
+
+        console.log({ place: "spotify -> body 4", data });
+
         return c.json(data);
     } catch (error) {
+        console.log({
+            place: "spotify -> fetch currently playing track",
+            error,
+        });
+
         return c.json<AppError>(
             {
                 code: "FETCH",

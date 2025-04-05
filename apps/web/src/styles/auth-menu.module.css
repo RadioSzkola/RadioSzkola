@@ -1,6 +1,7 @@
 .authMenu {
-    max-height: 90vh;
-    max-width: 90vw;
+    max-height: 90svh;
+    max-width: 90svw;
+    width: fit-content;
     display: flex;
     align-items: center;
     justify-content: center;

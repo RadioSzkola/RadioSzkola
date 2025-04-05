@@ -50,6 +50,11 @@ export default function CurrentlyPLaying() {
                     </div>
                 </>
             )}
+            {(error || pending) && (
+                <h1 className={styles.currentlyPlayingEmpty}>
+                    Jeszcze nic nie gra!
+                </h1>
+            )}
         </div>
     );
 }
