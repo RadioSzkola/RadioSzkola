@@ -8,6 +8,11 @@ export const timestampSchema = {
 
 export const permissionsSchema = z.enum(["role-admin", "role-user"]);
 
+export const paginationSchema = z.object({
+  page: z.number().min(1).default(1),
+  limit: z.number().min(1).max(100).default(10),
+});
+
 // Auth schemas
 export const signupSchema = z.object({
   email: z
@@ -142,6 +147,7 @@ export const updateVoteSchema = z.object({
 
 // Types exports
 export type Permissions = z.infer<typeof permissionsSchema>;
+export type Pagination = z.infer<typeof paginationSchema>;
 
 export type SigninData = z.infer<typeof signinSchema>;
 export type SignupData = z.infer<typeof signupSchema>;
