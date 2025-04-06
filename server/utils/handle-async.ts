@@ -13,6 +13,8 @@ export async function handleAsync<T, E>(
       success: true,
     };
   } catch (e) {
+    console.log({ e });
+
     return {
       data: null,
       error: e as E,

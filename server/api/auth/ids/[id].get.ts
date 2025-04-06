@@ -1,7 +1,8 @@
 import { handleAsync } from "~/server/utils/handle-async";
 import {
-  ErrorAuthIdNotFound,
+  ErrorNotFound,
   ErrorUnknownDatabase,
+  ErrorValidation,
 } from "~/utils/error-status";
 
 export default defineEventHandler(async (event) => {
@@ -10,7 +11,7 @@ export default defineEventHandler(async (event) => {
   if (!id) {
     throw createError({
       statusCode: 400,
-      statusText: "Missing ID parameter",
+      statusText: ErrorValidation,
     });
   }
 
@@ -31,7 +32,7 @@ export default defineEventHandler(async (event) => {
   if (!authId) {
     throw createError({
       statusCode: 404,
-      statusText: ErrorAuthIdNotFound,
+      statusText: ErrorNotFound,
     });
   }
 

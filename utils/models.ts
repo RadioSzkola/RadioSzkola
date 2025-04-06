@@ -2,40 +2,67 @@ import { z } from "zod";
 
 // Base schemas for common fields
 export const timestampSchema = {
-  createdAt: z.number(),
-  updatedAt: z.number(),
+  createdAt: z.number({ message: "Wymagane" }),
+  updatedAt: z.number({ message: "Wymagane" }),
 };
 
 export const permissionsSchema = z.enum(["role-admin", "role-user"]);
 
 export const paginationSchema = z.object({
-  page: z.number().min(1).default(1),
-  limit: z.number().min(1).max(100).default(10),
+  offset: z.number({ message: "Wymagane", coerce: true }).min(0).default(0),
+  limit: z
+    .number({ message: "Wymagane", coerce: true })
+    .min(1)
+    .max(100)
+    .default(10),
 });
 
 // Auth schemas
+
+export const authIdSchema = z.object({
+  id: z
+    .string({ message: "Wymagane" })
+    .min(1, "ID jest wymagane")
+    .max(255, "ID nie może być dłuższe niż 255 znaków"),
+  userId: z.number({ message: "Wymagane" }).nullish(),
+  expiresAt: z.number({ message: "Wymagane" }),
+  ...timestampSchema,
+});
+
+export const createAuthIdSchema = z.object({
+  id: z
+    .string({ message: "Wymagane" })
+    .min(1, "ID jest wymagane")
+    .max(255, "ID nie może być dłuższe niż 255 znaków"),
+});
+
+export const updateAuthIdSchema = z.object({
+  userId: z.number({ message: "Wymagane" }).optional(),
+  expiresAt: z.number({ message: "Wymagane" }).optional(),
+});
+
 export const signupSchema = z.object({
   email: z
-    .string()
+    .string({ message: "Wymagane" })
     .email("Nieprawidłowy format adresu email")
     .min(1, "Email jest wymagany"),
   name: z
-    .string()
+    .string({ message: "Wymagane" })
     .min(2, "Imię musi mieć co najmniej 2 znaki")
     .max(50, "Imię nie może być dłuższe niż 50 znaków"),
   password: z
-    .string()
+    .string({ message: "Wymagane" })
     .min(6, "Hasło musi mieć co najmniej 6 znaków")
     .max(50, "Hasło nie może być dłuższe niż 50 znaków"),
   authId: z
-    .string()
+    .string({ message: "Wymagane" })
     .min(1, "ID autoryzacji jest wymagane")
     .max(50, "ID autoryzacji nie może być dłuższe niż 50 znaków"),
 });
 
 export const signinSchema = z.object({
   email: z
-    .string()
+    .string({ message: "Wymagane" })
     .email("Nieprawidłowy format adresu email")
     .min(1, "Email jest wymagany"),
   password: z.string().min(1, "Hasło jest wymagane"),
@@ -45,75 +72,108 @@ export const signoutSchema = z.object({});
 
 // User schemas
 export const serverUserSchema = z.object({
-  id: z.number(),
-  email: z.string().email("Nieprawidłowy format adresu email"),
-  name: z.string().min(2, "Imię musi mieć co najmniej 2 znaki"),
-  passwordHash: z.string(),
-  permissions: z.string(),
+  id: z.number({ message: "Wymagane" }),
+  email: z
+    .string({ message: "Wymagane" })
+    .email("Nieprawidłowy format adresu email"),
+  name: z
+    .string({ message: "Wymagane" })
+    .min(2, "Imię musi mieć co najmniej 2 znaki"),
+  passwordHash: z.string({ message: "Wymagane" }),
+  permissions: z.string({ message: "Wymagane" }),
   ...timestampSchema,
 });
 
 export const userSchema = serverUserSchema.omit({ passwordHash: true });
 
 export const createUserSchema = z.object({
-  email: z.string().email("Nieprawidłowy format adresu email"),
-  name: z.string().min(2, "Imię musi mieć co najmniej 2 znaki"),
-  passwordHash: z.string(),
-  permissions: z.string(),
+  email: z
+    .string({ message: "Wymagane" })
+    .email("Nieprawidłowy format adresu email"),
+  name: z
+    .string({ message: "Wymagane" })
+    .min(2, "Imię musi mieć co najmniej 2 znaki"),
+  passwordHash: z.string({ message: "Wymagane" }),
+  permissions: z.string({ message: "Wymagane" }),
 });
 
 export const updateUserSchema = z.object({
-  email: z.string().email("Nieprawidłowy format adresu email").optional(),
-  name: z.string().min(2, "Imię musi mieć co najmniej 2 znaki").optional(),
-  passwordHash: z.string().optional(),
-  permissions: z.string().optional(),
+  email: z
+    .string({ message: "Wymagane" })
+    .email("Nieprawidłowy format adresu email")
+    .optional(),
+  name: z
+    .string({ message: "Wymagane" })
+    .min(2, "Imię musi mieć co najmniej 2 znaki")
+    .optional(),
+  passwordHash: z.string({ message: "Wymagane" }).optional(),
+  permissions: z.string({ message: "Wymagane" }).optional(),
 });
 
 // Spotify Token schemas
 export const spotifyTokenSchema = z.object({
-  id: z.number(),
-  userId: z.number(),
-  accessToken: z.string().min(1, "Token dostępu jest wymagany"),
-  refreshToken: z.string().min(1, "Token odświeżania jest wymagany"),
+  id: z.number({ message: "Wymagane" }),
+  userId: z.number({ message: "Wymagane" }),
+  accessToken: z
+    .string({ message: "Wymagane" })
+    .min(1, "Token dostępu jest wymagany"),
+  refreshToken: z
+    .string({ message: "Wymagane" })
+    .min(1, "Token odświeżania jest wymagany"),
   active: z.union([z.literal(0), z.literal(1)]),
   ...timestampSchema,
 });
 
 export const createSpotifyTokenSchema = z.object({
-  userId: z.number().min(1, "ID użytkownika jest wymagane"),
-  accessToken: z.string().min(1, "Token dostępu jest wymagany"),
-  refreshToken: z.string().min(1, "Token odświeżania jest wymagany"),
+  userId: z
+    .number({ message: "Wymagane" })
+    .min(1, "ID użytkownika jest wymagane"),
+  accessToken: z
+    .string({ message: "Wymagane" })
+    .min(1, "Token dostępu jest wymagany"),
+  refreshToken: z
+    .string({ message: "Wymagane" })
+    .min(1, "Token odświeżania jest wymagany"),
   active: z.union([z.literal(0), z.literal(1)]),
 });
 
 export const updateSpotifyTokenSchema = z.object({
-  accessToken: z.string().min(1, "Token dostępu jest wymagany").optional(),
-  refreshToken: z.string().min(1, "Token odświeżania jest wymagany").optional(),
+  accessToken: z
+    .string({ message: "Wymagane" })
+    .min(1, "Token dostępu jest wymagany")
+    .optional(),
+  refreshToken: z
+    .string({ message: "Wymagane" })
+    .min(1, "Token odświeżania jest wymagany")
+    .optional(),
   active: z.union([z.literal(0), z.literal(1)]).optional(),
 });
 
 // Track History schemas
 export const trackHistorySchema = z.object({
-  id: z.number(),
-  trackId: z.string().min(1, "ID utworu jest wymagane"),
-  startedAt: z.number(),
-  endedAt: z.number(),
+  id: z.number({ message: "Wymagane" }),
+  trackId: z.string({ message: "Wymagane" }).min(1, "ID utworu jest wymagane"),
+  startedAt: z.number({ message: "Wymagane" }),
+  endedAt: z.number({ message: "Wymagane" }),
   ...timestampSchema,
 });
 
 export const createTrackHistorySchema = z.object({
-  trackId: z.string().min(1, "ID utworu jest wymagane"),
+  trackId: z.string({ message: "Wymagane" }).min(1, "ID utworu jest wymagane"),
 });
 
 export const updateTrackHistorySchema = z.object({
-  trackId: z.string().min(1, "ID utworu jest wymagane").optional(),
+  trackId: z
+    .string({ message: "Wymagane" })
+    .min(1, "ID utworu jest wymagane")
+    .optional(),
 });
 
 // Vote Rounds schemas
 export const voteRoundSchema = z.object({
-  id: z.number(),
-  startedAt: z.number(),
-  endedAt: z.number(),
+  id: z.number({ message: "Wymagane" }),
+  startedAt: z.number({ message: "Wymagane" }),
+  endedAt: z.number({ message: "Wymagane" }),
   ...timestampSchema,
 });
 
@@ -123,31 +183,55 @@ export const updateVoteRoundSchema = z.object({});
 
 // Votes schemas
 export const voteSchema = z.object({
-  id: z.number(),
-  roundId: z.number().min(1, "ID rundy jest wymagane"),
-  userId: z.number().min(1, "ID użytkownika jest wymagane"),
-  trackId: z.string().min(1, "ID utworu jest wymagane"),
-  count: z.number().min(0, "Liczba głosów musi być dodatnia"),
+  id: z.number({ message: "Wymagane" }),
+  roundId: z.number({ message: "Wymagane" }).min(1, "ID rundy jest wymagane"),
+  userId: z
+    .number({ message: "Wymagane" })
+    .min(1, "ID użytkownika jest wymagane"),
+  trackId: z.string({ message: "Wymagane" }).min(1, "ID utworu jest wymagane"),
+  count: z
+    .number({ message: "Wymagane" })
+    .min(0, "Liczba głosów musi być dodatnia"),
   ...timestampSchema,
 });
 
 export const createVoteSchema = z.object({
-  roundId: z.number().min(1, "ID rundy jest wymagane"),
-  userId: z.number().min(1, "ID użytkownika jest wymagane"),
-  trackId: z.string().min(1, "ID utworu jest wymagane"),
-  count: z.number().min(0, "Liczba głosów musi być dodatnia"),
+  roundId: z.number({ message: "Wymagane" }).min(1, "ID rundy jest wymagane"),
+  userId: z
+    .number({ message: "Wymagane" })
+    .min(1, "ID użytkownika jest wymagane"),
+  trackId: z.string({ message: "Wymagane" }).min(1, "ID utworu jest wymagane"),
+  count: z
+    .number({ message: "Wymagane" })
+    .min(0, "Liczba głosów musi być dodatnia"),
 });
 
 export const updateVoteSchema = z.object({
-  roundId: z.number().min(1, "ID rundy jest wymagane").optional(),
-  userId: z.number().min(1, "ID użytkownika jest wymagane").optional(),
-  trackId: z.string().min(1, "ID utworu jest wymagane").optional(),
-  count: z.number().min(0, "Liczba głosów musi być dodatnia").optional(),
+  roundId: z
+    .number({ message: "Wymagane" })
+    .min(1, "ID rundy jest wymagane")
+    .optional(),
+  userId: z
+    .number({ message: "Wymagane" })
+    .min(1, "ID użytkownika jest wymagane")
+    .optional(),
+  trackId: z
+    .string({ message: "Wymagane" })
+    .min(1, "ID utworu jest wymagane")
+    .optional(),
+  count: z
+    .number({ message: "Wymagane" })
+    .min(0, "Liczba głosów musi być dodatnia")
+    .optional(),
 });
 
 // Types exports
 export type Permissions = z.infer<typeof permissionsSchema>;
 export type Pagination = z.infer<typeof paginationSchema>;
+
+export type AuthId = z.infer<typeof authIdSchema>;
+export type CreateAuthId = z.infer<typeof createAuthIdSchema>;
+export type UpdateAuthId = z.infer<typeof updateAuthIdSchema>;
 
 export type SigninData = z.infer<typeof signinSchema>;
 export type SignupData = z.infer<typeof signupSchema>;

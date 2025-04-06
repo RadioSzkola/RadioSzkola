@@ -1,4 +1,3 @@
-import { count } from "drizzle-orm";
 import { handleAsync } from "~/server/utils/handle-async";
 import {
   ErrorInvalidPagination,
@@ -16,24 +15,11 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 400,
       statusText: ErrorInvalidPagination,
+      data: paginationResult.error.flatten().fieldErrors,
     });
   }
 
-  const { page, limit } = paginationResult.data;
-  const offset = (page - 1) * limit;
-
-  const countResult = await handleAsync(() =>
-    useDatabase().select({ value: count() }).from(tables.authIds),
-  );
-
-  if (!countResult.success) {
-    throw createError({
-      statusCode: 500,
-      statusText: ErrorUnknownDatabase,
-    });
-  }
-
-  const rowCount = countResult.data[0].value;
+  const { offset, limit } = paginationResult.data;
 
   const authIdsResult = await handleAsync(() =>
     useDatabase().query.authIds.findMany({
@@ -50,13 +36,5 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return {
-    items: authIdsResult.data,
-    pagination: {
-      page,
-      limit,
-      total: countResult.data,
-      pages: Math.ceil(rowCount / limit),
-    },
-  };
+  return authIdsResult.data;
 });

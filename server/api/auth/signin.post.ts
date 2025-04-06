@@ -1,8 +1,8 @@
 import { handleAsync } from "~/server/utils/handle-async";
 import {
+  ErrorNotFound,
   ErrorUnknownDatabase,
   ErrorUserInvalidCredentials,
-  ErrorUserNotFound,
   ErrorValidation,
 } from "~/utils/error-status";
 import { signinSchema } from "~/utils/models";
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
   if (!serverUser) {
     throw createError({
       statusCode: 404,
-      statusText: ErrorUserNotFound,
+      statusText: ErrorNotFound,
     });
   }
 

@@ -36,6 +36,10 @@
     border-radius: 0 !important;
 }
 
+.rounded-000 {
+    border-radius: 0 !important;
+}
+
 body {
     @apply bg-amber-50;
 }

@@ -1,10 +1,21 @@
-import { randomBytes } from "crypto";
+import { z } from "zod";
 import { handleAsync } from "~/server/utils/handle-async";
-import { ErrorUnknownDatabase } from "~/utils/error-status";
+import { ErrorUnknownDatabase, ErrorValidation } from "~/utils/error-status";
 
-export default defineEventHandler(async () => {
-  // Generate a random ID
-  const id = randomBytes(16).toString("hex");
+export default defineEventHandler(async (event) => {
+  const bodyValidationResult = await readValidatedBody(
+    event,
+    z.object({ id: z.string().min(1).max(255) }).safeParse,
+  );
+
+  if (!bodyValidationResult.success) {
+    throw createError({
+      statusCode: 400,
+      statusText: ErrorValidation,
+    });
+  }
+
+  const { id } = bodyValidationResult.data;
 
   // Insert the new auth ID into the database
   const result = await handleAsync(() =>
