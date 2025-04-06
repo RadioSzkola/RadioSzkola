@@ -1,0 +1,1 @@
+ALTER TABLE `authIds` ADD `expiresAt` integer NOT NULL;

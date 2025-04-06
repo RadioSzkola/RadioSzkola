@@ -1,10 +1,12 @@
 import { z } from "zod";
 
 // Base schemas for common fields
-const timestampSchema = {
+export const timestampSchema = {
   createdAt: z.number(),
   updatedAt: z.number(),
 };
+
+export const permissionsSchema = z.enum(["role-admin", "role-user"]);
 
 // Auth schemas
 export const signupSchema = z.object({
@@ -139,6 +141,8 @@ export const updateVoteSchema = z.object({
 });
 
 // Types exports
+export type Permissions = z.infer<typeof permissionsSchema>;
+
 export type SigninData = z.infer<typeof signinSchema>;
 export type SignupData = z.infer<typeof signupSchema>;
 export type SignoutData = z.infer<typeof signoutSchema>;

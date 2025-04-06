@@ -2,8 +2,13 @@ import { relations } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 const timestamp = {
-  createdAt: integer().$defaultFn(() => new Date().getTime()),
-  updatedAt: integer().$defaultFn(() => new Date().getTime()),
+  createdAt: integer()
+    .$defaultFn(() => new Date().getTime())
+    .notNull(),
+  updatedAt: integer()
+    .$defaultFn(() => new Date().getTime())
+    .$onUpdateFn(() => new Date().getTime())
+    .notNull(),
 };
 
 export const users = sqliteTable("users", {
@@ -18,6 +23,7 @@ export const users = sqliteTable("users", {
 export const authIds = sqliteTable("authIds", {
   id: text("id").primaryKey(),
   userId: integer("userId").references(() => users.id),
+  expiresAt: integer("expiresAt").notNull(),
   ...timestamp,
 });
 

@@ -1,3 +1,3 @@
-<template>
-    <div>Moje konto</div>
-</template>
+<script setup lang="ts"></script>
+
+<template><div>a</div></template>
