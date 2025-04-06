@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 const timestamp = {
@@ -14,6 +15,12 @@ export const users = sqliteTable("users", {
   ...timestamp,
 });
 
+export const authIds = sqliteTable("authIds", {
+  id: text("id").primaryKey(),
+  userId: integer("userId").references(() => users.id),
+  ...timestamp,
+});
+
 export const spotifyTokens = sqliteTable("spotifyTokens", {
   id: integer("id").primaryKey(),
   userId: integer("userId")
@@ -27,11 +34,9 @@ export const spotifyTokens = sqliteTable("spotifyTokens", {
 
 export const trackHistory = sqliteTable("trackHistory", {
   id: integer("id").primaryKey(),
-  userId: integer("userId")
-    .notNull()
-    .references(() => users.id),
   trackId: text("trackId").notNull(),
-  playedAt: integer("playedAt").notNull(),
+  startedAt: integer("startedAt").notNull(),
+  endedAt: integer("endedAt").notNull(),
   ...timestamp,
 });
 
@@ -54,3 +59,42 @@ export const votes = sqliteTable("votes", {
   count: integer("count").notNull(),
   ...timestamp,
 });
+
+export const usersRelations = relations(users, ({ many, one }) => ({
+  spotifyTokens: many(spotifyTokens),
+  trackHistory: many(trackHistory),
+  votes: many(votes),
+  authId: one(authIds, {
+    fields: [users.id],
+    references: [authIds.id],
+  }),
+}));
+
+export const authIdsRelations = relations(authIds, ({ one }) => ({
+  user: one(users, {
+    fields: [authIds.id],
+    references: [users.id],
+  }),
+}));
+
+export const spotifyTokensRelations = relations(spotifyTokens, ({ one }) => ({
+  user: one(users, {
+    fields: [spotifyTokens.userId],
+    references: [users.id],
+  }),
+}));
+
+export const voteRoundsRelations = relations(voteRounds, ({ many }) => ({
+  votes: many(votes),
+}));
+
+export const votesRelations = relations(votes, ({ one }) => ({
+  user: one(users, {
+    fields: [votes.userId],
+    references: [users.id],
+  }),
+  voteRound: one(voteRounds, {
+    fields: [votes.roundId],
+    references: [voteRounds.id],
+  }),
+}));
