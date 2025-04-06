@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { NuxtLink } from "#components";
+
 type Link = {
     label: string;
     to?: string;
@@ -57,7 +59,9 @@ onMounted(() => {
     <nav
         class="sticky top-0 w-full py-4 px-8 h-20 flex justify-between items-center backdrop-blur-xl z-50"
     >
-        <NuxtImg src="/logo-light.png" alt="Logo" class="w-20 h-20" />
+        <NuxtLink to="/">
+            <NuxtImg src="/logo-light.png" alt="Logo" class="w-20 h-20" />
+        </NuxtLink>
         <ul class="gap-8 hidden md:flex">
             <li
                 v-for="link in user ? optionsLoggedIn : optionsLoggedOut"

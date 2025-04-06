@@ -6,7 +6,6 @@ export default defineNuxtConfig({
     devServer: {
         port: 3001,
     },
-
     modules: [
         "@nuxt/icon",
         "@nuxt/fonts",
@@ -23,9 +22,15 @@ export default defineNuxtConfig({
     ui: {
         colorMode: false,
     },
-
     hub: {
         cache: true,
         database: true,
+    },
+    runtimeConfig: {
+        spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+        spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI,
+        public: {
+            spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
+        },
     },
 });

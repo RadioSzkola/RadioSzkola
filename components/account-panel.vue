@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { NuxtLink } from "#components";
+
 const { user } = useUserSession();
 
 const formattedDate = (timestamp?: number) => {
@@ -82,13 +84,14 @@ const roleDisplay = computed(() => {
 
             <!-- Actions -->
             <div class="flex gap-4 border-amber-200">
-                <UButton
-                    v-if="user.permissions === 'role-admin'"
-                    variant="soft"
-                    icon="i-heroicons-wrench-screwdriver"
-                >
-                    Panel Administracyjny
-                </UButton>
+                <NuxtLink v-if="user.permissions === 'role-admin'" to="/admin">
+                    <UButton
+                        variant="soft"
+                        icon="i-heroicons-wrench-screwdriver"
+                    >
+                        Panel Administracyjny
+                    </UButton>
+                </NuxtLink>
 
                 <UButton variant="soft" icon="i-heroicons-user">
                     Edytuj Profil

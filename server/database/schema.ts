@@ -27,13 +27,13 @@ export const authIds = sqliteTable("authIds", {
   ...timestamp,
 });
 
-export const spotifyTokens = sqliteTable("spotifyTokens", {
+export const spotifyProfiles = sqliteTable("spotifyProfiles", {
   id: integer("id").primaryKey(),
-  userId: integer("userId")
-    .notNull()
-    .references(() => users.id),
+  name: text("name").notNull(),
+  spotifyUsername: text("spotifyUsername").notNull().unique(),
   accessToken: text("accessToken").notNull(),
   refreshToken: text("refreshToken").notNull(),
+  refreshTokenExpiresAt: integer("refreshTokenExpiresAt").notNull(),
   active: integer("active").notNull().default(0).$type<0 | 1>(),
   ...timestamp,
 });
@@ -43,6 +43,9 @@ export const trackHistory = sqliteTable("trackHistory", {
   trackId: text("trackId").notNull(),
   startedAt: integer("startedAt").notNull(),
   endedAt: integer("endedAt").notNull(),
+  profile: integer("profile")
+    .notNull()
+    .references(() => spotifyProfiles.id),
   ...timestamp,
 });
 
@@ -67,7 +70,6 @@ export const votes = sqliteTable("votes", {
 });
 
 export const usersRelations = relations(users, ({ many, one }) => ({
-  spotifyTokens: many(spotifyTokens),
   trackHistory: many(trackHistory),
   votes: many(votes),
   authId: one(authIds, {
@@ -83,10 +85,17 @@ export const authIdsRelations = relations(authIds, ({ one }) => ({
   }),
 }));
 
-export const spotifyTokensRelations = relations(spotifyTokens, ({ one }) => ({
-  user: one(users, {
-    fields: [spotifyTokens.userId],
-    references: [users.id],
+export const spotifyProfilesRelations = relations(
+  spotifyProfiles,
+  ({ many }) => ({
+    tracks: many(trackHistory),
+  }),
+);
+
+export const trackHistoryRelations = relations(trackHistory, ({ one }) => ({
+  profile: one(spotifyProfiles, {
+    fields: [trackHistory.profile],
+    references: [spotifyProfiles.id],
   }),
 }));
 

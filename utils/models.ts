@@ -111,33 +111,41 @@ export const updateUserSchema = z.object({
 });
 
 // Spotify Token schemas
-export const spotifyTokenSchema = z.object({
+export const spotifyProfileSchema = z.object({
   id: z.number({ message: "Wymagane" }),
-  userId: z.number({ message: "Wymagane" }),
+  name: z
+    .string({ message: "Wymagane" })
+    .min(2, "Nazwa musi mieć co najmniej 2 znaki"),
+  spotifyUsername: z.string({ message: "Wymagane" }),
   accessToken: z
     .string({ message: "Wymagane" })
     .min(1, "Token dostępu jest wymagany"),
   refreshToken: z
     .string({ message: "Wymagane" })
     .min(1, "Token odświeżania jest wymagany"),
+  refreshTokenExpiresAt: z.number({ message: "Wymagane" }),
   active: z.union([z.literal(0), z.literal(1)]),
   ...timestampSchema,
 });
 
-export const createSpotifyTokenSchema = z.object({
-  userId: z
-    .number({ message: "Wymagane" })
-    .min(1, "ID użytkownika jest wymagane"),
+export const createSpotifyProfileSchema = z.object({
+  name: z
+    .string({ message: "Wymagane" })
+    .min(2, "Nazwa musi mieć co najmniej 2 znaki"),
   accessToken: z
     .string({ message: "Wymagane" })
     .min(1, "Token dostępu jest wymagany"),
   refreshToken: z
     .string({ message: "Wymagane" })
     .min(1, "Token odświeżania jest wymagany"),
+  refreshTokenExpiresAt: z.number({ message: "Wymagane" }),
   active: z.union([z.literal(0), z.literal(1)]),
 });
 
-export const updateSpotifyTokenSchema = z.object({
+export const updateSpotifyProfileSchema = z.object({
+  name: z
+    .string({ message: "Wymagane" })
+    .min(2, "Nazwa musi mieć co najmniej 2 znaki"),
   accessToken: z
     .string({ message: "Wymagane" })
     .min(1, "Token dostępu jest wymagany")
@@ -146,6 +154,7 @@ export const updateSpotifyTokenSchema = z.object({
     .string({ message: "Wymagane" })
     .min(1, "Token odświeżania jest wymagany")
     .optional(),
+  refreshTokenExpiresAt: z.number({ message: "Wymagane" }),
   active: z.union([z.literal(0), z.literal(1)]).optional(),
 });
 
@@ -155,11 +164,13 @@ export const trackHistorySchema = z.object({
   trackId: z.string({ message: "Wymagane" }).min(1, "ID utworu jest wymagane"),
   startedAt: z.number({ message: "Wymagane" }),
   endedAt: z.number({ message: "Wymagane" }),
+  profile: z.number({ message: "Wymagane" }),
   ...timestampSchema,
 });
 
 export const createTrackHistorySchema = z.object({
   trackId: z.string({ message: "Wymagane" }).min(1, "ID utworu jest wymagane"),
+  profile: z.number({ message: "Wymagane" }),
 });
 
 export const updateTrackHistorySchema = z.object({
@@ -242,9 +253,9 @@ export type User = z.infer<typeof userSchema>;
 export type CreateUser = z.infer<typeof createUserSchema>;
 export type UpdateUser = z.infer<typeof updateUserSchema>;
 
-export type SpotifyToken = z.infer<typeof spotifyTokenSchema>;
-export type CreateSpotifyToken = z.infer<typeof createSpotifyTokenSchema>;
-export type UpdateSpotifyToken = z.infer<typeof updateSpotifyTokenSchema>;
+export type SpotifyProfile = z.infer<typeof spotifyProfileSchema>;
+export type CreateSpotifyProfile = z.infer<typeof createSpotifyProfileSchema>;
+export type UpdateSpotifyProfile = z.infer<typeof updateSpotifyProfileSchema>;
 
 export type TrackHistory = z.infer<typeof trackHistorySchema>;
 export type CreateTrackHistory = z.infer<typeof createTrackHistorySchema>;

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Param } from "drizzle-orm";
-
 const { user } = useUserSession();
 const { add: addToast } = useToast();
 
@@ -10,7 +8,7 @@ const newAuthIdInput = reactive({
 const authIds = ref<AuthId[]>([]);
 const pagination = reactive<Pagination>({
     offset: 0,
-    limit: 50,
+    limit: 12,
 });
 
 const APIGenAuthId = await useFetch("/api/auth/genid", {
@@ -102,6 +100,38 @@ function onPaginationBackwards() {
 onMounted(async () => {
     await fetchAuthIds();
 });
+
+const currentDeleteAuthId = ref("");
+const APIDeleteAuthId = useFetch(`/api/auth/ids/${currentDeleteAuthId.value}`, {
+    method: "DELETE",
+    immediate: false,
+    watch: false,
+});
+
+async function deleteAuthId(id: string) {
+    currentDeleteAuthId.value = id;
+    await APIDeleteAuthId.execute();
+
+    if (APIDeleteAuthId.error.value) {
+        addToast({
+            description: getErrorDescription(
+                APIDeleteAuthId.error.value?.data.statusText,
+            ),
+            color: "error",
+            close: false,
+        });
+        return;
+    }
+
+    addToast({
+        description: "Kod rejestracyjny został usunięty",
+        color: "success",
+        close: false,
+    });
+
+    // Refresh the list
+    await fetchAuthIds();
+}
 </script>
 
 <template>
@@ -182,6 +212,14 @@ onMounted(async () => {
                             icon="i-heroicons-clipboard"
                             @click="handleCopyAuthId(authId.id)"
                         />
+                        <UButton
+                            v-if="!authId.userId"
+                            variant="soft"
+                            color="error"
+                            icon="i-heroicons-trash"
+                            class="ml-2"
+                            @click="deleteAuthId(authId.id)"
+                        />
                     </div>
                 </div>
             </div>
@@ -191,11 +229,16 @@ onMounted(async () => {
                 <UButton
                     :disabled="pagination.offset === 1"
                     variant="soft"
+                    color="info"
                     @click="onPaginationBackwards"
                 >
                     Poprzednia
                 </UButton>
-                <UButton variant="soft" @click="onPaginationForwards">
+                <UButton
+                    variant="soft"
+                    color="info"
+                    @click="onPaginationForwards"
+                >
                     Następna
                 </UButton>
                 <span class="text-lg text-gray-500 font-mono">
