@@ -1,36 +1,33 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    compatibilityDate: "2024-11-01",
-    devtools: { enabled: true },
+  compatibilityDate: "2024-11-01",
+  devtools: { enabled: true },
 
-    devServer: {
-        port: 3001,
-    },
-    modules: [
-        "@nuxt/icon",
-        "@nuxt/fonts",
-        "@nuxt/eslint",
-        "@nuxt/ui",
-        "@nuxt/test-utils",
-        "@nuxt/image",
-        "@nuxt/scripts",
-        "nuxt-auth-utils",
-        "@nuxthub/core",
-    ],
+  modules: [
+    "@nuxt/icon",
+    "@nuxt/fonts",
+    "@nuxt/eslint",
+    "@nuxt/ui",
+    "@nuxt/test-utils",
+    "@nuxt/image",
+    "@nuxt/scripts",
+    "nuxt-auth-utils",
+    "@nuxthub/core",
+  ],
 
-    css: ["~/assets/css/main.css"],
-    ui: {
-        colorMode: false,
+  css: ["~/assets/css/main.css"],
+  ui: {
+    colorMode: false,
+  },
+  hub: {
+    cache: true,
+    database: true,
+  },
+  runtimeConfig: {
+    spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI,
+    public: {
+      spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
     },
-    hub: {
-        cache: true,
-        database: true,
-    },
-    runtimeConfig: {
-        spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-        spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI,
-        public: {
-            spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
-        },
-    },
+  },
 });
