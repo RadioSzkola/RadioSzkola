@@ -1,0 +1,45 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+    --font-sans: "Public Sans", sans-serif;
+    --font-mono: "Space Mono", monospace;
+    --font-serif: "Public Sans", sans-serif;
+    --font-display: "Public Sans", sans-serif;
+}
+
+.border-shadow-sm {
+    box-shadow:
+        0 0 0 1px var(--color-black),
+        2px 2px 0 1px var(--color-black);
+    border-radius: 0 !important;
+}
+
+.border-shadow {
+    box-shadow:
+        0 0 0 2px var(--color-black),
+        4px 4px 0 2px var(--color-black);
+    border-radius: 0 !important;
+}
+
+.border-shadow-md {
+    box-shadow:
+        0 0 0 2px var(--color-black),
+        4px 4px 0 2px var(--color-black);
+    border-radius: 0 !important;
+}
+
+.border-shadow-lg {
+    box-shadow:
+        0 0 0 4px var(--color-black),
+        8px 8px 0 4px var(--color-black);
+    border-radius: 0 !important;
+}
+
+.rounded-000 {
+    border-radius: 0 !important;
+}
+
+body {
+    @apply bg-amber-50;
+}
