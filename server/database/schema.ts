@@ -30,7 +30,8 @@ export const authIds = sqliteTable("authIds", {
 export const spotifyProfiles = sqliteTable("spotifyProfiles", {
   id: integer("id").primaryKey(),
   name: text("name").notNull(),
-  spotifyUsername: text("spotifyUsername").notNull().unique(),
+  spotifyUsername: text("spotifyUsername").notNull(),
+  spotifyId: text("spotifyId").notNull().unique(),
   accessToken: text("accessToken").notNull(),
   refreshToken: text("refreshToken").notNull(),
   refreshTokenExpiresAt: integer("refreshTokenExpiresAt").notNull(),

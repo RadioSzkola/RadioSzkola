@@ -99,8 +99,9 @@ export default defineEventHandler(async (event) => {
       .insert(tables.spotifyProfiles)
       // @ts-expect-error I dont know what to do here
       .values({
-        name: userProfileResult.data?.display_name || "Spotify User",
-        spotifyUsername: userProfileResult.data?.id || "Spotify User",
+        name: userProfileResult.data?.display_name || "ERROR",
+        spotifyId: userProfileResult.data?.id || "ERROR",
+        spotifyUsername: userProfileResult.data?.display_name || "ERROR",
         accessToken: tokenResult.data.access_token,
         refreshToken: tokenResult.data.refresh_token,
         refreshTokenExpiresAt: Date.now() + tokenResult.data.expires_in * 1000,

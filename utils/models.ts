@@ -117,6 +117,7 @@ export const spotifyProfileSchema = z.object({
     .string({ message: "Wymagane" })
     .min(2, "Nazwa musi mieć co najmniej 2 znaki"),
   spotifyUsername: z.string({ message: "Wymagane" }),
+  spotifyId: z.string({ message: "Wymagane" }),
   accessToken: z
     .string({ message: "Wymagane" })
     .min(1, "Token dostępu jest wymagany"),
@@ -132,6 +133,8 @@ export const createSpotifyProfileSchema = z.object({
   name: z
     .string({ message: "Wymagane" })
     .min(2, "Nazwa musi mieć co najmniej 2 znaki"),
+  spotifyUsername: z.string({ message: "Wymagane" }),
+  spotifyId: z.string({ message: "Wymagane" }),
   accessToken: z
     .string({ message: "Wymagane" })
     .min(1, "Token dostępu jest wymagany"),
@@ -146,6 +149,8 @@ export const updateSpotifyProfileSchema = z.object({
   name: z
     .string({ message: "Wymagane" })
     .min(2, "Nazwa musi mieć co najmniej 2 znaki"),
+  spotifyUsername: z.string({ message: "Wymagane" }),
+  spotifyId: z.string({ message: "Wymagane" }),
   accessToken: z
     .string({ message: "Wymagane" })
     .min(1, "Token dostępu jest wymagany")

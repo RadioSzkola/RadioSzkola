@@ -56,7 +56,28 @@ async function disconnectProfile(id: number) {
 }
 
 async function activateProfile(id: number) {
-    console.log(id);
+    const response = await handleAsync(() =>
+        $fetch("/api/spotify/profiles/" + id + "/activate", {
+            method: "POST",
+        }),
+    );
+
+    if (!response.success) {
+        addToast({
+            description: "Błąd :( Profil Spotify nie został aktywowany",
+            color: "error",
+            close: false,
+        });
+        return;
+    }
+
+    addToast({
+        description: "Profil Spotify został aktywowany",
+        color: "success",
+        close: false,
+    });
+
+    await fetchProfiles();
 }
 
 onMounted(async () => {
@@ -112,7 +133,10 @@ onMounted(async () => {
                                     </UBadge>
                                 </div>
                                 <div class="text-sm text-gray-600 font-mono">
-                                    ID Spotify: {{ profile.spotifyUsername }}
+                                    ID Spotify: {{ profile.spotifyId }}
+                                </div>
+                                <div class="text-sm text-gray-600 font-mono">
+                                    Nazwa Spotify: {{ profile.spotifyUsername }}
                                 </div>
                                 <div class="text-sm text-gray-600 font-mono">
                                     Token wygasa:

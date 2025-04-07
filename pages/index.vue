@@ -36,5 +36,6 @@ definePageMeta({
                 class="max-w-32 md:max-w-64"
             />
         </main>
+        <HomeNowPlaying />
     </div>
 </template>

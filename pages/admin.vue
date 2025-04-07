@@ -6,7 +6,7 @@ definePageMeta({
 
 <template>
     <div>
-        <!-- Admin page content -->
         <AdminAuthid />
+        <AdminSpotify />
     </div>
 </template>
