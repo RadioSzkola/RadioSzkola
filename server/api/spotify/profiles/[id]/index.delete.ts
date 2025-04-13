@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { ErrorUnknownDatabase, ErrorValidation } from "~/utils/error-status";
+import { ErrorNotFound, ErrorValidation } from "~/utils/error-status";
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id");
@@ -11,19 +11,17 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const result = await handleAsync(() =>
-    useDatabase()
-      .delete(tables.spotifyProfiles)
-      .where(eq(tables.spotifyProfiles.id, parseInt(id)))
-      .returning(),
-  );
+  const profiles = await useDatabase()
+    .delete(tables.spotifyProfiles)
+    .where(eq(tables.spotifyProfiles.id, parseInt(id)))
+    .returning();
 
-  if (!result.success) {
+  if (!profiles.length) {
     throw createError({
-      statusCode: 500,
-      statusText: ErrorUnknownDatabase,
+      statusCode: 404,
+      statusText: ErrorNotFound,
     });
   }
 
-  return result.data[0];
+  return profiles[0];
 });
