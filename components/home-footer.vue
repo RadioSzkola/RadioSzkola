@@ -141,16 +141,12 @@
                                 href="https://www.instagram.com/mikusshepard/"
                                 class="hover:underline"
                             >
-                                Pomysłodawca: Mikus
+                                Pomysłodawca: Mikus, Kiju
                             </a>
                         </li>
                         <li>
-                            <a
-                                target="_blank"
-                                href="https://www.instagram.com/mikusshepard/"
-                                class="hover:underline"
-                            >
-                                Wykonawca: Kiju, Mikus
+                            <a href="#" class="hover:underline">
+                                Wykonawca: Kiju
                             </a>
                         </li>
                     </ul>

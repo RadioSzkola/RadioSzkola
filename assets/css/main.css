@@ -43,3 +43,7 @@
 body {
     @apply bg-amber-50;
 }
+
+html {
+    scroll-behavior: smooth;
+}

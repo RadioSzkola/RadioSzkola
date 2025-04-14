@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "nuxt-auth-utils",
     "@nuxthub/core",
+    "nuxt-umami",
   ],
 
   css: ["~/assets/css/main.css"],
@@ -28,6 +29,17 @@ export default defineNuxtConfig({
     spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI,
     public: {
       spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
+    },
+  },
+
+  umami: {
+    id: "077a553a-cf3c-4309-935b-1477af26c8ef",
+    host: "https://cloud.umami.is",
+  },
+
+  app: {
+    head: {
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     },
   },
 });

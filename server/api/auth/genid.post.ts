@@ -3,6 +3,13 @@ import { handleAsync } from "~/server/utils/handle-async";
 import { ErrorUnknownDatabase, ErrorValidation } from "~/utils/error-status";
 
 export default defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event);
+  if (user.permissions !== "role-admin") {
+    throw createError({
+      statusCode: 403,
+    });
+  }
+
   const bodyValidationResult = await readValidatedBody(
     event,
     z.object({ id: z.string().min(1).max(255) }).safeParse,

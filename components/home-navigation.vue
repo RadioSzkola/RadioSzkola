@@ -9,41 +9,41 @@ type Link = {
 
 const optionsLoggedOut = ref<Link[]>([
     {
-        label: "Playlista",
+        label: "PLAYLISTA",
     },
     {
-        label: "Informacje",
+        label: "INFORMACJE",
     },
     {
-        label: "Szkoła",
+        label: "SZKOŁA",
         to: "http://2loraciborz.pl/",
     },
     {
-        label: "Zaloguj się",
+        label: "ZALOGUJ SIĘ",
         modal: "signin",
     },
     {
-        label: "Zarejestruj się",
+        label: "ZAREJESTRUJ SIĘ",
         modal: "signup",
     },
 ]);
 const optionsLoggedIn = ref<Link[]>([
     {
-        label: "Playlista",
+        label: "PLAYLISTA",
     },
     {
-        label: "Informacje",
+        label: "INFORMACJE",
     },
     {
-        label: "Szkoła",
+        label: "SZKOŁA",
         to: "http://2loraciborz.pl/",
     },
     {
-        label: "Konto",
+        label: "KONTO",
         to: "/konto",
     },
     {
-        label: "Wyloguj się",
+        label: "WYLOGUJ SIĘ",
         modal: "signout",
     },
 ]);
@@ -57,7 +57,7 @@ onMounted(() => {
 
 <template>
     <nav
-        class="sticky top-0 w-full py-4 px-8 h-20 flex justify-between items-center backdrop-blur-xl z-50"
+        class="sticky font-mono top-0 w-full py-4 px-8 h-20 flex justify-between items-center backdrop-blur-xl z-50"
     >
         <NuxtLink to="/">
             <NuxtImg src="/logo-light.png" alt="Logo" class="w-20 h-20" />
@@ -71,12 +71,12 @@ onMounted(() => {
                     v-if="!link.modal"
                     :href="link.to"
                     :to="link.to"
-                    class="hover:underline text-lg font-semibold text-black cursor-pointer"
+                    class="hover:underline text-md font-semibold text-black cursor-pointer"
                     >{{ link.label }}</NuxtLink
                 >
                 <UModal v-else>
                     <span
-                        class="hover:underline text-lg font-semibold text-black cursor-pointer"
+                        class="hover:underline text-md font-semibold text-black cursor-pointer"
                         >{{ link.label }}</span
                     >
                     <template v-if="link.modal === 'signup'" #content>

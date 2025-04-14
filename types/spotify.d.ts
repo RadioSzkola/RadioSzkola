@@ -135,3 +135,24 @@ export type SpotifyNowPlayingResponse =
       isPlaying: false;
       track: null;
     };
+
+export interface TrackHistoryItem {
+  id: string;
+  name: string;
+  artists: Array<{
+    id: string;
+    name: string;
+  }>;
+  album: {
+    id: string;
+    name: string;
+    images: Array<{
+      url: string;
+      height: number;
+      width: number;
+    }>;
+  };
+  duration: number;
+  startedAt: number;
+  endedAt: number;
+}

@@ -1,75 +1,62 @@
-# Nuxt Minimal Starter
+# RadioSzkola Project
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+RadioSzkola is a web application for the school radio station at II Liceum Ogólnokształcące in Racibórz. The platform allows users to view currently playing music, recently played tracks, and features user authentication for administrative features.
 
-## Setup
+## Features
 
-Make sure to install dependencies:
+- Real-time display of currently playing tracks via Spotify integration
+- History of recently played music
+- User authentication system with registration codes
+- Admin panel for managing registration codes and Spotify connections
+- Responsive design that works on both mobile and desktop devices
 
-```bash
-# npm
-npm install
+## Technology Stack
 
-# pnpm
-pnpm install
+- **Frontend**: Vue.js, Nuxt 3, Tailwind CSS
+- **Backend**: Nuxt server routes
+- **Database**: SQLite with Drizzle ORM
+- **Authentication**: Custom implementation with session management
+- **External APIs**: Spotify Web API
 
-# yarn
-yarn install
+## Getting Started
 
-# bun
-bun install
-```
+1. Clone the repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Configure environment variables in `.env`:
+   ```
+   SPOTIFY_CLIENT_ID=your_spotify_client_id
+   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+   SPOTIFY_REDIRECT_URI=your_redirect_uri
+   ```
+4. Run the development server:
+   ```
+   npm run dev
+   ```
 
-## Development Server
+## Admin Access
 
-Start the development server on `http://localhost:3000`:
+Access to admin features requires registration with a valid admin code. Contact the system administrator to obtain an admin registration code.
 
-```bash
-# npm
-npm run dev
+## Project Structure
 
-# pnpm
-pnpm dev
+- `/components`: Vue components
+- `/layouts`: Page layouts
+- `/pages`: Application routes
+- `/composables`: Shared Vue composables
+- `/server`: Backend API routes and database schema
+- `/utils`: Utility functions and type definitions
 
-# yarn
-yarn dev
+## Deployment
 
-# bun
-bun run dev
-```
+The application is designed to be deployed on Vercel or similar platforms.
 
-## Production
+## License
 
-Build the application for production:
+MIT
 
-```bash
-# npm
-npm run build
+## Contact
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+For questions or support, contact the development team at lo2radiowezel@proton.me.

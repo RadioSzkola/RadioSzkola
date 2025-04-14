@@ -8,6 +8,13 @@ import {
 } from "~/utils/error-status";
 
 export default defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event);
+  if (user.permissions !== "role-admin") {
+    throw createError({
+      statusCode: 403,
+    });
+  }
+
   const id = getRouterParam(event, "id");
 
   if (!id) {

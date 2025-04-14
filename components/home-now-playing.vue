@@ -37,11 +37,16 @@ const backgroundStyle = computed(() => {
         backgroundBlendMode: "overlay",
     };
 });
+
+function openSpotifyTrack(trackId: string) {
+    window.open(`https://open.spotify.com/track/${trackId}`, "_blank");
+}
 </script>
 
 <template>
     <div
-        class="relative overflow-hidden shadow-lg border border-black rounded-lg my-16 w-full md:w-2xl lg:w-4xl"
+        id="home-now-playing"
+        class="relative overflow-hidden shadow-lg border border-black my-16 w-full md:w-2xl lg:w-4xl scroll-m-[40vh]"
     >
         <div
             :style="backgroundStyle"
@@ -81,7 +86,8 @@ const backgroundStyle = computed(() => {
                         <img
                             :src="currentTrack.track.album.images[0]?.url"
                             :alt="currentTrack.track.album.name"
-                            class="w-full aspect-square max-w-sm md:w-48 md:h-48 rounded-lg shadow-lg"
+                            @click="openSpotifyTrack(currentTrack.track.id)"
+                            class="w-full aspect-square max-w-sm md:w-48 md:h-48 rounded-lg shadow-lg cursor-pointer"
                         />
                     </div>
 

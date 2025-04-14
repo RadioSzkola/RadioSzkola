@@ -1,6 +1,9 @@
 <script setup lang="ts">
 definePageMeta({
     layout: "home",
+    title: "RadioSzkola - Radiowęzeł Liceum Ogólnokształcącego Nr 2 w Raciborzu",
+    description:
+        "Oficjalna strona szkolnego radiowęzła Liceum Ogólnokształcącego Nr 2 w Raciborzu. Zobacz co leci na przerwie i dowiedz się czego słuchaliśmy ostatnio.",
 });
 </script>
 
@@ -17,17 +20,21 @@ definePageMeta({
                 </header>
                 <p class="text-lg text-red-950 max-w-[32rem] text-justify">
                     Radiowęzeł LO2 to oficjalna strona szkolnego radiowęzła
-                    Liceum Ogólnokształcącego Nr 2 w Raciborzu. Dziel się
-                    propozycjami, polub lubiane utwory oraz steruj muzyką na
-                    przerwach!
+                    Liceum Ogólnokształcącego Nr 2 w Raciborzu. Zobacz co leci
+                    na przerwie i dowiedz się czego słuchaliśmy ostatnio. System
+                    proponowania muzyki przez uczniów w trakcie budowy 🚧
                 </p>
                 <div class="flex gap-4 mt-2">
-                    <UButton size="xl" icon="fluent:arrow-down-12-filled"
-                        >Co dzisiaj gra?</UButton
-                    >
-                    <UButton size="xl" icon="fluent:arrow-down-12-filled"
-                        >Propozycje</UButton
-                    >
+                    <a href="#home-now-playing">
+                        <UButton size="xl" icon="fluent:arrow-down-12-filled"
+                            >Co dzisiaj gra?</UButton
+                        >
+                    </a>
+                    <a href="#home-recent-tracks">
+                        <UButton size="xl" icon="fluent:arrow-down-12-filled"
+                            >Co grało ostatnio?</UButton
+                        >
+                    </a>
                 </div>
             </div>
             <NuxtImg
@@ -37,5 +44,6 @@ definePageMeta({
             />
         </main>
         <HomeNowPlaying />
+        <HomeRecentTracks />
     </div>
 </template>
